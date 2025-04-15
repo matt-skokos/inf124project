@@ -1,0 +1,9 @@
+.navbar{
+    background-color: #FFFBEC;
+    border-bottom: 1 px solid #053747;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-content{
+    display: flex;
+}
