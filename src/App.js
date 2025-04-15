@@ -1,33 +1,19 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Home from './components/Home'
-import About from './components/About'
-
-import './App.css';
+import './App.css'; // global styles
 
 function App() {
   return (
     // BrowserRouter Wraps entire app to keep UI in sync with URL
     <BrowserRouter>
-      <div className='App'>
-        {/* Navigation Menu */}
-        <header className='App-header'>
-          <nav className='App-nav'>
-            <ul>
-              {/* Link used to create naviation links without reloading page */}
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/about">About</Link></li>
-            </ul>
-          </nav>
-          <h1>Local Legend</h1>
-        </header>
+      <div className='app-container'>
+        <Navbar/>
 
-        {/* Define Routes */}
-        {/* Routes(v6) replaces older Switch component */}
         <Routes>
-          {/* Each Route element defines mapping bewteen URL path and corresponding components */}
-          <Route path="/" element={<Home/>}/>
-          <Route path="/about" element={<About/>}/>
+          <Route path='/' element={<Home/>} />
+          {/* Add other routes here: Forecast, Explore Spots, Favorites */}
         </Routes>
       </div>
     </BrowserRouter>

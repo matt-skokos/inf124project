@@ -1,0 +1,28 @@
+.conditions-card{
+    display: flex; 
+    flex-direction: row;
+    gap: 1rem;
+    background-color: #E1EEE8;
+}
+
+.condition-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.condition-icon i{
+    font-size: 1.5rem;
+    color: #053747;
+}
+
+.condition-label{
+    font-weight: bold;
+    margin: 0.5rem 0 0.2rem;
+}
+
+.condition-value{
+    font-size: 1rem;
+    color: #053747;
+}
