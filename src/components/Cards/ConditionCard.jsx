@@ -1,5 +1,4 @@
 import React from "react";
-import './ConditionCard.css'
 import ContentCard from "./ContentCard";
 
 function ConditionItem({icon, condition, value}){

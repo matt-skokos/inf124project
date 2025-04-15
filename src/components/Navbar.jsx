@@ -1,29 +1,49 @@
 import React from 'react'; 
 import { Link } from 'react-router-dom'; 
-import './Navbar.css'
+
 
 function Navbar(){
     return (
-        <header className='navbar'>
-            <nav className='navbar-content'>
-                <div className='navbar-logo'>
+        <nav className='navbar navbar-expand-lg navbar-light bg-light border-bottom'>
+            <div className='container'>
+                
+                {/* Logo */}
+                <Link className='navbar-brand fw-bold' to='/'>
                     {/*TODO: replace with site logo */}
-                    <h1 className='navbar-logo-text'>LocalLengend</h1>
+                    Local Legend
+                </Link>
+
+                {/* Toggle for mobile view */}
+                <button
+                    className='navbar-toggler'
+                    type='button'
+                    data-bs-toggle='collapse'
+                    data-bs-target='#navbarNav'
+                    aria-controls="navbarNav"
+                    aria-expanded='false'
+                    aria-label='Toggle navigation'
+                >
+                    <span className='navbar-toggler-icon'></span>
+                </button>
+
+                
+                <div className='collapse navbar-collapse' id='navbarNav'>
+                    <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
+                        <li className='nav-item'><Link className='nav-link' to='/'>Home</Link></li>
+                        <li className='nav-item'><Link className='nav-link' to='/forecast'>Forecast</Link></li>
+                        <li className='nav-item'><Link className='nav-link' to='/explore'>Explore</Link></li>
+                        <li className='nav-item'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
+                    </ul>
                 </div>
 
-                <ul className='navbar-links'>
-                    <li><Link to='/'>Home</Link></li>
-                    <li><Link to='/forecast'>Forecast</Link></li>
-                    <li><Link to='/explore'>Explore</Link></li>
-                    <li><Link to='/favorites'>Favorites</Link></li>
-                </ul>
-
-                <div className='navbar-user-icon'>
+                <span className='navbar-profile-icon'>
                     {/* TODO: replace with profile icon */}
                     <p>profile</p>
-                </div>
-            </nav>
-        </header>
+                </span>
+
+
+            </div>
+        </nav>
     );
 }
 
