@@ -1,0 +1,38 @@
+
+/* color variables */
+:root{
+  --cream-bg:#FFFCED;
+  --text-primary:#053747;
+  --text-hover:#608F9F;
+  --border-color:#053747;
+  --card-bg:#E1EEE8;
+  --highlight-green:#68BD42;
+}
+
+/* Global Style */
+body {
+  background-color: var(--cream-bg);
+  color: var(--text-primary);
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar{
+background-color: var(--cream-bg);
+border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand{
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-primary)}
+
+.nav-link:hover{
+  color: var(--text-hover);
+}
+.content-card{
+  background-color: var(--card-bg);
+  filter: drop-shadow(0px 4px 2px #C1BFB3);
+}
