@@ -2,7 +2,6 @@ import React from "react";
 import ContentCard from "./ContentCard";
 import './DateLocationCard'
 
-
 function DateLocationCard({date, location}){
     return(
         <ContentCard className="">
