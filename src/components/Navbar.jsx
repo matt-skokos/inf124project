@@ -37,7 +37,7 @@ function Navbar(){
 
                 <span className='navbar-profile-icon'>
                     {/* TODO: replace with profile icon */}
-                    <p>profile</p>
+                    <a href='/login'>profile</a>
                 </span>
 
 
