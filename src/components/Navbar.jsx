@@ -36,13 +36,13 @@ function MobileNavbar(props)
                 {/* profile icon */}
                 { !props.hideTopRow && (
                 <Link to="/login" className='navbar-profile'>
-                    <i class="bi bi-person-circle"></i>
+                    <i className="bi bi-person-circle"></i>
                 </Link>
                 )}
             </div>
 
             { !props.hideTopRow && (
-            <div className="navbar-collapse justify-content-center alin-items-center w-100 py-2" id="mobileNavbarNav">
+            <div className="collapse navbar-collapse justify-content-center alin-items-center w-100 py-2" id="mobileNavbarNav">
                 <ul className='navbar-nav'>
                     <li className='nav-item'><Link className='nav-link' to='/'>Home</Link></li>
                     <li className='nav-item'><Link className='nav-link' to='/forecast'>Forecast</Link></li>
@@ -57,10 +57,11 @@ function MobileNavbar(props)
     );
 }
 
-function DesktopNavbar()
+function DesktopNavbar(props)
 {
     return(
         <div className='desktop-nav'>
+            { !props.hideTopRow && (
             <div className="d-none d-lg-flex justify-content-center alin-items-center w-100 py-2">
                 <ul className='navbar-nav'>
                     <li className='nav-item'><Link className='nav-link' to='/'>Home</Link></li>
@@ -71,9 +72,10 @@ function DesktopNavbar()
 
                 {/* profile icon */}
                 <Link to="/login" className='navbar-profile'>
-                    <i class="bi bi-person-circle"></i>
+                    <i className="bi bi-person-circle"></i>
                 </Link> 
             </div>
+            )}
 
             {/* ---Logo Row---- */}
             <div className='logo-row d-none d-lg-block w-100 text-center'>
@@ -103,9 +105,9 @@ function Navbar(){
                     hideTopRow = {hideTopRow}
                 />
 
-                { !hideTopRow && (
-                    <DesktopNavbar/>
-                )}
+                    <DesktopNavbar
+                        hideTopRow = {hideTopRow}
+                    />
 
                 {/* Underline */}
                 <div className='logo-underline'></div>
