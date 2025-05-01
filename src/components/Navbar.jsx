@@ -1,15 +1,20 @@
 import React from 'react'; 
-import { Link } from 'react-router-dom'; 
+import { Link, useLocation } from 'react-router-dom'; 
 import logo from '../assets/logo.png'; 
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Import Bootstrap Icons
 import './Navbar.css'; 
 
 function Navbar(){
+
+    const location = useLocation(); // Get the current location
+    const hideTopRow = ['/login', '/register'].includes(location.pathname); // Check if the current path is login or registration
+    
     return (
         <nav className='navbar navbar-expand-lg'>
             <div className='container flex-column'>
                 
                 {/* First row: links + toggler + profile */}
+                { !hideTopRow && (
                 <div className='d-flex w-100 justify-content-center align-items-center py-2'>
                     
                     {/* Toggle for mobile view */}
@@ -40,6 +45,7 @@ function Navbar(){
                         <i class="bi bi-person-circle"></i>
                     </Link>
                 </div>
+                )}
 
                 {/* Second row: Logo + underline */}
                 <div className='w-100 text-center logo-row'>
