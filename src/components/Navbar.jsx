@@ -95,7 +95,7 @@ function DesktopNavbar(props)
 function Navbar(){
 
     const {pathname} = useLocation(); // Get the current location
-    const hideTopRow = ['/login', '/register'].includes(pathname); // Check if the current path is login or registration
+    const hideTopRow = ['/login', '/registration'].includes(pathname); // Check if the current path is login or registration
     
     return (
         <nav className='navbar navbar-expand-lg'>
