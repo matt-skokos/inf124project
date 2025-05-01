@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import ContentCard from "./Cards/ContentCard";
+import Button from "./Custom/Button";
+import './Registration.css';
 
-function Register() {
+function Registration() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -19,26 +21,31 @@ function Register() {
         console.log("Last Name:", lastName);
         console.log("Email:", email);
         console.log("Password:", password);
+        console.log("Confirm password:", confirmPassword);
     }
 
     return(
-        <div className="justify-content-center align-items-center d-flex vh-100">
-            <ContentCard>
-                <form className="register-form" onSubmit={handleSubmit}>
+        <div className="registration-container p-1">
+            <ContentCard className="registration-card">
+                <form className="registration-form" onSubmit={handleSubmit}>
 
+                    {/* USER NAME  */}
                     <div className="mb-3 d-flex gap-2">
+                        {/* FIRST NAME  */}
                         <input  
                             type="text"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="firstName"
                             placeholder="first name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             required
                         />
+
+                        {/* LAST NAME */}
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="lastName"
                             placeholder="last name"
                             value={lastName}
@@ -47,10 +54,11 @@ function Register() {
                         />
                     </div>
 
+                    {/* EMAIL  */}
                     <div className="mb-3">
                         <input
                             type="email"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="email"
                             placeholder="email"
                             value={email}
@@ -58,10 +66,12 @@ function Register() {
                             required
                         />
                     </div>
+
+                    {/* PASSWORD */}
                     <div className="mb-3">
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="password"
                             placeholder="password"
                             value={password}
@@ -69,10 +79,12 @@ function Register() {
                             required
                         />
                     </div>
+
+                    {/* CONFIRM PASSWORD */}
                     <div className="mb-3">
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="confirmpassword"
                             placeholder="confirm password"
                             value={confirmPassword}
@@ -80,7 +92,11 @@ function Register() {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
+
+                    {/* SUBMIT BUTTON  */}
+                    <Button type="submit" className="registration-button btn btn-primary w-100 mb-3">Register</Button>
+                    
+                    {/* Redicit to login page */}
                     <div className="text-center">
                         <p>Already have an account? <a href="/login">Login</a></p>
                     </div>
@@ -90,4 +106,4 @@ function Register() {
     )
 };
 
-export default Register;
+export default Registration;

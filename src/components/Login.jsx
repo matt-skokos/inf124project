@@ -20,7 +20,7 @@ function Login()
             <ContentCard className="login-card">
                 <form className="login-form px-4" onSubmit={handleSubmit}>
 
-                    {/* USERNAME */}
+                    {/* EMAIL */}
                     <div className="mb-3">
                         <input
                             type="email"
@@ -51,7 +51,7 @@ function Login()
                     
                     {/* Redirect to registeration page */}
                     <div className="text-center">
-                        <p>Don't have an account? <a href="/register">Register</a></p>
+                        <p>Don't have an account? <a href="/registration">Register</a></p>
                     </div>
                 </form>
             </ContentCard>
