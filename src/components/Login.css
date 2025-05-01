@@ -20,7 +20,7 @@
     width: 100%;
 }
 
-/* white inputs with subtle border radius and padding */
+/* off white inputs with subtle border radius and padding */
 .login-input {
     background-color: var(--cream-bg);
     padding: 0.75rem rem;
