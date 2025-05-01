@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import ContentCard from "./Cards/ContentCard";
+import Button from "./Custom/Button";
+import './Login.css';
 
 function Login()
 {
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -15,13 +16,15 @@ function Login()
     };
 
     return(
-        <div className="justify-content-center align-items-center d-flex vh-100">
-            <ContentCard>
-                <form className="login-form" onSubmit={handleSubmit}>
+        <div className="login-container p-1">
+            <ContentCard className="login-card">
+                <form className="login-form px-4" onSubmit={handleSubmit}>
+
+                    {/* USERNAME */}
                     <div className="mb-3">
                         <input
                             type="email"
-                            className="form-control"
+                            className="form-control login-input"
                             id="email"
                             placeholder="email"
                             value={email}
@@ -29,10 +32,12 @@ function Login()
                             required
                         />
                     </div>
+                    
+                    {/* PASSWORD */}
                     <div className="mb-3">
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control login-input"
                             id="password"
                             placeholder="password"
                             value={password}
@@ -40,7 +45,11 @@ function Login()
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+
+                    {/* SUBMIT BUTTON */}
+                    <Button type="submit" className="login-button btn btn-primary w-100 mb-3">Log in</Button>
+                    
+                    {/* Redirect to registeration page */}
                     <div className="text-center">
                         <p>Don't have an account? <a href="/register">Register</a></p>
                     </div>
