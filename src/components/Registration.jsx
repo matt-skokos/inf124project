@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import ContentCard from "./Cards/ContentCard";
+import Button from "./Custom/Button";
 import './Registration.css';
 
 function Registration() {
@@ -20,26 +21,31 @@ function Registration() {
         console.log("Last Name:", lastName);
         console.log("Email:", email);
         console.log("Password:", password);
+        console.log("Confirm password:", confirmPassword);
     }
 
     return(
         <div className="registration-container p-1">
-            <ContentCard>
-                <form className="register-form" onSubmit={handleSubmit}>
+            <ContentCard className="registration-card">
+                <form className="registration-form" onSubmit={handleSubmit}>
 
+                    {/* USER NAME  */}
                     <div className="mb-3 d-flex gap-2">
+                        {/* FIRST NAME  */}
                         <input  
                             type="text"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="firstName"
                             placeholder="first name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             required
                         />
+
+                        {/* LAST NAME */}
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="lastName"
                             placeholder="last name"
                             value={lastName}
@@ -48,10 +54,11 @@ function Registration() {
                         />
                     </div>
 
+                    {/* EMAIL  */}
                     <div className="mb-3">
                         <input
                             type="email"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="email"
                             placeholder="email"
                             value={email}
@@ -59,10 +66,12 @@ function Registration() {
                             required
                         />
                     </div>
+
+                    {/* PASSWORD */}
                     <div className="mb-3">
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="password"
                             placeholder="password"
                             value={password}
@@ -70,10 +79,12 @@ function Registration() {
                             required
                         />
                     </div>
+
+                    {/* CONFIRM PASSWORD */}
                     <div className="mb-3">
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control registration-input"
                             id="confirmpassword"
                             placeholder="confirm password"
                             value={confirmPassword}
@@ -81,7 +92,11 @@ function Registration() {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
+
+                    {/* SUBMIT BUTTON  */}
+                    <Button type="submit" className="registration-button btn btn-primary w-100 mb-3">Register</Button>
+                    
+                    {/* Redicit to login page */}
                     <div className="text-center">
                         <p>Already have an account? <a href="/login">Login</a></p>
                     </div>
