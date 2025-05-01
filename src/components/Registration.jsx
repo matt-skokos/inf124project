@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import ContentCard from "./Cards/ContentCard";
+import './Registration.css';
 
-function Register() {
+function Registration() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ function Register() {
     }
 
     return(
-        <div className="justify-content-center align-items-center d-flex vh-100">
+        <div className="registration-container p-1">
             <ContentCard>
                 <form className="register-form" onSubmit={handleSubmit}>
 
@@ -90,4 +91,4 @@ function Register() {
     )
 };
 
-export default Register;
+export default Registration;
