@@ -104,9 +104,9 @@ function Navbar(){
                     hideTopRow = {hideTopRow}
                 />
 
-                    <DesktopNavbar
-                        hideTopRow = {hideTopRow}
-                    />
+                <DesktopNavbar
+                    hideTopRow = {hideTopRow}
+                />
 
                 {/* Underline */}
                 <div className='logo-underline'></div>
