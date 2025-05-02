@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import ContentCard from "./Custom/ContentCard";
 import Button from "./Custom/Button";
-import './Variables.css'
 import './Login.css';
 
 function Login()

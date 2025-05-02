@@ -1,3 +1,25 @@
+/* color variables */
+:root{
+  --cream-bg:#FFFCED;
+  --card-bg:#E1EEE8;
+
+  --text-primary:#053747;
+  --text-hover:#608F9F;
+  --text-placeholder: #9aa3a3;
+
+  --profile-primary:#23718F;
+  --profile-hover:#608F9F;
+
+  --button-primary: #23718F;
+  --button-hover: #608F9F;
+
+  --border-color:#053747;
+
+  --highlight-green:#68BD42;
+  --highlight-yellow:#FDD202;
+  --highlight-red:#D02F40;
+}
+
 /* Global Style */
 body {
   background-color: var(--cream-bg);
