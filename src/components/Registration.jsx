@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ContentCard from "./Cards/ContentCard";
+import ContentCard from "./Custom/ContentCard";
 import Button from "./Custom/Button";
 import './Registration.css';
 
