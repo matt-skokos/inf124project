@@ -1,13 +1,3 @@
-/* color variables */
-:root{
-    --cream-bg:#FFFCED;
-    --text-primary:#053747;
-    --text-hover:#608F9F;
-    --border-color:#053747;
-    --profile-primary:#23718F;
-    --profile-hover:#608F9F;
-}
-
 .navbar{
     border-bottom: none;
 }

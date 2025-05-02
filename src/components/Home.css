@@ -1,0 +1,73 @@
+/* ----GENERAL---- */
+/* Center date & location in the left card */
+.date-location-section .content-card .card-body {
+    /* switch from “around” to a stacked, centered flex layout */
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center;
+    text-align: center;
+}
+
+/* ----DATE TIME CARD---- */
+.current-date-time .card-body {
+    gap: 0.25rem;
+  }
+
+.current-date{
+    font-size: 3rem;    /* make it bigger */
+    font-weight:lighter  /* some icon‐fonts honour weight */
+}
+
+/* ----CONDITION CARD---- */
+
+.section-title{
+    font-size: 2.5rem;    /* make it bigger */
+}
+
+.condition-card{
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height:  200px; /* default "closed" height */
+}
+.condition-card.expanded{
+    max-height:800px;
+}
+
+.condition-summary, 
+.condition-details{
+    margin-bottom: 2rem;
+}
+
+/* Ensure icon + label stack neatly */
+.condition-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.condition-icon{
+    font-size: 3rem;    /* make it bigger */
+    font-weight: bold;  /* some icon‐fonts honour weight */
+    line-height: .5;    /* tighter spacing below the icon */
+}
+
+.condition-label {
+margin: 0 ;
+font-size: 1.2rem;
+}
+
+.condition-overview {
+    font-size: 1.5rem;
+    font-weight: 100;
+    line-height: 1.2;   /* keep it nicely spaced */
+  }
+
+.expand-icon{
+    position: absolute;
+    bottom: 12px;
+    right: 24px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #444;
+}

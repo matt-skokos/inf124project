@@ -1,7 +1,9 @@
 .content-card{
     background-color: var(--card-bg);
     border-radius: 12px;
-    filter: drop-shadow(0px 4px 2px #C1BFB3);
+    border: none;
+    filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+    color: var(--text-primary);
 }
   
 .card-body {

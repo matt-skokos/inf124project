@@ -1,7 +1,6 @@
 import React from 'react'; 
 import { Link, useLocation } from 'react-router-dom'; 
 import logo from '../assets/logo.png'; 
-import 'bootstrap-icons/font/bootstrap-icons.css'; // Import Bootstrap Icons
 import './Navbar.css'; 
 
 
@@ -105,9 +104,9 @@ function Navbar(){
                     hideTopRow = {hideTopRow}
                 />
 
-                    <DesktopNavbar
-                        hideTopRow = {hideTopRow}
-                    />
+                <DesktopNavbar
+                    hideTopRow = {hideTopRow}
+                />
 
                 {/* Underline */}
                 <div className='logo-underline'></div>
