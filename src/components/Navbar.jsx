@@ -51,8 +51,6 @@ function MobileNavbar(props)
             </div>
             )}
         </div>
-
-
     );
 }
 
