@@ -14,6 +14,7 @@ function ConditionOverview({children, icon, label}){
     );
 }
 
+
 function ConditionDetails({children, label, identifier}){
     return(
     <li>
