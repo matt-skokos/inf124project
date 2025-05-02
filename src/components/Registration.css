@@ -1,12 +1,3 @@
-:root{
-    --cream-bg:#FFFCED;
-    --text_primary:#053747
-    --border-color:#053747;
-    --button-primary: #23718F;
-    --button-hover: #608F9F;
-    --placeholder-color: #9aa3a3;
-}
-
 .registration-container {
     display: flex;
     flex-direction: column;
@@ -30,7 +21,7 @@
 }
 
 .registration-input::placeholder {
-    color: var(--placeholder-color);
+    color: var(--text-placeholder);
     text-align: center;
 }
 
