@@ -2,11 +2,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     /* justify-content: center; */
 }
 
-/* form itself just takes full width of the card body */
+/* form itself full width of the card body */
 .login-form {
     width: 100%;
 }

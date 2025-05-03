@@ -14,7 +14,6 @@ function ConditionOverview({children, icon, label}){
     );
 }
 
-
 function ConditionDetails({children, label, identifier}){
     return(
     <li>
@@ -98,9 +97,9 @@ function ConditionCard(props){
                 aria-label={isExpanded ? 'Collapse details' : 'Expand details'}
             >
                 {isExpanded ? (
-                    <i class="bi bi-arrows-angle-contract"></i>
+                    <i className="bi bi-arrows-angle-contract"></i>
                 ) : (
-                    <i class="bi bi-arrows-angle-expand"></i>
+                    <i className="bi bi-arrows-angle-expand"></i>
                 )}
             </div>
         </ContentCard>
