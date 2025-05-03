@@ -34,7 +34,7 @@ function MobileNavbar(props)
 
                 {/* profile icon */}
                 { !props.hideTopRow && (
-                <Link to="/login" className='navbar-profile'>
+                <Link to="/profile" className='navbar-profile'>
                     <i className="bi bi-person-circle"></i>
                 </Link>
                 )}
@@ -68,7 +68,7 @@ function DesktopNavbar(props)
                 </ul>
 
                 {/* profile icon */}
-                <Link to="/login" className='navbar-profile'>
+                <Link to="/profile" className='navbar-profile'>
                     <i className="bi bi-person-circle"></i>
                 </Link> 
             </div>
