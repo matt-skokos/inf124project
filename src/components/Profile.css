@@ -65,7 +65,14 @@
     margin-top: 0.2rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    background-color: var(--cream-bg);
 }
+
+.profile-input{
+    background-color: var(--cream-bg);
+
+}
+
 
 /* ----NOTICATION---- */
 .notification-group {
@@ -99,7 +106,7 @@
     padding: 0.4rem 0.8rem;
     margin-right: 1rem;
     border-radius: 4px;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     font-size: 0.9rem;
 }
 

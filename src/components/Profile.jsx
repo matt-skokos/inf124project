@@ -92,6 +92,7 @@ function Profile(){
                             <input
                                 type="tel"
                                 id="tel"
+                                className="profile-input"
                                 placeholder="(xxx)-xxx-xxxx"
                                 autoComplete="on"
                                 value={phone}
@@ -105,6 +106,7 @@ function Profile(){
                             <input
                                 type="password"
                                 id="password"
+                                className="profile-input"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                             />
@@ -116,6 +118,7 @@ function Profile(){
                             <select
                                 value={skill}
                                 id="skill"
+                                className="profile-input"
                                 onChange={e => setSkill(e.target.value)}
                             >
                                 <option>Beginner</option>
