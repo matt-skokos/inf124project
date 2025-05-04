@@ -117,7 +117,7 @@ function DateLocationCard(props){
 
 function Home() {
     return(
-        <main className="container" >
+        <main className="container">
             <div className="row gx-4">
                 <section className="date-location-section col-12 col-md-6 mb-4">
                     <br/>
