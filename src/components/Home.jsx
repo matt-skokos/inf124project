@@ -99,8 +99,8 @@ function Home() {
     <main className="container">
       <div className="row gx-4">
         <section className="date-location-section col-12 col-md-6 mb-4">
-          <br/>
-          <br/>
+          <br className="d-none d-lg-flex"/>
+          <br className="d-none d-lg-flex"/>
           <DateLocationCard
             date="April 11, 2025"
             location="Near Aliso Viejo, California"

@@ -9,14 +9,13 @@ import ForecastForum from './components/ForecastForum';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
-import Favorites from './components/favorites';
+import Favorites from './components/Favorites';
 
 function App() {
   return (
     <BrowserRouter>
       <div className='app-container'>
         <Navbar />
-
         <div className='main-content'>
           <Routes>
             <Route path='/'                 element={<Home/>}/>
