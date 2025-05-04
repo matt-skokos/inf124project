@@ -94,15 +94,13 @@ export function DateLocationCard(props) {
   );
 }
 
-// —————————————————————————————
-// Default export for the Home page
-// —————————————————————————————
-
 function Home() {
   return (
     <main className="container">
       <div className="row gx-4">
         <section className="date-location-section col-12 col-md-6 mb-4">
+          <br/>
+          <br/>
           <DateLocationCard
             date="April 11, 2025"
             location="Near Aliso Viejo, California"

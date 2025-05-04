@@ -44,7 +44,7 @@ function MobileNavbar(props)
             <div className="collapse navbar-collapse justify-content-center alin-items-center w-100 py-2" id="mobileNavbarNav">
                 <ul className='navbar-nav'>
                     <li className='nav-item'><Link className='nav-link' to='/'>Home</Link></li>
-                    <li className='nav-item'><Link className='nav-link' to='/forecast'>Forecast</Link></li>
+                    <li className='nav-item'><Link className='nav-link' to='/forecast-forum'>Forecast</Link></li>
                     <li className='nav-item'><Link className='nav-link' to='/explore'>Explore</Link></li>
                     <li className='nav-item'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
                 </ul>
@@ -62,7 +62,7 @@ function DesktopNavbar(props)
             <div className="d-none d-lg-flex justify-content-center alin-items-center w-100 py-2">
                 <ul className='navbar-nav'>
                     <li className='nav-item'><Link className='nav-link' to='/'>Home</Link></li>
-                    <li className='nav-item'><Link className='nav-link' to='/forecast'>Forecast</Link></li>
+                    <li className='nav-item'><Link className='nav-link' to='/forecast-forum'>Forecast</Link></li>
                     <li className='nav-item'><Link className='nav-link' to='/explore'>Explore</Link></li>
                     <li className='nav-item'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
                 </ul>
