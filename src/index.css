@@ -1,12 +1,25 @@
-
 /* color variables */
 :root{
   --cream-bg:#FFFCED;
+  --card-bg:#E1EEE8;
+  --drop-shadow:#C1BFB3;
+
   --text-primary:#053747;
   --text-hover:#608F9F;
+  --text-placeholder: #9aa3a3;
+
+  --profile-primary:#23718F;
+  --profile-hover:#608F9F;
+
+  --button-primary: #23718F;
+  --button-hover:#608F9F;
+  --button-secondary:#6ca0a3;
+
   --border-color:#053747;
-  --card-bg:#E1EEE8;
+
   --highlight-green:#68BD42;
+  --highlight-yellow:#FDD202;
+  --highlight-red:#D02F40;
 }
 
 /* Global Style */
@@ -18,7 +31,13 @@ body {
   padding: 0;
 }
 
-.content-card{
-  background-color: var(--card-bg);
-  filter: drop-shadow(0px 4px 2px #C1BFB3);
+/* ───────── FOOTER ─────────*/
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;    /* ensures container fills the viewport */
+}
+
+.main-content {
+  flex: 1;              /* pushes footer down */
 }

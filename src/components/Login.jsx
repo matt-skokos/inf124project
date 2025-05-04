@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ContentCard from "./Cards/ContentCard";
+import ContentCard from "./Custom/ContentCard";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ function Login() {
   };
 
   return (
-    <div className="justify-content-center align-items-center d-flex vh-200">
+    <div className="justify-content-center align-items-center d-flex vh-100">
       <ContentCard>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -38,7 +38,7 @@ function Login() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-secondary w-100 mb-3">
+          <button type="submit" className="btn btn-primary w-100 mb-3">
             Login
           </button>
           <div className="text-center">

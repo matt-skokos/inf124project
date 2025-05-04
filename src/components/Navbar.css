@@ -1,57 +1,84 @@
-/* color variables */
-:root{
-    --cream-bg:#FFFCED;
-    --text-primary:#053747;
-    --text-hover:#608F9F;
-    --border-color:#053747;
-    --card-bg:#E1EEE8;
-    --highlight-green:#68BD42;
-  }
-
 .navbar{
     border-bottom: none;
 }
 
-/* links */
-.navbar-nav .nav-link {
-    color: var(--text-primary);
-    font-weight: lighter;
-    font-size: x-large;
-    margin: 0 1.75rem;
-  }
-
-  .navbar-nav .nav-link:hover {
-    color: var(--text-hover);
-  }
-
-/* profile icon */
-.navbar-profile {
-    font-size: 2rem;
-    color: #23718F
+/* ───────── DESKTOP NAV ROW ───────── */
+.desktop-nav .navbar-nav {
+  flex-direction: row;
 }
 
-.navbar-profile:hover {
-    color: var(--text-hover);
+.desktop-nav .nav-link {
+  margin: 0 1.0rem;
+  color: var(--text-primary);
+  font-weight: lighter;
+  font-size: x-large;
+}
+
+.desktop-nav .nav-link:hover {
+  color: var(--text-hover);
+}
+
+.desktop-nav .navbar-profile {
+  font-size: 2rem;
+  color: var(--profile-primary);
+  margin-left: 2rem;
+}
+
+.desktop-nav .navbar-profile:hover {
+  color: var(--profile-hover);
 }
 
 /* ───────── Logo row ───────── */
-.logo-row {
+.desktop-nav .logo-row {
     position: relative;
-    margin-top: 0.5rem;
-    padding-bottom: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
 /* logo itself */
-.navbar-logo {
+.desktop-nav .navbar-logo {
     height: 80px;
     width: auto;
   }
 
-  /* the centered underline spanning 2/3 of viewport */
+/* ───────── MOBILE TOP ROW ───────── */
+.mobile-nav .navbar-toggler {
+  border: none;
+}
+
+.mobile-nav .navbar-logo {
+  height: 40px;
+  padding: 0rem 1rem;
+}
+
+.mobile-nav .navbar-profile {
+  font-size: 2rem;
+  color: var(--profile-primary);
+}
+
+.mobile-nav .navbar-profile:hover {
+  color: var(--profile-hover);
+}
+
+/* ───────── MOBILE NAV ROW ───────── */
+.mobile-nav .navbar-nav {
+  flex-direction: row;
+}
+
+.mobile-nav .nav-link {
+  color: var(--text-primary);
+  padding: 0 0.5rem;
+}
+
+.mobile-nav .nav-link:hover {
+  color: var(--text-hover);
+}
+
+/* ───────── NAV UNDERLINE ─────────*/
 .logo-underline {
     height: 1px;
     width: 66.666vw;        /* two-thirds of viewport width */
-    max-width: 800px;       /* optional cap, tweak as needed */
+    max-width: 800px;       /* optional cap */
     background-color: var(--border-color);
-    margin: 0.5rem auto 0;  /* center horizontally */
-  }
+    margin: 0.5rem auto 0.75rem;  /* center horizontally */
+}
