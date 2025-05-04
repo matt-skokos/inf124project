@@ -12,6 +12,7 @@ function ForecastForum(){
         // Handle login logic here, e.g., API call to authenticate user
         console.log("Location:", location);
     };
+    
 
     return(
         <div className="forecast-forum-container p-1">
