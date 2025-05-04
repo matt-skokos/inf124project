@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ContentCard from "./Custom/ContentCard";
 import Button from "./Custom/Button";
+import './ForecastForum.css'
 
 function ForecastForum(){
 
@@ -11,14 +12,14 @@ function ForecastForum(){
         // Handle login logic here, e.g., API call to authenticate user
         console.log("Location:", location);
     };
+    
 
     return(
-        <div className="container">
+        <div className="forecast-forum-container p-1">
             <h3 className="section-title mb-0">Forecast</h3>
-        
-            <ContentCard>
-                <form className="login-form px-4" onSubmit={handleSubmit}>
-                    {/* EMAIL */}
+            <ContentCard className="forecast-card">
+                <form className="forecast-form px-2" onSubmit={handleSubmit}>
+                    {/* LOCATION */}
                     <div className="mb-3">
                         <input
                             type="text"

@@ -1,3 +1,36 @@
+.forecast-forum-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .section-title{
     font-size: 2.5rem;
+    min-width: 300px;
+    width: 40%;
+    text-align: left;
+}
+
+.forecast-form{
+    width:100%
+}
+
+.forecast-card{
+    min-width: 300px;
+    min-height: 200px;
+    width:40%
+}
+
+.forecast-input {
+    background-color: var(--cream-bg);
+    padding: 0.75rem rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-align: center;
+    /* width: 100%; */
+}
+
+.forecast-input::placeholder {
+    color: var(--text-placeholder);
+    text-align: center;
 }
