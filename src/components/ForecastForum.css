@@ -23,10 +23,6 @@
     width: 100%;
     max-width: 800px;
     margin: 0 auto 2rem;
-    padding: 1rem;
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .forecast-input {
@@ -63,14 +59,9 @@
 }
 
 .forecast-bestday-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    color: var(--text-primary);
     max-width: 800px;
     width: 100%;
     margin: 0 auto 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 /* 3-Day Forecast Styling */

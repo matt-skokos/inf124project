@@ -1,7 +1,27 @@
 import React, { useState } from "react";
 import ContentCard from "./Custom/ContentCard";
 import Button from "./Custom/Button";
+import { ConditionOverview } from "./Home";
 import './ForecastForum.css';
+
+function ForecastDay({ date, swell, wind, tide }) {
+    return (
+        <div className="forecast-day">
+            <p className="day-label">{date}</p>
+            <div className="day-conditions">
+                <ConditionOverview icon="bi bi-tsunami" label="Swell">
+                    <p>{swell}</p>
+                </ConditionOverview>
+                <ConditionOverview icon="bi bi-wind" label="Wind">
+                    <p>{wind}</p>
+                </ConditionOverview>
+                <ConditionOverview icon="bi bi-water" label="Tide">
+                    <p>{tide}</p>
+                </ConditionOverview>
+            </div>
+        </div>
+    );
+}
 
 function ForecastForum(){
     const [location, setLocation] = useState("");
@@ -53,32 +73,24 @@ function ForecastForum(){
                     {/* 3 Day Forecast */}
                     <h5 className="forecast-subheader">3 Day Forecast</h5>
                     <ContentCard className="forecast-card">
-                        <div className="forecast-day">
-                            <p className="day-label">Saturday, April 12th</p>
-                            <div className="day-conditions">
-                                <div className="condition-item"><i className="bi bi-tsunami"></i> SSW, 2–3 ft</div>
-                                <div className="condition-item"><i className="bi bi-wind"></i> SSW, 4 mph</div>
-                                <div className="condition-item"><i className="bi bi-water"></i> Low</div>
-                            </div>
-                        </div>
-
-                        <div className="forecast-day">
-                            <p className="day-label">Sunday, April 13th</p>
-                            <div className="day-conditions">
-                                <div className="condition-item"><i className="bi bi-tsunami"></i> SSW, 2–3 ft</div>
-                                <div className="condition-item"><i className="bi bi-wind"></i> Light/Variable</div>
-                                <div className="condition-item"><i className="bi bi-water"></i> Low</div>
-                            </div>
-                        </div>
-
-                        <div className="forecast-day">
-                            <p className="day-label">Monday, April 14th</p>
-                            <div className="day-conditions">
-                                <div className="condition-item"><i className="bi bi-tsunami"></i> SSW, 2–3 ft</div>
-                                <div className="condition-item"><i className="bi bi-wind"></i> S, 5 mph</div>
-                                <div className="condition-item"><i className="bi bi-water"></i> Rising</div>
-                            </div>
-                        </div>
+                        <ForecastDay 
+                            date="Saturday, April 12th"
+                            swell="SSW, 2–3 ft"
+                            wind="SSW, 4 mph"
+                            tide="Low"
+                        />
+                        <ForecastDay 
+                            date="Sunday, April 13th"
+                            swell="SSW, 2–3 ft"
+                            wind="Light/Variable"
+                            tide="Low"
+                        />
+                        <ForecastDay 
+                            date="Monday, April 14th"
+                            swell="SSW, 2–3 ft"
+                            wind="S, 5 mph"
+                            tide="Rising"
+                        />
                     </ContentCard>
                 </>
             )}
