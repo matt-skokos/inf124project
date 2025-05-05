@@ -9,7 +9,7 @@ import ForecastForum from './components/ForecastForum';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
-import Favorites from './components/Favorites';
+import Favorites from './components/favorites';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
             <Route path='/registration'     element={<Registration/>}/>
             <Route path='/profile'          element={<Profile/>}/>
             <Route path='/forecast-forum'   element={<ForecastForum/>}/>
-+           <Route path='/favorites'        element={<Favorites />}/>  
+            <Route path='/favorites'        element={<Favorites />}/>  
             {/* Add other routes here: Forecast, Explore Spots, Favorites */}
           </Routes>
         </div>
