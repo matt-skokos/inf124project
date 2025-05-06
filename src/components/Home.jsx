@@ -17,6 +17,7 @@ const mockLocation = {
 
 const mockCondition = [ 
   { 
+    date: "April 11, 2025",
     overview: "Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended.",
     swell_direction: "SSW",
     swell: "2-3 ft",
@@ -121,18 +122,21 @@ function Home() {
     <main className="container">
       <div className="row gx-4">
         <section className="date-location-section col-12 col-md-6 mb-4">
-          <br className="d-none d-lg-flex"/>
-          <br className="d-none d-lg-flex"/>
+          
+          {/* ----DATE TIME---- */}
+          <br className="d-none d-md-flex"/>
+          <br className="d-none d-md-flex"/>
           <DateLocationCard
             date={mockDate.date}
             location={mockLocation.location}
           />
         </section>
 
+        {/* ----CONDITIONS---- */}
+        <section className="condition-section col-12 col-md-6 mb-4">
+        <h2 className="section-title mb-0">Conditions</h2>
         {mockCondition.map((cond) => (
-          <section className="condition-section col-12 col-md-6 mb-4">
-            <h3 className="section-title mb-0">Conditions</h3>
-              <ConditionCard
+              <ConditionCard key={cond.date}
                 overview        ={cond.overview}
                 swell_direction ={cond.swell_direction}
                 swell           ={cond.swell}
@@ -143,8 +147,8 @@ function Home() {
                 tide            ={cond.tide}
                 tide_details    ={cond.tide_details}
               />
-          </section>
         ))}
+        </section>
       </div>
     </main>
   );
