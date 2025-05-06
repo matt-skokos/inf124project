@@ -9,7 +9,7 @@ import ForecastForum from './components/ForecastForum';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
-import Favorites from './components/favorites';
+import Favorites from './components/Favorites';
 
 function App() {
   return (
