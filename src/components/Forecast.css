@@ -13,6 +13,7 @@
     align-content: center;
     width: 70%;
     min-width: 350px;
+    max-width: 800px;
 }
 
 .title-icon {
