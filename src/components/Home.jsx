@@ -44,7 +44,7 @@ export function ConditionDetails({ children, label, identifier }) {
   return (
     <li>
       <strong className="condition-label">{label}</strong>
-      <div className="condition-description px-3" id={identifier}>
+      <div className="condition-details px-3" id={identifier}>
         {children}
       </div>
     </li>
@@ -134,20 +134,20 @@ function Home() {
 
         {/* ----CONDITIONS---- */}
         <section className="condition-section col-12 col-md-6 mb-4">
-        <h2 className="section-title mb-0">Conditions</h2>
-        {mockCondition.map((cond) => (
-              <ConditionCard key={cond.date}
-                overview        ={cond.overview}
-                swell_direction ={cond.swell_direction}
-                swell           ={cond.swell}
-                swell_details   ={cond.swell_details}
-                wind_direction  ={cond.wind_direction}
-                wind            ={cond.wind}
-                wind_details    ={cond.wind_details}
-                tide            ={cond.tide}
-                tide_details    ={cond.tide_details}
-              />
-        ))}
+          <h2 className="section-title mb-0">Conditions</h2>
+          {mockCondition.map((cond) => (
+          <ConditionCard key={cond.date}
+            overview        ={cond.overview}
+            swell_direction ={cond.swell_direction}
+            swell           ={cond.swell}
+            swell_details   ={cond.swell_details}
+            wind_direction  ={cond.wind_direction}
+            wind            ={cond.wind}
+            wind_details    ={cond.wind_details}
+            tide            ={cond.tide}
+            tide_details    ={cond.tide_details}
+          />
+          ))}
         </section>
       </div>
     </main>
