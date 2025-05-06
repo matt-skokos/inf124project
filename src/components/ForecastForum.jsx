@@ -4,6 +4,10 @@ import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './ForecastForum.css';
 
+const mock_forecast = [
+    {}
+]
+
 function ForecastDay({ date, swell, wind, tide }) {
     return (
         <div className="forecast-day">
