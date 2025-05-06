@@ -143,11 +143,11 @@ const Explore = () => {
 
   if (selectedSpot) {
     return (
-      <div className="container">
+      <div className="explore-page">
         <div>
           <button onClick={() => setSelectedSpot(null)}>← Back to Spots</button>
         </div>
-        <div className="explore-page">
+        <div>
           <SpotDetail spot={selectedSpot} />
         </div>
       </div>
@@ -155,21 +155,19 @@ const Explore = () => {
   }
 
   return (
-    <div className="container">
-      <div className="explore-page">
-        <h1>Explore Spots</h1>
-        <ul className="spotItems">
-          {spotList.map((spot) => (
-            <li
-              className="content-card"
-              key={spot.title}
-              onClick={() => setSelectedSpot(spot)}
-            >
-              <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="explore-page">
+      <h1>Explore Spots</h1>
+      <ul className="spotItems">
+        {spotList.map((spot) => (
+          <li
+            className="content-card"
+            key={spot.title}
+            onClick={() => setSelectedSpot(spot)}
+          >
+            <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
