@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Custom/Footer';
 import Home from './components/Home';
-import ForecastForum from './components/ForecastForum';
+import ForecastForum from './components/Forecast';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
