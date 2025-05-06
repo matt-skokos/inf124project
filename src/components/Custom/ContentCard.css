@@ -1,11 +1,11 @@
-.content-card{
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    border: none;
-    filter: drop-shadow(0px 4px 2px var(--drop-shadow));
-    color: var(--text-primary);
+.content-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: none;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  color: var(--text-primary);
 }
-  
+
 .card-body {
   display: flex;
   flex-direction: column;
