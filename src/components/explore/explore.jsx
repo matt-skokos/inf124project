@@ -143,11 +143,11 @@ const Explore = () => {
 
   if (selectedSpot) {
     return (
-      <div className="explore-page">
-        <div>
+      <div className="explore-page explore-detail-container">
+        <div className="back-button-container">
           <button onClick={() => setSelectedSpot(null)}>← Back to Spots</button>
         </div>
-        <div>
+        <div className="spot-detail-wrapper">
           <SpotDetail spot={selectedSpot} />
         </div>
       </div>
@@ -155,7 +155,7 @@ const Explore = () => {
   }
 
   return (
-    <div className="explore-page">
+    <div className="explore-page explore-list-container">
       <h1>Explore Spots</h1>
       <ul className="spotItems">
         {spotList.map((spot) => (
@@ -222,8 +222,8 @@ const SpotDetail = ({ spot }) => {
               className="btn btn-outline-secondary social-media-button"
               style={{
                 borderRadius: "50%",
-                width: 32,
-                height: 32,
+                width: 50,
+                height: 40,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -294,6 +294,63 @@ const SpotDetail = ({ spot }) => {
                 </div>
               </div>
             </ContentCard>
+          </div>
+
+          {/* Detailed Spot Overview Card */}
+          <div style={{ width: "100%", marginTop: "1.5rem" }}>
+            <h2>Local Insights</h2>
+            <ContentCard className="spot-overview-card">
+              <p className="mb-0">
+                Sunset Cliffs in San Diego is a popular surfing destination
+                known for its beautiful coastal bluffs and reliable waves. It
+                offers a range of breaks, including reef breaks and beach
+                breaks, with a mix of left and right-hand waves. The area is
+                known for its glassy barrels when the tide is low and kelp beds
+                and sandy bottom form the perfect beach break. However, it's
+                also important to be aware of the potential dangers, including
+                rocky cliffs and exposed reefs, and to respect the locals and
+                follow surf etiquette, especially during busy periods.
+              </p>
+            </ContentCard>
+          </div>
+
+          {/* Sources Card */}
+          <div style={{ width: "100%", marginTop: "1.5rem" }}>
+            <h2>Sources</h2>
+            <ContentCard className="sources-card">
+              <ul className="list-unstyled text-center mb-0">
+                <li className="mb-2">
+                  <a href="#" className="source-link">
+                    Visit {spot.title}
+                  </a>
+                </li>
+                <li className="mb-2">
+                  <a href="#" className="source-link">
+                    {spot.title} Community
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="source-link">
+                    Swell Magnet
+                  </a>
+                </li>
+              </ul>
+            </ContentCard>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
+            <a href="#" className="btn action-button directions-button">
+              <i className="bi bi-map me-2"></i>
+              Directions
+            </a>
+            <a
+              href="/forecast-forum"
+              className="btn action-button forecast-button"
+            >
+              <i className="bi bi-cloud me-2"></i>
+              Forecast
+            </a>
           </div>
         </div>
       </div>

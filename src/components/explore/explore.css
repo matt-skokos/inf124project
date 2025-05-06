@@ -181,6 +181,108 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: calc(100vh - 150px); /* Adjust based on your navbar/footer height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* For WebKit browsers like Chrome/Safari */
+.explore-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.explore-page::-webkit-scrollbar-track {
+  background: var(--cream-bg);
+}
+
+.explore-page::-webkit-scrollbar-thumb {
+  background-color: var(--button-secondary);
+  border-radius: 20px;
+}
+
+/* For the back button */
+.back-button-container {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem; /* Add padding between back button and content */
+  padding: 0 1rem;
+}
+
+.spot-detail-wrapper {
+  width: 100%;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .explore-page {
+    height: calc(100vh - 120px); /* Adjust for mobile */
+  }
+}
+
+/* Remove any conflicting styles */
+.explore-page .container {
+  padding: 0;
+  max-width: none;
+}
+
+/* Sources Card */
+.explore-page .sources-card {
+  background-color: var(
+    --card-bg
+  ); /* Changed from var(--cream-bg) to var(--card-bg) */
+  padding: 1rem 0.5rem;
+}
+
+.explore-page .source-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: block;
+  padding: 0.4rem 0;
+}
+
+.explore-page .source-link:hover {
+  color: var(--text-hover);
+}
+
+/* Action Buttons */
+.explore-page .spot-actions {
+  margin: 1.5rem 0;
+}
+
+.explore-page .action-button {
+  width: 48%;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  background-color: var(--button-primary);
+  border: none;
+  padding: 0.8rem 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.explore-page .action-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-3px);
+}
+
+.explore-page .action-button i {
+  font-size: 1.2rem;
+}
+
+.explore-page .action-card {
+  padding: 0.8rem 0;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.explore-page .directions-button .action-card:hover {
+  background-color: #e1eee8;
+}
+
+.explore-page .forecast-button .action-card:hover {
+  background-color: #e1eee8;
 }
 
 /* Remove or comment out the global .container style to avoid conflicts */
