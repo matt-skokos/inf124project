@@ -10,7 +10,7 @@ import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
 import Favorites from './components/Favorites';
-import Explore from "./components/explore/explore";
+import Explore from "./components/Explore";
 
 function App() {
   return (

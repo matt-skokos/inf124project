@@ -39,11 +39,6 @@ body {
   padding: 0;
 }
 
-/* ───────── BODY ─────────*/
-.section-title{
-  font-size: 2.5rem;    /* make it bigger */
-}
-
 /* ───────── FOOTER ─────────*/
 .app-container {
   display: flex;

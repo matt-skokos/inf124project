@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
+import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './Forecast.css';
@@ -73,48 +75,30 @@ function ForecastDay({ date, swell, wind, tide }) {
 
 function ForecastReport(props)
 {
-    const [isFavoriteSpot, setIsFavoriteSpot] = useState(false)
-
     return( 
         <React.Fragment>
-            {/* TITLE */}
-            <div className="forecast-report-container d-flex justify-content-around mb-3">
-                <div className="actions-container d-flex justify-content-around mx-3">
-                    
-                    {isFavoriteSpot ? (
-                        <i className="title-icon bi bi-suit-heart-fill mx-1"></i>
-                    ):(
-                        <i className="title-icon bi bi-suit-heart mx-1"></i>
-                    )}
-                    <i className="title-icon bi bi-share mx-1"></i>
-                </div>
-                <h1 className="forecast-title">{props.location}</h1>
-            </div>
+            <SpotTitle
+                title={props.location}
+            />
 
             {/* Best Day */}
-            <div className="forecast-report-container">
-                <h2 className="section-title mb-0">Best Day</h2>
-                <ContentCard className="mb-4">
-                    <p className="small mb-0">
-                        {mockForecast.best_day}
-                    </p>
-                </ContentCard>
-            </div>
+            <ContentCard className="mb-4" title="Best Day">
+                <p className="small mb-0">
+                    {mockForecast.best_day}
+                </p>
+            </ContentCard>
 
             {/* 3 Day Forecast */}
-            <div className="forecast-report-container">
-                <h2 className="section-title mb-0">3 Day Forecast</h2>
-                <ContentCard className="">
-                    {mockForecast.forecast_3_day.map((forecast)=>(
-                    <ForecastDay key={forecast.date}
-                        date=   {forecast.date}
-                        swell=  {forecast.swell}
-                        wind=   {forecast.wind}
-                        tide=   {forecast.tide}
-                    />
-                    ))}
-                </ContentCard>
-            </div>
+            <ContentCard title="3 Day Forecast">
+                {mockForecast.forecast_3_day.map((forecast)=>(
+                <ForecastDay key={forecast.date}
+                    date=   {forecast.date}
+                    swell=  {forecast.swell}
+                    wind=   {forecast.wind}
+                    tide=   {forecast.tide}
+                />
+                ))}
+            </ContentCard>
         </React.Fragment>
     );
 }
@@ -129,14 +113,14 @@ function Forecast(){
     };
 
     return (
-        <div className="forecast-container p-3">
-            {!submitted ? (
-                <React.Fragment>
-                    {/* ----FORM---- */}
-                    <ContentCard className="forecast-card">
+        <PageContainer>
+                {!submitted ? (
+                    <ContentCard>
+                        {/* ----FORM---- */}
                         <form className="forecast-form px-2" onSubmit={handleSubmit}>
+                            
+                            {/* LOCATION */}
                             <div className="mb-3">
-                                {/* LOCATION */}
                                 <input
                                     type="text"
                                     className="form-control forecast-input"
@@ -147,19 +131,19 @@ function Forecast(){
                                     required
                                 />
                             </div>
+
                             {/* SUBMIT */}
                             <Button type="submit" className="get-report-button">
                                 Get Report
                             </Button>
                         </form>
                     </ContentCard>
-                </React.Fragment>
-            ) : (
-                <ForecastReport
-                    location = {location}
-                />
-            )}
-        </div>
+                ) : (
+                    <ForecastReport
+                        location = {location}
+                    />
+                )}
+        </PageContainer>
     );
 }
 
