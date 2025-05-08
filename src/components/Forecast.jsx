@@ -121,6 +121,7 @@ function Forecast(){
                     
                     {/* LOCATION */}
                     <div className="mb-3">
+                        <label htmlFor="location">Location</label>
                         <input
                             type="text"
                             className="form-control forecast-input"
