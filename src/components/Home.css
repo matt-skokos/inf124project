@@ -50,11 +50,11 @@
 
 .condition-label {
 margin: 0 ;
-font-size: 1.2rem;
+font-size: 1.4rem;
 }
 
 .condition-overview {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 100;
     line-height: 1.2;   /* keep it nicely spaced */
   }

@@ -35,7 +35,7 @@ export function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
       <i className={`condition-icon ${icon}`}></i>
-      <strong className="condition-label card-subtitle mb-1">{label}</strong>
+      <h3 className="condition-label card-subtitle mb-1"><strong>{label}</strong></h3>
       <div className="condition-overview">{children}</div>
     </div>
   );
@@ -120,7 +120,7 @@ export function DateLocationCard(props) {
 
 function Home() {
   return (
-    <PageContainer className="">
+    <PageContainer className="" title="Home" hideTitle={true}>
       <div className="row gx-4">
 
         {/* ----DATE TIME---- */}
