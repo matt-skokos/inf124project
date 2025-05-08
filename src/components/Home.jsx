@@ -1,5 +1,6 @@
 // src/components/Home.jsx
 import React, { useState } from "react";
+import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
 
@@ -110,20 +111,20 @@ export function ConditionCard(props) {
 
 export function DateLocationCard(props) {
   return (
-    <ContentCard className="current-date-time">
-      <h2 className="current-date m-0">{props.date}</h2>
-      <p className="current-time m-0">{props.location}</p>
+    <ContentCard className="date-location-card" >
+      <h2 className="m-0" id="current-date">{props.date}</h2>
+      <p  className="m-0" id="current-time">{props.location}</p>
     </ContentCard>
   );
 }
 
 function Home() {
   return (
-    <main className="container">
+    <PageContainer className="">
       <div className="row gx-4">
+
+        {/* ----DATE TIME---- */}
         <section className="date-location-section col-12 col-md-6 mb-4">
-          
-          {/* ----DATE TIME---- */}
           <br className="d-none d-md-flex"/>
           <br className="d-none d-md-flex"/>
           <DateLocationCard
@@ -149,7 +150,7 @@ function Home() {
           ))}
         </section>
       </div>
-    </main>
+    </PageContainer>
   );
 }
 

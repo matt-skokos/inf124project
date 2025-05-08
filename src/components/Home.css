@@ -1,6 +1,6 @@
-/* ----GENERAL---- */
+/* ----DATE TIME CARD---- */
 /* Center date & location in the left card */
-.date-location-section .content-card .card-body {
+.date-location-card .card-body {
     /* switch from “around” to a stacked, centered flex layout */
     flex-direction: column;
     justify-content: center !important;
@@ -8,12 +8,11 @@
     text-align: center;
 }
 
-/* ----DATE TIME CARD---- */
 .current-date-time .card-body {
     gap: 0.25rem;
   }
 
-.current-date{
+#current-date{
     font-size: 3rem;    /* make it bigger */
     font-weight:lighter  /* some icon‐fonts honour weight */
 }
@@ -25,6 +24,7 @@
     transition: max-height 0.3s ease;
     max-height:  200px; /* default "closed" height */
 }
+
 .condition-card.expanded{
     max-height:800px;
 }
