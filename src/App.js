@@ -2,6 +2,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
 import Footer from './components/Custom/Footer';
 import Home from './components/Home';
 import Forecast from './components/Forecast';
@@ -24,7 +25,7 @@ function App() {
             <Route path="/registration" element={<Registration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/explore" element={<Explore />} />
-            <Route path="/forecast-forum" element={<ForecastForum />} />
+            <Route path="/forecast" element={<Forecast/>} />
             <Route path="/favorites" element={<Favorites />} />
             {/* Add other routes here: Forecast, Explore Spots, Favorites */}
           </Routes>
