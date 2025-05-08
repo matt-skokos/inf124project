@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./explore.css";
-import HeartSpot from "./heartComponent.jsx";
-import ContentCard from "../Custom/ContentCard.jsx";
+import "./Explore.css";
+import HeartSpot from "./Custom/HeartButton.jsx";
+import ContentCard from "./Custom/ContentCard.jsx";
 
 const spots = [
   {
