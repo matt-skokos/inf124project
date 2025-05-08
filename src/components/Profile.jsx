@@ -45,11 +45,13 @@ function Profile(){
                         <i className="avatar-icon bi bi-person-circle"></i>
                     )}
 
+                    <label className="visually-hidden" htmlFor="avator-input">avator input</label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleAvatarChange}
                         className="avatar-input"
+                        id="avatar-input"
                     />
                 </div>
 
@@ -60,7 +62,7 @@ function Profile(){
             </div>
             
             <ContentCard className="profile-card">
-                <form className="profile-form" onSubmit={handleSave}>
+                <form className="profile-form" onSubmit={handleSave} aria-label="profile input form">
                     <div className="profile-fields p-1">
                         
                         {/* NAME */}

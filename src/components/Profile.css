@@ -111,7 +111,7 @@
 
 /* highlight the selected one */
 .notification-group .notify-option input:checked + span {
-    background: var(--button-secondary);
+    background: var(--button-primary);
     color: white;
     border-color: var(--border-color);
 }
