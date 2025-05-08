@@ -49,6 +49,10 @@
     cursor: pointer;
 }
 
+#avatar-input-label{
+    visibility: 'hidden'
+}
+
 /* ----FORM FIELDS---- */
 .profile-fields label {
     display: block;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ContentCard from "./Custom/ContentCard";
+import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
 import './Profile.css'
 
@@ -30,7 +31,7 @@ function Profile(){
     }
 
     return(
-        <div className="profile-container p-3">
+        <PageContainer>
             {/* ----HEADER---- */}
             <div className="profile-header">
                 {/* AVATAR */}
@@ -165,7 +166,7 @@ function Profile(){
 
                 </form>
             </ContentCard>
-        </div>
+        </PageContainer>
     );
 }
 
