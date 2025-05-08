@@ -8,7 +8,7 @@ function SpotTitle (props)
         <React.Fragment>
             {/* TITLE */}
             <div className="spot-title-container d-flex justify-content-around mb-3">
-                <div className="actions-container d-flex justify-content-around mx-3">
+                <div className="actions-container d-flex justify-content-around mx-2">
                     {isFavoriteSpot ? (
                         <i className="title-icon bi bi-suit-heart-fill mx-1"></i>
                     ):(

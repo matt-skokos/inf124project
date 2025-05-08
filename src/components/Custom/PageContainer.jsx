@@ -3,7 +3,7 @@ import "./PageContainer.css";
 
 function PageContainer({children}){
     return(
-        <div className="page-container p-3">
+        <div className="page-container p-2">
             {children}
         </div>
     );
