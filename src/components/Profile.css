@@ -1,16 +1,3 @@
-.profile-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--cream-bg);
-}
-
-.profile-card {
-    width: 90%;
-    max-width: 500px;
-}
-
 /* ----AVATAR---- */
 .profile-header {
     text-align: center;
@@ -51,6 +38,11 @@
 
 #avatar-input-label{
     visibility: 'hidden'
+}
+
+/* -----CARD----- */
+.profile-card {
+    max-width: 500px;
 }
 
 /* ----FORM FIELDS---- */

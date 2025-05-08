@@ -46,7 +46,7 @@ function Profile(){
                         <i className="avatar-icon bi bi-person-circle"></i>
                     )}
 
-                    <label className="visually-hidden" htmlFor="avator-input">avator input</label>
+                    <label className="visually-hidden" htmlFor="avatar-input">avator input</label>
                     <input
                         type="file"
                         accept="image/*"
