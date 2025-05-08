@@ -1,14 +1,22 @@
-.content-card{
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    border: none;
-    filter: drop-shadow(0px 4px 2px var(--drop-shadow));
-    color: var(--text-primary);
+.card-container{
+  width: 100%;
+}
 
-    /* Set default width */
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto 0rem;
+.section-title{
+  font-size: 2.5rem;    /* make it bigger */
+}
+
+.content-card{
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: none;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  color: var(--text-primary);
+
+  /* Set default width */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 0rem;
 } 
 
 .card-body {

@@ -1,11 +1,20 @@
 import React from "react";
 import './ContentCard.css';
 
-function ContentCard({children, className}){
+function ContentCard({children, className, ...props}){
     return(
-        <div className={className + " content-card card"}>
-            <div className="card-body justify-content-around">
-                {children}
+        <div className="card-container">
+
+            {/* ----TITLE---- */}
+            {props.title && (
+            <h2 className="section-title mb-0">{props.title}</h2>
+            )}
+
+            {/* ----BODY---- */}
+            <div className={className + " content-card card"}>
+                <div className="card-body justify-content-around">
+                    {children}
+                </div>
             </div>
         </div>
     );
