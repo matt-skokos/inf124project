@@ -113,36 +113,37 @@ function Forecast(){
     };
 
     return (
-        <PageContainer>
-                {!submitted ? (
-                    <ContentCard>
-                        {/* ----FORM---- */}
-                        <form className="forecast-form px-2" onSubmit={handleSubmit}>
-                            
-                            {/* LOCATION */}
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control forecast-input"
-                                    id="location"
-                                    placeholder="Select location"
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    required
-                                />
-                            </div>
+        <PageContainer title="Forecast">
+            {!submitted ? (
+            <ContentCard>
+                {/* ----FORM---- */}
+                <form className="forecast-form px-2" onSubmit={handleSubmit}>
+                    
+                    {/* LOCATION */}
+                    <div className="mb-3">
+                        <label htmlFor="location">Location</label>
+                        <input
+                            type="text"
+                            className="form-control forecast-input"
+                            id="location"
+                            placeholder="Select location"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                            {/* SUBMIT */}
-                            <Button type="submit" className="get-report-button">
-                                Get Report
-                            </Button>
-                        </form>
-                    </ContentCard>
-                ) : (
-                    <ForecastReport
-                        location = {location}
-                    />
-                )}
+                    {/* SUBMIT */}
+                    <Button type="submit" className="get-report-button">
+                        Get Report
+                    </Button>
+                </form>
+            </ContentCard>
+            ) : (
+            <ForecastReport
+                location = {location}
+            />
+            )}
         </PageContainer>
     );
 }

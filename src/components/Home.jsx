@@ -1,5 +1,6 @@
 // src/components/Home.jsx
 import React, { useState } from "react";
+import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
 
@@ -34,7 +35,7 @@ export function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
       <i className={`condition-icon ${icon}`}></i>
-      <strong className="condition-label card-subtitle mb-1">{label}</strong>
+      <h3 className="condition-label card-subtitle mb-1"><strong>{label}</strong></h3>
       <div className="condition-overview">{children}</div>
     </div>
   );
@@ -110,20 +111,20 @@ export function ConditionCard(props) {
 
 export function DateLocationCard(props) {
   return (
-    <ContentCard className="current-date-time">
-      <h2 className="current-date m-0">{props.date}</h2>
-      <p className="current-time m-0">{props.location}</p>
+    <ContentCard className="date-location-card" >
+      <h2 className="m-0" id="current-date">{props.date}</h2>
+      <p  className="m-0" id="current-time">{props.location}</p>
     </ContentCard>
   );
 }
 
 function Home() {
   return (
-    <main className="container">
+    <PageContainer className="" title="Home" hideTitle={true}>
       <div className="row gx-4">
+
+        {/* ----DATE TIME---- */}
         <section className="date-location-section col-12 col-md-6 mb-4">
-          
-          {/* ----DATE TIME---- */}
           <br className="d-none d-md-flex"/>
           <br className="d-none d-md-flex"/>
           <DateLocationCard
@@ -149,7 +150,7 @@ function Home() {
           ))}
         </section>
       </div>
-    </main>
+    </PageContainer>
   );
 }
 

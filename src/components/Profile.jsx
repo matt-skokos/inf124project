@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ContentCard from "./Custom/ContentCard";
+import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
 import './Profile.css'
 
@@ -30,7 +31,7 @@ function Profile(){
     }
 
     return(
-        <div className="profile-container p-3">
+        <PageContainer title="Profile" hideTitle={true}>
             {/* ----HEADER---- */}
             <div className="profile-header">
                 {/* AVATAR */}
@@ -45,11 +46,13 @@ function Profile(){
                         <i className="avatar-icon bi bi-person-circle"></i>
                     )}
 
+                    <label className="visually-hidden" htmlFor="avatar-input">avator input</label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleAvatarChange}
                         className="avatar-input"
+                        id="avatar-input"
                     />
                 </div>
 
@@ -60,7 +63,7 @@ function Profile(){
             </div>
             
             <ContentCard className="profile-card">
-                <form className="profile-form" onSubmit={handleSave}>
+                <form className="profile-form" onSubmit={handleSave} aria-label="profile input form">
                     <div className="profile-fields p-1">
                         
                         {/* NAME */}
@@ -163,7 +166,7 @@ function Profile(){
 
                 </form>
             </ContentCard>
-        </div>
+        </PageContainer>
     );
 }
 

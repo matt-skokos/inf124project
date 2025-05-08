@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import ContentCard from "./Custom/ContentCard";
+import PageContainer from "./Custom/PageContainer";
+import Button from "./Custom/Button";
+import './Login.css'
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,10 +16,15 @@ function Login() {
   };
 
   return (
-    <div className="justify-content-center align-items-center d-flex vh-100">
+    <PageContainer title="Log In">
       <ContentCard>
         <form className="login-form" onSubmit={handleSubmit}>
+          
+          {/* EMAIL */}
           <div className="mb-3">
+            <label className="visually-hidden" htmlFor="email">
+              Email
+            </label>
             <input
               type="email"
               className="form-control"
@@ -27,7 +35,12 @@ function Login() {
               required
             />
           </div>
+
+          {/* PASSWORD */}
           <div className="mb-3">
+            <label className="visually-hidden" htmlFor="password">
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
@@ -38,17 +51,21 @@ function Login() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100 mb-3">
+
+          {/* BUTTON */}
+          <Button type="submit" className="get-report-button">
             Login
-          </button>
+          </Button>
           <div className="text-center">
             <p>
-              Don't have an account? <a href="/register">Register</a>
+              Don't have an account? <a href="/registration">Register</a>
             </p>
           </div>
+
         </form>
       </ContentCard>
-    </div>
+    </PageContainer>
+
   );
 }
 
