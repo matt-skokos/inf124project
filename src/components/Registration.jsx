@@ -26,7 +26,7 @@ function Registration() {
     }
 
     return(
-        <PageContainer>
+        <PageContainer title="Register">
             <ContentCard className="registration-card">
                 <form className="registration-form" onSubmit={handleSubmit}>
 

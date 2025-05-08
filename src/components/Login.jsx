@@ -16,7 +16,7 @@ function Login() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer title="Log In">
       <ContentCard>
         <form className="login-form" onSubmit={handleSubmit}>
           

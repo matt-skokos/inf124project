@@ -31,7 +31,7 @@ function Profile(){
     }
 
     return(
-        <PageContainer>
+        <PageContainer title="Profile" hideTitle={true}>
             {/* ----HEADER---- */}
             <div className="profile-header">
                 {/* AVATAR */}
