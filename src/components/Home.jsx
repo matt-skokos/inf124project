@@ -55,7 +55,7 @@ export function ConditionCard(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <ContentCard className={`condition-card ${isExpanded ? "expanded" : ""}`}>
+    <ContentCard className={`condition-card ${isExpanded ? "expanded" : ""}`} title="Conditions">
       {isExpanded ? (
         <div className="condition-details">
           <p>{props.overview}</p>
@@ -134,7 +134,6 @@ function Home() {
 
         {/* ----CONDITIONS---- */}
         <section className="condition-section col-12 col-md-6 mb-4">
-          <h2 className="section-title mb-0">Conditions</h2>
           {mockCondition.map((cond) => (
           <ConditionCard key={cond.date}
             overview        ={cond.overview}
