@@ -9,8 +9,8 @@
     width: 100%;
     max-width: 800px;
     margin: 0 auto 0rem;
-
 } 
+
 .card-body {
   display: flex;
   flex-direction: column;

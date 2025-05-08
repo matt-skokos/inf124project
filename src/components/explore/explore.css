@@ -1,0 +1,296 @@
+/* Scope all styles to .explore-page to avoid affecting other pages */
+.explore-page .spotItems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 80%;
+  max-width: 800px;
+}
+
+.explore-page .spotItems li {
+  list-style: none;
+  padding: 0;
+}
+
+.explore-page .spotImage {
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 25px;
+  border-style: solid 2px black;
+  margin-right: 1rem;
+  background-color: #d9d9d9;
+}
+
+.explore-page .title {
+  font-weight: bold;
+  color: #053747;
+  font-size: 2.5rem;
+}
+
+.explore-page .skill {
+  font-size: 1rem;
+}
+
+.explore-page span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.explore-page h1 {
+  padding-bottom: 0.5rem;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.explore-page .content-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: none;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+.explore-page .content-card img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.explore-page p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+.explore-page .imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 0.5rem;
+}
+
+.explore-page .spot-detail-centered {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* align to top, not center vertically */
+  min-height: 70vh;
+  width: 100%;
+}
+
+.explore-page .spot-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center all children horizontally */
+  width: 100%;
+  max-width: 800px;
+}
+
+.explore-page .spot-detail > div,
+.explore-page .spot-detail > h1,
+.explore-page .spot-detail > h2,
+.explore-page .spot-detail > p {
+  text-align: center;
+}
+.explore-page h2 {
+  padding-top: 0.25rem;
+}
+
+.explore-page .spot-detail .spot-images-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.explore-page .spot-detail .spot-title-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.explore-page .spot-detail .spot-date-row {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: normal;
+  font-size: 2rem;
+  color: #053747;
+}
+
+.explore-page .spot-detail .condition-card {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  display: block;
+}
+
+.explore-page .detail-name {
+  padding-left: 3rem;
+  color: #23718f;
+  font-weight: bold;
+}
+
+.explore-page button {
+  background-color: #23718f;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.explore-page .spot-attributes-card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  margin: 1rem 0 0 0;
+  padding: 0.75rem 1rem;
+  box-shadow: none;
+}
+
+.explore-page .spot-attributes-card > div > div {
+  min-width: 120px;
+  text-align: left;
+}
+
+.explore-page .spot-attributes-card strong {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+.explore-page .condition-card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  margin: 1rem 0 0 0;
+  padding: 0.75rem 1rem;
+  box-shadow: none;
+  padding-bottom: 1rem;
+}
+
+.explore-page {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 150px); /* Adjust based on your navbar/footer height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* For WebKit browsers like Chrome/Safari */
+.explore-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.explore-page::-webkit-scrollbar-track {
+  background: var(--cream-bg);
+}
+
+.explore-page::-webkit-scrollbar-thumb {
+  background-color: var(--button-secondary);
+  border-radius: 20px;
+}
+
+/* For the back button */
+.back-button-container {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem; /* Add padding between back button and content */
+  padding: 0 1rem;
+}
+
+.spot-detail-wrapper {
+  width: 100%;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .explore-page {
+    height: calc(100vh - 120px); /* Adjust for mobile */
+  }
+}
+
+/* Remove any conflicting styles */
+.explore-page .container {
+  padding: 0;
+  max-width: none;
+}
+
+/* Sources Card */
+.explore-page .sources-card {
+  background-color: var(
+    --card-bg
+  ); /* Changed from var(--cream-bg) to var(--card-bg) */
+  padding: 1rem 0.5rem;
+}
+
+.explore-page .source-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: block;
+  padding: 0.4rem 0;
+}
+
+.explore-page .source-link:hover {
+  color: var(--text-hover);
+}
+
+/* Action Buttons */
+.explore-page .spot-actions {
+  margin: 1.5rem 0;
+}
+
+.explore-page .action-button {
+  width: 48%;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  background-color: var(--button-primary);
+  border: none;
+  padding: 0.8rem 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.explore-page .action-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-3px);
+}
+
+.explore-page .action-button i {
+  font-size: 1.2rem;
+}
+
+.explore-page .action-card {
+  padding: 0.8rem 0;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.explore-page .directions-button .action-card:hover {
+  background-color: #e1eee8;
+}
+
+.explore-page .forecast-button .action-card:hover {
+  background-color: #e1eee8;
+}
+
+/* Remove or comment out the global .container style to avoid conflicts */
+/*
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+*/
