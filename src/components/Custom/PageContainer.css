@@ -8,3 +8,24 @@
     max-width: 800px;
     margin: 0 auto;
 }
+
+.page-title{
+    font-size: 3rem;
+    font-weight:lighter;
+    color: var(--text-primary);
+    /* align-self: center;  */
+}
+
+/* medium */
+@media (max-width: 768px) {
+    .page-title{
+        font-size: 2rem;
+    }
+}
+  
+/* small */
+@media (max-width: 576px) {
+    .page-title{
+        font-size: 1.5rem;
+    }
+}
