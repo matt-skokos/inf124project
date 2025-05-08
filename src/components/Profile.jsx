@@ -30,7 +30,7 @@ function Profile(){
     }
 
     return(
-        <div className="profile-container">
+        <div className="profile-container p-3">
             {/* ----HEADER---- */}
             <div className="profile-header">
                 {/* AVATAR */}

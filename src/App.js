@@ -2,14 +2,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-import Footer from "./components/Custom/Footer";
-import Home from "./components/Home";
-import ForecastForum from "./components/ForecastForum";
-import Login from "./components/Login";
-import Registration from "./components/Registration";
-import Profile from "./components/Profile";
-import Favorites from "./components/favorites";
+import Footer from './components/Custom/Footer';
+import Home from './components/Home';
+import Forecast from './components/Forecast';
+import Login from './components/Login';
+import Registration from './components/Registration';
+import Profile from './components/Profile';
+import Favorites from './components/Favorites';
 import Explore from "./components/explore/explore";
 
 function App() {

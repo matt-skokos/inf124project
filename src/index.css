@@ -7,6 +7,7 @@
   --text-primary:#053747;
   --text-hover:#608F9F;
   --text-placeholder: #9aa3a3;
+  --text-title:#23718F;
 
   --profile-primary:#23718F;
   --profile-hover:#608F9F;
@@ -20,6 +21,13 @@
   --highlight-green:#68BD42;
   --highlight-yellow:#FDD202;
   --highlight-red:#D02F40;
+
+  --breakpoint-xsm:576px;
+  --breakpoint-sm:576px;
+  --breakpoint-md:768px;
+  --breakpoint-lg:992px;
+  --breakpoint-xl:1200px;
+  --breakpoint-xxl:1400px;
 }
 
 /* Global Style */
@@ -29,6 +37,11 @@ body {
   color: var(--text-primary);
   margin: 0;  
   padding: 0;
+}
+
+/* ───────── BODY ─────────*/
+.section-title{
+  font-size: 2.5rem;    /* make it bigger */
 }
 
 /* ───────── FOOTER ─────────*/

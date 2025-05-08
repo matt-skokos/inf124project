@@ -7,6 +7,29 @@ import './Home.css';
 // Named exports so other modules can import them
 // —————————————————————————————
 
+const mockDate = {
+  date: "April 11, 2025"
+}
+
+const mockLocation = {
+  location: "Near Aliso Viejo, California"
+}
+
+const mockCondition = [ 
+  { 
+    date: "April 11, 2025",
+    overview: "Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended.",
+    swell_direction: "SSW",
+    swell: "2-3 ft",
+    swell_details: "Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals",
+    wind_direction: "SSW",
+    wind: "4 mph",
+    wind_details: "Light and variable winds, around 4 mph from the southwest.",
+    tide: "Low",
+    tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet",
+  }
+]
+
 export function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
@@ -21,7 +44,7 @@ export function ConditionDetails({ children, label, identifier }) {
   return (
     <li>
       <strong className="condition-label">{label}</strong>
-      <div className="condition-description px-3" id={identifier}>
+      <div className="condition-details px-3" id={identifier}>
         {children}
       </div>
     </li>
@@ -99,27 +122,32 @@ function Home() {
     <main className="container">
       <div className="row gx-4">
         <section className="date-location-section col-12 col-md-6 mb-4">
-          <br className="d-none d-lg-flex"/>
-          <br className="d-none d-lg-flex"/>
+          
+          {/* ----DATE TIME---- */}
+          <br className="d-none d-md-flex"/>
+          <br className="d-none d-md-flex"/>
           <DateLocationCard
-            date="April 11, 2025"
-            location="Near Aliso Viejo, California"
+            date={mockDate.date}
+            location={mockLocation.location}
           />
         </section>
 
+        {/* ----CONDITIONS---- */}
         <section className="condition-section col-12 col-md-6 mb-4">
-          <h3 className="section-title mb-0">Conditions</h3>
-          <ConditionCard
-            overview="Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended."
-            swell_direction="SSW"
-            swell="2-3 ft"
-            swell_details="Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals"
-            wind_direction="SSW"
-            wind="4 mph"
-            wind_details="Light and variable winds, around 4 mph from the southwest."
-            tide="Low"
-            tide_details="Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
+          <h2 className="section-title mb-0">Conditions</h2>
+          {mockCondition.map((cond) => (
+          <ConditionCard key={cond.date}
+            overview        ={cond.overview}
+            swell_direction ={cond.swell_direction}
+            swell           ={cond.swell}
+            swell_details   ={cond.swell_details}
+            wind_direction  ={cond.wind_direction}
+            wind            ={cond.wind}
+            wind_details    ={cond.wind_details}
+            tide            ={cond.tide}
+            tide_details    ={cond.tide_details}
           />
+          ))}
         </section>
       </div>
     </main>

@@ -19,10 +19,6 @@
 }
 
 /* ----CONDITION CARD---- */
-.section-title{
-    font-size: 2.5rem;    /* make it bigger */
-}
-
 .condition-card{
     position: relative;
     overflow: hidden;
@@ -38,6 +34,7 @@
     margin-bottom: 2rem;
 }
 
+/* ----CONDITION ITEMS---- */
 /* Ensure icon + label stack neatly */
 .condition-item {
     display: flex;
@@ -62,6 +59,7 @@ font-size: 1.2rem;
     line-height: 1.2;   /* keep it nicely spaced */
   }
 
+/* ----EXPAND/COLLAPSE ICON---- */
 .expand-icon{
     position: absolute;
     bottom: 12px;
