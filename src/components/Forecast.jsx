@@ -113,7 +113,7 @@ function Forecast(){
     };
 
     return (
-        <PageContainer>
+        <PageContainer title="Forecast">
             {!submitted ? (
             <ContentCard>
                 {/* ----FORM---- */}
