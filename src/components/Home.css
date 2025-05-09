@@ -1,3 +1,14 @@
+/* ----HOME CONTAINER---- */
+.home-container{
+    max-width: 1200px;
+}
+
+@media (min-width: 768px) and (max-width: 1200px){
+    .home-container{
+        margin: 0 0;
+    }
+}
+
 /* ----DATE TIME CARD---- */
 /* Center date & location in the left card */
 .date-location-card .card-body {

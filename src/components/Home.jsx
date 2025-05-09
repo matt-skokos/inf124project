@@ -120,11 +120,11 @@ export function DateLocationCard(props) {
 
 function Home() {
   return (
-    <PageContainer className="" title="Home" hideTitle={true}>
-      <div className="row gx-4">
+    <PageContainer className="home-container" title="Home" hideTitle={true}>
+      <div className="row gx-">
 
         {/* ----DATE TIME---- */}
-        <section className="date-location-section col-12 col-md-6 mb-4">
+        <section className="date-location-section col-12 col-md-5 mb-4 px-md-0">
           <br className="d-none d-md-flex"/>
           <br className="d-none d-md-flex"/>
           <DateLocationCard
@@ -134,7 +134,7 @@ function Home() {
         </section>
 
         {/* ----CONDITIONS---- */}
-        <section className="condition-section col-12 col-md-6 mb-4">
+        <section className="condition-section col-12 col-md-7 mb-4">
           {mockCondition.map((cond) => (
           <ConditionCard key={cond.date}
             overview        ={cond.overview}
