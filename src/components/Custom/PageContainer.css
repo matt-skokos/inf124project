@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    width: 80%;
+    width: 90%;
     min-width: 350px;
     max-width: 800px;
     margin: 0 auto;
@@ -13,7 +13,6 @@
     font-size: 3rem;
     font-weight:lighter;
     color: var(--text-primary);
-    /* align-self: center;  */
 }
 
 /* medium */
@@ -23,9 +22,3 @@
     }
 }
   
-/* small */
-@media (max-width: 576px) {
-    .page-title{
-        font-size: 1.5rem;
-    }
-}

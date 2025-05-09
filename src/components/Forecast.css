@@ -1,8 +1,11 @@
+/* FOR CARD */
+.forecast-form-card{
+    min-height: 300px;
+}
 
 /* ----FORM---- */
 .forecast-form {
-    width: 100%;
-    max-width: 500px;
+    width: 70%;
     margin: 0 auto;
 }
 

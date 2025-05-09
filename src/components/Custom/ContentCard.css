@@ -1,9 +1,11 @@
+/* ----CONTAINTER---- */
 .card-container{
   width: 100%;
 }
 
+/* ----CARD TITLE---- */
 .section-title{
-  font-size: 2.5rem;    /* make it bigger */
+  font-size: 2rem;    /* make it bigger */
 }
 
 @media (max-width: 768px) {
@@ -12,13 +14,7 @@
   }
 }
 
-/* small */
-@media (max-width: 576px) {
-  .section-title{
-    font-size: 1.5rem;    /* make it bigger */
-  }
-}
-
+/* ----CARD---- */
 .content-card{
   background-color: var(--card-bg);
   border-radius: 12px;
@@ -28,7 +24,6 @@
 
   /* Set default width */
   width: 100%;
-  max-width: 800px;
   margin: 0 auto 0rem;
 } 
 

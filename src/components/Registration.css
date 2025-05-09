@@ -1,5 +1,6 @@
 .registration-form {
-    width: 100%;
+    width: 70%;
+    margin: 0 auto;
 }
 
 /* off white inputs with subtle border radius and padding */
