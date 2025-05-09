@@ -1,6 +1,8 @@
 /* form itself full width of the card body */
 .login-form {
-    width: 100%;
+    width: 70%;
+    margin: 0 auto;
+
 }
 
 /* off white inputs with subtle border radius and padding */
