@@ -113,15 +113,15 @@ function Forecast(){
     };
 
     return (
-        <PageContainer title="Forecast">
+        <PageContainer title="Forecast" hideTitle={!submitted ? false:true}>
             {!submitted ? (
-            <ContentCard>
+            <ContentCard className="forecast-form-card">
                 {/* ----FORM---- */}
                 <form className="forecast-form px-2" onSubmit={handleSubmit}>
                     
                     {/* LOCATION */}
                     <div className="mb-3">
-                        <label htmlFor="location">Location</label>
+                        <label className="visually-hidden" htmlFor="location">Location</label>
                         <input
                             type="text"
                             className="form-control forecast-input"
