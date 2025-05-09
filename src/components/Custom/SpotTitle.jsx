@@ -8,6 +8,8 @@ function SpotTitle (props)
         <React.Fragment>
             {/* TITLE */}
             <div className="spot-title-container d-flex justify-content-around mb-3">
+                
+                {/* ICONS */}
                 <div className="actions-container d-flex justify-content-around mx-2">
                     {isFavoriteSpot ? (
                         <i className="title-icon bi bi-suit-heart-fill mx-1"></i>
@@ -16,6 +18,8 @@ function SpotTitle (props)
                     )}
                     <i className="title-icon bi bi-share mx-1"></i>
                 </div>
+
+                {/* TITLE */}
                 <h1 className="spot-title">{props.title}</h1>
             </div>
         </React.Fragment>
