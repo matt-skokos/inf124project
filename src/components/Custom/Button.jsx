@@ -13,7 +13,7 @@ function Button({
     return (
         <button
           type={type}
-          className={`btn-custom ${className} btn btn-primary w-100 mb-3`}
+          className={`btn-custom ${className} btn btn-primary w-100 my-3`}
           onClick={onClick}
           {...rest}
         >
