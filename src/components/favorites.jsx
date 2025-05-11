@@ -1,4 +1,4 @@
-// src/components/Favorites.jsx
+
 import React, { useState } from 'react';
 import PageContainer from './Custom/PageContainer';      
 import ContentCard from './Custom/ContentCard';
@@ -12,14 +12,13 @@ const mockFavorites = [
   { name: 'Thalia Street', swell: { dir: 'SSW', val: '3-4 ft' }, wind: { dir: 'W',   val: '6 mph' }, tide: 'Low', schedule: {} },
 ];
 
-// seed images once, outside of the component
 const seededFavorites = mockFavorites.map(spot => ({
   ...spot,
   imgSrc: `https://picsum.photos/seed/${Math.floor(Math.random() * 1e6)}/300/300`
 }));
 
 export default function Favorites() {
-  // no useEffect needed — we already have imgSrc
+
   const [favorites] = useState(seededFavorites);
 
   return (
@@ -27,7 +26,7 @@ export default function Favorites() {
       {favorites.map(spot => (
         <ContentCard key={spot.name} className="favorite-card">
           <div className="favorite-details-cell">
-            {/* 1) Header: name + bell */}
+            {}
             <div className="favorite-header">
               <h3 className="favorite-name mb-0">{spot.name}</h3>
               <NotificationButton
@@ -38,7 +37,7 @@ export default function Favorites() {
               />
             </div>
 
-            {/* 2) Bottom row: image + 3 widgets */}
+            {}
             <div className="favorite-bottom-row">
               <div className="favorite-image-cell">
                 <img

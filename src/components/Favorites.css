@@ -1,12 +1,7 @@
-/* Favorites.css */
 
-/* remove any .container overrides—PageContainer will handle widths/margins */
 .favorites-page {
-  /* if you need extra page-level tweaks, add them here */
-  /* e.g. background-color: var(--bg-secondary); */
 }
 
-/* 1) The outer card can just flow naturally (no top-level flex) */
 .content-card.favorite-card {
   background-color: var(--card-bg);
   border-radius: 12px;
@@ -16,28 +11,24 @@
   padding: 1rem;
 }
 
-/* 2) Details cell stacks header above bottom-row */
 .favorite-details-cell {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-/* Header (name + bell) */
 .favorite-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* 3) Bottom row: image + widgets side by side */
 .favorite-bottom-row {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
 }
 
-/* Image cell & styling */
 .favorite-image-cell {
   flex: 0 0 150px;
 }
@@ -51,19 +42,14 @@
   display: block;
 }
 
-/* Condition widgets: sit to right of image */
 .favorite-conditions {
   display: flex;
   justify-content: space-between;
-  flex: 1;              /* fill remaining space */
+  flex: 1;            
   gap: 1rem;
 }
 
-/* (optional) if you want them tightly aligned under header */
 .favorite-conditions > * {
   flex: 1;
 }
 
-/* ------------------------------------------------------------ */
-/* Keep any existing forecast CSS below unchanged */
-/* … */
