@@ -1,52 +1,69 @@
-.favorites-page 
-{
-    margin-top: 2rem;
-}
-  
-.favorites-page .section-title 
-{
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+/* Favorites.css */
+
+/* remove any .container overrides—PageContainer will handle widths/margins */
+.favorites-page {
+  /* if you need extra page-level tweaks, add them here */
+  /* e.g. background-color: var(--bg-secondary); */
 }
 
-.favorite-card 
-{
+/* 1) The outer card can just flow naturally (no top-level flex) */
+.content-card.favorite-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  color: var(--text-primary);
+  margin-bottom: 1rem;
   padding: 1rem;
-  margin-bottom: 1rem;
 }
 
-.favorite-thumb img 
-{
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-right: 1rem;
-}
-
-.favorite-name 
-{
-  margin: 0 1rem;
-  white-space: nowrap;
-}
-
-.favorite-conditions .condition-item 
-{
+/* 2) Details cell stacks header above bottom-row */
+.favorite-details-cell {
+  display: flex;
   flex-direction: column;
+  gap: 1rem;
+}
+
+/* Header (name + bell) */
+.favorite-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.favorite-bell 
-{
-  font-size: 1.5rem;
-  color: #444;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+/* 3) Bottom row: image + widgets side by side */
+.favorite-bottom-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 }
-.favorite-conditions 
-{
-  display: flex;                
-  justify-content: space-evenly;
-  gap: 1.5rem;                  
+
+/* Image cell & styling */
+.favorite-image-cell {
+  flex: 0 0 150px;
 }
+.favorite-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 25px;
+  border: 2px solid black;
+  background-color: #d9d9d9;
+  display: block;
+}
+
+/* Condition widgets: sit to right of image */
+.favorite-conditions {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;              /* fill remaining space */
+  gap: 1rem;
+}
+
+/* (optional) if you want them tightly aligned under header */
+.favorite-conditions > * {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------ */
+/* Keep any existing forecast CSS below unchanged */
+/* … */
