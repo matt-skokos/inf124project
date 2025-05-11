@@ -1,24 +1,23 @@
-.page-container{
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    width: 90%;
-    min-width: 350px;
-    max-width: 800px;
-    margin: 0 auto;
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 90%;
+  min-width: 350px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.page-title{
-    font-size: 3rem;
-    font-weight:lighter;
-    color: var(--text-primary);
+.page-title {
+  font-size: 3rem;
+  font-weight: lighter;
+  color: var(--text-primary);
 }
 
 /* medium */
 @media (max-width: 768px) {
-    .page-title{
-        font-size: 2rem;
-    }
+  .page-title {
+    font-size: 2rem;
+  }
 }
-  
