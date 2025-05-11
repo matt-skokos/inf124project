@@ -5,9 +5,6 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: calc(100vh - 150px); /* Adjust based on your navbar/footer height */
-  overflow-y: auto; /* Enable vertical scrolling */
-  scrollbar-width: thin; /* For Firefox */
 }
 
 /* For WebKit browsers like Chrome/Safari */
@@ -29,25 +26,32 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  width: 90%;
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .explore-page .spotItems li {
   list-style: none;
   padding: 0;
   cursor: pointer;
+  width: 100%;
 }
 
 /* Individual spot card */
 .spot-card {
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .spot-card-inner {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 1rem;
+  width: 100%;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 0.5rem;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
 }
 
 .explore-page .imageWrapper {
@@ -56,6 +60,7 @@
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
+  width: 160px;
 }
 
 .explore-page .spotImage {
@@ -84,16 +89,65 @@
   margin-bottom: 0;
 }
 
-/* Back button */
-.back-button-container {
+/* Back to Spots button styling */
+.explore-page .back-button-container {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 800px;
-  margin-bottom: 1.5rem; /* Add padding between back button and content */
-  padding: 0 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.explore-page .back-button-container a,
+.explore-page .back-button-container .back-button {
+  background-color: var(
+    --ocean-blue,
+    #23718f
+  ); /* Use the ocean blue color or theme color */
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.explore-page .back-button-container a:hover,
+.explore-page .back-button-container .back-button:hover {
+  background-color: var(
+    --ocean-hover,
+    #1c5a72
+  ); /* Slightly darker blue on hover */
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  outline: 2px solid rgba(255, 255, 255, 0.3); /* Add white outline on hover */
+}
+
+.explore-page .back-button-container a svg,
+.explore-page .back-button-container a i,
+.explore-page .back-button-container .back-button i {
+  margin-right: 0.5rem;
 }
 
 .spot-detail-wrapper {
   width: 100%;
+}
+
+/* Social share button styling to match heart button */
+.explore-page .social-share-btn {
+  color: #23718f;
+  background-color: transparent;
+  border-color: #23718f;
+  transition: all 0.2s ease;
+}
+
+.explore-page .social-share-btn:hover {
+  background-color: rgba(35, 113, 143, 0.1);
+  transform: scale(1.05);
 }
 
 /* Spot detail */
@@ -211,10 +265,7 @@
 
 /* RESPONSIVE BREAKPOINTS */
 @media (max-width: 768px) {
-  .explore-page {
-    height: calc(100vh - 120px); /* Adjust for mobile */
-  }
-
+  /* Remove redundant height declaration that was causing scrolling issues */
   .spot-card-inner {
     flex-direction: column;
     align-items: center;

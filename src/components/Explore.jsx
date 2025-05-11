@@ -3,6 +3,7 @@ import "./Explore.css";
 import HeartSpot from "./Custom/HeartButton.jsx";
 import ContentCard from "./Custom/ContentCard.jsx";
 import PageContainer from "./Custom/PageContainer.jsx";
+import SocialShareButton from "./Custom/SocialShareButton.jsx";
 
 const spots = [
   {
@@ -149,7 +150,22 @@ const Explore = () => {
     return (
       <div className="explore-page explore-detail-container">
         <div className="back-button-container">
-          <button onClick={() => setSelectedSpot(null)}>← Back to Spots</button>
+          <a
+            href="#"
+            className="btn action-button back-button"
+            style={{
+              width: "auto",
+              display: "inline-flex",
+              padding: "0.5rem 1rem",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectedSpot(null);
+            }}
+          >
+            <i className="bi bi-arrow-left me-2"></i>
+            Back to Spots
+          </a>
         </div>
         <div className="spot-detail-wrapper">
           <SpotDetail spot={selectedSpot} />
@@ -159,9 +175,8 @@ const Explore = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer title="Explore Spots">
       <div className="explore-page explore-list-container">
-        <h1>Explore Spots</h1>
         <ul className="spotItems">
           {spotList.map((spot) => (
             <li
@@ -215,31 +230,16 @@ const SpotDetail = ({ spot }) => {
       <div className="container ">
         <div className="spot-detail-centered">
           <div className="spot-detail">
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+                flexWrap: "wrap",
+              }}
+            >
               <HeartSpot color="#23718f" size={32} className="heart-button" />
-              {/* Social Media Share Button (placeholder) */}
-              <button
-                type="button"
-                className="btn btn-outline-secondary social-media-button"
-                style={{
-                  borderRadius: "50%",
-                  width: 50,
-                  height: 40,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 0,
-                  margin: 0,
-                }}
-                title="Share"
-                aria-label="Share"
-                tabIndex={0}
-              >
-                <i
-                  className="bi bi-share-fill"
-                  style={{ fontSize: "1.5rem" }}
-                ></i>
-              </button>
+              <SocialShareButton color="#23718f" size={40} />
               <h1 className="detail-name">{spot.title}</h1>
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>

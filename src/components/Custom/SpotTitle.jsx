@@ -1,29 +1,54 @@
 import React, { useState } from "react";
-import './SpotTitle.css'
-function SpotTitle (props)
-{
-    const [isFavoriteSpot, setIsFavoriteSpot] = useState(false)
+import "./SpotTitle.css";
+import HeartSpot from "./HeartButton.jsx";
+import SocialShareButton from "./SocialShareButton.jsx";
 
-    return(
-        <React.Fragment>
-            {/* TITLE */}
-            <div className="spot-title-container d-flex justify-content-around mb-3">
-                
-                {/* ICONS */}
-                <div className="actions-container d-flex justify-content-around mx-2">
-                    {isFavoriteSpot ? (
-                        <i className="title-icon bi bi-suit-heart-fill mx-1"></i>
-                    ):(
-                        <i className="title-icon bi bi-suit-heart mx-1"></i>
-                    )}
-                    <i className="title-icon bi bi-share mx-1"></i>
-                </div>
+function SpotTitle(props) {
+  const [isFavoriteSpot, setIsFavoriteSpot] = useState(false);
 
-                {/* TITLE */}
-                <h1 className="spot-title">{props.title}</h1>
-            </div>
-        </React.Fragment>
-    );
+  // Handle heart button click
+  const handleHeartClick = () => {
+    setIsFavoriteSpot(!isFavoriteSpot);
+  };
+
+  return (
+    <React.Fragment>
+      {/* TITLE */}
+      <div className="spot-title-container d-flex align-items-center mb-3">
+        {/* ICONS */}
+        <div
+          className="actions-container d-flex align-items-center"
+          style={{ gap: "1rem" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <HeartSpot
+              color="#23718f"
+              size={32}
+              filled={isFavoriteSpot}
+              onClick={handleHeartClick}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <SocialShareButton color="#23718f" size={40} />
+          </div>
+          {/* TITLE */}
+          <h1 className="spot-title mb-0 ms-2">{props.title}</h1>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
 
-export default SpotTitle
+export default SpotTitle;
