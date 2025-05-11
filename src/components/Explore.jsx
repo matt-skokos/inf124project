@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Explore.css";
 import HeartSpot from "./Custom/HeartButton.jsx";
 import ContentCard from "./Custom/ContentCard.jsx";
+import PageContainer from "./Custom/PageContainer.jsx";
 
 const spots = [
   {
@@ -52,7 +53,10 @@ function ConditionCard(props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <ContentCard className={`condition-card ${isExpanded ? "expanded" : ""}`}>
+    <ContentCard
+      className={`condition-card ${isExpanded ? "expanded" : ""}`}
+      title={props.title}
+    >
       {isExpanded ? (
         <div className="condition-details">
           <p>{props.overview}</p>
@@ -155,20 +159,22 @@ const Explore = () => {
   }
 
   return (
-    <div className="explore-page explore-list-container">
-      <h1>Explore Spots</h1>
-      <ul className="spotItems">
-        {spotList.map((spot) => (
-          <li
-            className="content-card"
-            key={spot.title}
-            onClick={() => setSelectedSpot(spot)}
-          >
-            <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <PageContainer>
+      <div className="explore-page explore-list-container">
+        <h1>Explore Spots</h1>
+        <ul className="spotItems">
+          {spotList.map((spot) => (
+            <li
+              className="content-card"
+              key={spot.title}
+              onClick={() => setSelectedSpot(spot)}
+            >
+              <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </PageContainer>
   );
 };
 
@@ -176,17 +182,11 @@ export default Explore;
 
 const Spot = ({ imgURL, title, description, skillLevel, onClick }) => (
   <div className="spot-card" onClick={onClick}>
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        marginBottom: "1rem",
-      }}
-    >
+    <div className="spot-card-inner">
       <div className="imageWrapper">
         <img src={imgURL} alt={title} className="spotImage" />
       </div>
-      <div>
+      <div className="spot-card-content">
         <h2 className="title">{title}</h2>
         <p>{description}</p>
         <h3 className="skill">
@@ -211,149 +211,155 @@ const SpotDetail = ({ spot }) => {
   const crowdFactor = spot.crowdFactor || "Generally uncrowded";
 
   return (
-    <div className="container ">
-      <div className="spot-detail-centered">
-        <div className="spot-detail">
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <HeartSpot color="#23718f" size={32} className="heart-button" />
-            {/* Social Media Share Button (placeholder) */}
-            <button
-              type="button"
-              className="btn btn-outline-secondary social-media-button"
-              style={{
-                borderRadius: "50%",
-                width: 50,
-                height: 40,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 0,
-                margin: 0,
-              }}
-              title="Share"
-              aria-label="Share"
-              tabIndex={0}
-            >
-              <i
-                className="bi bi-share-fill"
-                style={{ fontSize: "1.5rem" }}
-              ></i>
-            </button>
-            <h1 className="detail-name">{spot.title}</h1>
-          </div>
-          <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
-            {[...Array(3)].map((_, index) => (
-              <img
-                key={index}
-                src={spot.imgURL}
-                alt={spot.title}
+    <PageContainer>
+      <div className="container ">
+        <div className="spot-detail-centered">
+          <div className="spot-detail">
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <HeartSpot color="#23718f" size={32} className="heart-button" />
+              {/* Social Media Share Button (placeholder) */}
+              <button
+                type="button"
+                className="btn btn-outline-secondary social-media-button"
                 style={{
-                  width: 200,
-                  height: 200,
-                  objectFit: "cover",
-                  padding: ".5rem",
+                  borderRadius: "50%",
+                  width: 50,
+                  height: 40,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 0,
+                  margin: 0,
                 }}
-              />
-            ))}
-          </div>
-          {/* Date between images and details */}
-          <div className="spot-date-row">{today}</div>
-          <div style={{ width: "100%" }}>
-            <ConditionCard
-              className=""
-              overview="Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended."
-              swell_direction="SSW"
-              swell="2-3 ft"
-              swell_details="Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals"
-              wind_direction="SSW"
-              wind="4 mph"
-              wind_details="Light and variable winds, around 4 mph from the southwest."
-              tide="Low"
-              tide_details="Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
-            />
-          </div>
-          <div style={{ width: "100%", marginTop: "1rem" }}>
-            <h2>Spot Overview</h2>
-            {/* New ContentCard for attributes */}
-            <ContentCard className="spot-attributes-card">
-              <div
-                className="d-flex flex-row justify-content-between w-100"
-                style={{ gap: "2rem" }}
+                title="Share"
+                aria-label="Share"
+                tabIndex={0}
               >
-                <div>
-                  <strong>Skill Level</strong>
-                  <div>{spot.skillLevel}</div>
+                <i
+                  className="bi bi-share-fill"
+                  style={{ fontSize: "1.5rem" }}
+                ></i>
+              </button>
+              <h1 className="detail-name">{spot.title}</h1>
+            </div>
+            <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
+              {[...Array(3)].map((_, index) => (
+                <img
+                  key={index}
+                  src={spot.imgURL}
+                  alt={spot.title}
+                  style={{
+                    width: 200,
+                    height: 200,
+                    objectFit: "cover",
+                    padding: ".5rem",
+                  }}
+                />
+              ))}
+            </div>
+            {/* Date between images and details */}
+            <div className="spot-date-row">{today}</div>
+            <div style={{ width: "100%" }}>
+              <ConditionCard
+                title="Current Conditions"
+                className=""
+                overview="Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended."
+                swell_direction="SSW"
+                swell="2-3 ft"
+                swell_details="Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals"
+                wind_direction="SSW"
+                wind="4 mph"
+                wind_details="Light and variable winds, around 4 mph from the southwest."
+                tide="Low"
+                tide_details="Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
+              />
+            </div>
+            <div style={{ width: "100%", marginTop: "1rem" }}>
+              <ContentCard
+                className="spot-attributes-card"
+                title="Spot Overview"
+              >
+                <div
+                  className="d-flex flex-row justify-content-between w-100"
+                  style={{ gap: "2rem" }}
+                >
+                  <div>
+                    <strong>Skill Level</strong>
+                    <div>{spot.skillLevel}</div>
+                  </div>
+                  <div>
+                    <strong>Ideal Tide</strong>
+                    <div>{idealTide}</div>
+                  </div>
+                  <div>
+                    <strong>Crowd Factor</strong>
+                    <div>{crowdFactor}</div>
+                  </div>
                 </div>
-                <div>
-                  <strong>Ideal Tide</strong>
-                  <div>{idealTide}</div>
-                </div>
-                <div>
-                  <strong>Crowd Factor</strong>
-                  <div>{crowdFactor}</div>
-                </div>
-              </div>
-            </ContentCard>
-          </div>
+              </ContentCard>
+            </div>
 
-          {/* Detailed Spot Overview Card */}
-          <div style={{ width: "100%", marginTop: "1.5rem" }}>
-            <h2>Local Insights</h2>
-            <ContentCard className="spot-overview-card">
-              <p className="mb-0">
-                Sunset Cliffs in San Diego is a popular surfing destination
-                known for its beautiful coastal bluffs and reliable waves. It
-                offers a range of breaks, including reef breaks and beach
-                breaks, with a mix of left and right-hand waves. The area is
-                known for its glassy barrels when the tide is low and kelp beds
-                and sandy bottom form the perfect beach break. However, it's
-                also important to be aware of the potential dangers, including
-                rocky cliffs and exposed reefs, and to respect the locals and
-                follow surf etiquette, especially during busy periods.
-              </p>
-            </ContentCard>
-          </div>
+            {/* Detailed Spot Overview Card */}
+            <div style={{ width: "100%", marginTop: "1.5rem" }}>
+              <ContentCard
+                className="spot-overview-card"
+                title="Local Insights"
+              >
+                <p className="mb-0">
+                  Sunset Cliffs in San Diego is a popular surfing destination
+                  known for its beautiful coastal bluffs and reliable waves. It
+                  offers a range of breaks, including reef breaks and beach
+                  breaks, with a mix of left and right-hand waves. The area is
+                  known for its glassy barrels when the tide is low and kelp
+                  beds and sandy bottom form the perfect beach break. However,
+                  it's also important to be aware of the potential dangers,
+                  including rocky cliffs and exposed reefs, and to respect the
+                  locals and follow surf etiquette, especially during busy
+                  periods.
+                </p>
+              </ContentCard>
+            </div>
 
-          {/* Sources Card */}
-          <div style={{ width: "100%", marginTop: "1.5rem" }}>
-            <h2>Sources</h2>
-            <ContentCard className="sources-card">
-              <ul className="list-unstyled text-center mb-0">
-                <li className="mb-2">
-                  <a href="#" className="source-link">
-                    Visit {spot.title}
-                  </a>
-                </li>
-                <li className="mb-2">
-                  <a href="#" className="source-link">
-                    {spot.title} Community
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="source-link">
-                    Swell Magnet
-                  </a>
-                </li>
-              </ul>
-            </ContentCard>
-          </div>
+            {/* Sources Card */}
+            <div style={{ width: "100%", marginTop: "1.5rem" }}>
+              <ContentCard className="sources-card" title="Sources">
+                <ul className="list-unstyled text-center mb-0">
+                  <li className="mb-2">
+                    <a href="./" className="source-link">
+                      Visit {spot.title}
+                    </a>
+                  </li>
+                  <li className="mb-2">
+                    <a href="./" className="source-link">
+                      {spot.title} Community
+                    </a>
+                  </li>
+                  <li>
+                    <a href="./" className="source-link">
+                      Swell Magnet
+                    </a>
+                  </li>
+                </ul>
+              </ContentCard>
+            </div>
 
-          {/* Action Buttons */}
-          <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
-            <a href="#" className="btn action-button directions-button">
-              <i className="bi bi-map me-2"></i>
-              Directions
-            </a>
-            <a
-              href="/forecast-forum"
-              className="btn action-button forecast-button"
-            >
-              <i className="bi bi-cloud me-2"></i>
-              Forecast
-            </a>
+            {/* Action Buttons */}
+            <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
+              <a href="./" className="btn action-button directions-button">
+                <i className="bi bi-map me-2"></i>
+                Directions
+              </a>
+              <a
+                href="/forecast-forum"
+                className="btn action-button forecast-button"
+              >
+                <i className="bi bi-cloud me-2"></i>
+                Forecast
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };

@@ -1,180 +1,4 @@
-/* Scope all styles to .explore-page to avoid affecting other pages */
-.explore-page .spotItems {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  width: 80%;
-  max-width: 800px;
-}
-
-.explore-page .spotItems li {
-  list-style: none;
-  padding: 0;
-}
-
-.explore-page .spotImage {
-  display: flex;
-  justify-content: center;
-  width: auto;
-  height: auto;
-  object-fit: cover;
-  border-radius: 25px;
-  border-style: solid 2px black;
-  margin-right: 1rem;
-  background-color: #d9d9d9;
-}
-
-.explore-page .title {
-  font-weight: bold;
-  color: #053747;
-  font-size: 2.5rem;
-}
-
-.explore-page .skill {
-  font-size: 1rem;
-}
-
-.explore-page span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.explore-page h1 {
-  padding-bottom: 0.5rem;
-  margin: 0;
-  text-align: center;
-  width: 100%;
-}
-
-.explore-page .content-card {
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  border: none;
-  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-}
-.explore-page .content-card img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.explore-page p {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  margin-right: 0.5rem;
-}
-.explore-page .imageWrapper {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  padding: 0.5rem;
-}
-
-.explore-page .spot-detail-centered {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* align to top, not center vertically */
-  min-height: 70vh;
-  width: 100%;
-}
-
-.explore-page .spot-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center all children horizontally */
-  width: 100%;
-  max-width: 800px;
-}
-
-.explore-page .spot-detail > div,
-.explore-page .spot-detail > h1,
-.explore-page .spot-detail > h2,
-.explore-page .spot-detail > p {
-  text-align: center;
-}
-.explore-page h2 {
-  padding-top: 0.25rem;
-}
-
-.explore-page .spot-detail .spot-images-row {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  width: 100%;
-}
-
-.explore-page .spot-detail .spot-title-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-  width: 100%;
-}
-
-.explore-page .spot-detail .spot-date-row {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 1rem;
-  font-weight: normal;
-  font-size: 2rem;
-  color: #053747;
-}
-
-.explore-page .spot-detail .condition-card {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  box-sizing: border-box;
-  display: block;
-}
-
-.explore-page .detail-name {
-  padding-left: 3rem;
-  color: #23718f;
-  font-weight: bold;
-}
-
-.explore-page button {
-  background-color: #23718f;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.explore-page .spot-attributes-card {
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  margin: 1rem 0 0 0;
-  padding: 0.75rem 1rem;
-  box-shadow: none;
-}
-
-.explore-page .spot-attributes-card > div > div {
-  min-width: 120px;
-  text-align: left;
-}
-
-.explore-page .spot-attributes-card strong {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-}
-.explore-page .condition-card {
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  margin: 1rem 0 0 0;
-  padding: 0.75rem 1rem;
-  box-shadow: none;
-  padding-bottom: 1rem;
-}
-
+/* Base styles */
 .explore-page {
   padding-top: 1rem;
   display: flex;
@@ -200,7 +24,67 @@
   border-radius: 20px;
 }
 
-/* For the back button */
+/* Spots List */
+.explore-page .spotItems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 90%;
+  max-width: 900px;
+}
+
+.explore-page .spotItems li {
+  list-style: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Individual spot card */
+.spot-card {
+  margin-bottom: 1.5rem;
+}
+
+.spot-card-inner {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.explore-page .imageWrapper {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.explore-page .spotImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 25px;
+  border: 1px solid var(--border-color);
+  background-color: #d9d9d9;
+}
+
+.spot-card-content {
+  padding: 0.5rem;
+  flex-grow: 1;
+}
+
+.explore-page .title {
+  font-weight: bold;
+  color: #053747;
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+.explore-page .skill {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* Back button */
 .back-button-container {
   width: 100%;
   max-width: 800px;
@@ -212,24 +96,78 @@
   width: 100%;
 }
 
-/* For smaller screens */
-@media (max-width: 768px) {
-  .explore-page {
-    height: calc(100vh - 120px); /* Adjust for mobile */
-  }
+/* Spot detail */
+.explore-page .spot-detail-centered {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
-/* Remove any conflicting styles */
-.explore-page .container {
-  padding: 0;
-  max-width: none;
+.explore-page .spot-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
 }
 
-/* Sources Card */
+.explore-page .spot-detail > div,
+.explore-page .spot-detail > h1,
+.explore-page .spot-detail > h2,
+.explore-page .spot-detail > p {
+  text-align: center;
+}
+
+.explore-page .detail-name {
+  padding-left: 3rem;
+  color: #23718f;
+  font-weight: bold;
+}
+
+/* Cards */
+.explore-page .content-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: none;
+  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+/* Update section titles for ContentCard */
+.explore-page .section-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+/* Remove unnecessary margin-top since titles are now outside cards */
+.explore-page h2 {
+  padding-top: 0;
+}
+
+/* Add some spacing between cards */
+.explore-page .card-container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* Condition card */
+.explore-page .condition-card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  margin: 1rem 0 0 0;
+  padding: 0.75rem 1rem;
+  box-shadow: none;
+  padding-bottom: 1rem;
+}
+
+/* Source card */
 .explore-page .sources-card {
-  background-color: var(
-    --card-bg
-  ); /* Changed from var(--cream-bg) to var(--card-bg) */
+  background-color: var(--card-bg);
   padding: 1rem 0.5rem;
 }
 
@@ -271,26 +209,79 @@
   font-size: 1.2rem;
 }
 
-.explore-page .action-card {
-  padding: 0.8rem 0;
-  text-align: center;
-  transition: background-color 0.2s ease;
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+  .explore-page {
+    height: calc(100vh - 120px); /* Adjust for mobile */
+  }
+
+  .spot-card-inner {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .explore-page .imageWrapper {
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .explore-page .spotImage {
+    width: 200px;
+    height: 200px;
+    margin-right: 0;
+  }
+
+  .spot-card-content {
+    text-align: center;
+    width: 100%;
+  }
+
+  .explore-page .title {
+    font-size: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Spot Detail responsive adjustments */
+  .explore-page .spot-detail img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Stack images in spot detail on small screens */
+  .explore-page .spot-detail div[style*="display: flex; gap: 1rem"] {
+    flex-direction: column;
+  }
+
+  .explore-page .section-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
 }
 
-.explore-page .directions-button .action-card:hover {
-  background-color: #e1eee8;
-}
+/* Even smaller screens like phones */
+@media (max-width: 576px) {
+  .explore-page .spotItems {
+    width: 95%;
+  }
 
-.explore-page .forecast-button .action-card:hover {
-  background-color: #e1eee8;
-}
+  .explore-page .title {
+    font-size: 1.75rem;
+  }
 
-/* Remove or comment out the global .container style to avoid conflicts */
-/*
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  .explore-page .spotImage {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* Adjust action buttons for mobile */
+  .explore-page .spot-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .explore-page .action-button {
+    width: 100%;
+  }
 }
-*/
