@@ -28,13 +28,13 @@ function MobileNavbar(props) {
         )}
 
         {/* Logo */}
-        <Link className="" to="/">
+        <Link className="" to="/" aria-label="Local Legend icon">
           <img src={logo} className="navbar-logo" alt="Local Legend" />
         </Link>
 
         {/* profile icon */}
         {!props.hideTopRow && (
-          <Link to="/profile" className="navbar-profile">
+          <Link to="/profile" className="navbar-profile" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         )}
@@ -102,7 +102,7 @@ function DesktopNavbar(props) {
           </ul>
 
           {/* profile icon */}
-          <Link to="/profile" className="navbar-profile">
+          <Link to="/profile" className="navbar-profile" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         </div>
@@ -111,7 +111,7 @@ function DesktopNavbar(props) {
       {/* ---Logo Row---- */}
       <div className="logo-row d-none d-lg-block w-100 text-center">
         {/* Logo */}
-        <Link to="/">
+        <Link to="/" aria-label="Local Legend icon">
           <img src={logo} className="navbar-logo" alt="Local Legend Logo" />
         </Link>
       </div>

@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import ContentCard from "./Custom/ContentCard";
+import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
 import './Registration.css';
 
@@ -25,17 +26,18 @@ function Registration() {
     }
 
     return(
-        <div className="registration-container p-1">
+        <PageContainer title="Register">
             <ContentCard className="registration-card">
                 <form className="registration-form" onSubmit={handleSubmit}>
 
                     {/* USER NAME  */}
                     <div className="mb-3 d-flex gap-2">
                         {/* FIRST NAME  */}
-                        <input  
+                        <label className="visually-hidden" htmlFor="first-name">First Name</label>
+                        <input
                             type="text"
-                            className="form-control registration-input"
-                            id="firstName"
+                            className="form-control"
+                            id="first-name"
                             placeholder="first name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -43,10 +45,11 @@ function Registration() {
                         />
 
                         {/* LAST NAME */}
+                        <label className="visually-hidden" htmlFor="last-name">Last Name</label>
                         <input
                             type="text"
-                            className="form-control registration-input"
-                            id="lastName"
+                            className="form-control"
+                            id="last-name"
                             placeholder="last name"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
@@ -56,9 +59,10 @@ function Registration() {
 
                     {/* EMAIL  */}
                     <div className="mb-3">
+                        <label className="visually-hidden" htmlFor="email">Email</label>
                         <input
                             type="email"
-                            className="form-control registration-input"
+                            className="form-control"
                             id="email"
                             placeholder="email"
                             value={email}
@@ -69,9 +73,10 @@ function Registration() {
 
                     {/* PASSWORD */}
                     <div className="mb-3">
+                        <label className="visually-hidden" htmlFor="password">Password</label>
                         <input
                             type="password"
-                            className="form-control registration-input"
+                            className="form-control"
                             id="password"
                             placeholder="password"
                             value={password}
@@ -82,10 +87,11 @@ function Registration() {
 
                     {/* CONFIRM PASSWORD */}
                     <div className="mb-3">
+                        <label className="visually-hidden" htmlFor="confirm-password">Confirm Password</label>
                         <input
                             type="password"
-                            className="form-control registration-input"
-                            id="confirmpassword"
+                            className="form-control"
+                            id="confirm-password"
                             placeholder="confirm password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -102,7 +108,7 @@ function Registration() {
                     </div>
                 </form>
             </ContentCard>
-        </div>
+        </PageContainer>
     )
 };
 
