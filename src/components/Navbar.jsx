@@ -102,7 +102,7 @@ function DesktopNavbar(props) {
           </ul>
 
           {/* profile icon */}
-          <Link to="/profile" className="navbar-profile" aria-label="profile icon">
+          <Link to="/login" className="navbar-profile" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         </div>

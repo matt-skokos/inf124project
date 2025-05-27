@@ -1,52 +1,41 @@
 import React, { useState } from "react";
+import SocialModal from "./SocialModal";
 import "./SpotTitle.css";
-import HeartSpot from "./HeartButton.jsx";
-import SocialShareButton from "./SocialShareButton.jsx";
 
-function SpotTitle(props) {
+function SpotTitle({title}) {
   const [isFavoriteSpot, setIsFavoriteSpot] = useState(false);
-
-  // Handle heart button click
-  const handleHeartClick = () => {
-    setIsFavoriteSpot(!isFavoriteSpot);
-  };
-
+  const [isSocialModalDisplayed, setShowSocialModal] = useState(false);
+  
   return (
     <React.Fragment>
-      {/* TITLE */}
       <div className="spot-title-container d-flex align-items-center mb-3">
         {/* ICONS */}
         <div
           className="actions-container d-flex align-items-center"
-          style={{ gap: "1rem" }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <HeartSpot
-              color="#23718f"
-              size={32}
-              filled={isFavoriteSpot}
-              onClick={handleHeartClick}
-            />
+          {/* Favorite Icon */}
+          <div className="title-icon" onClick={() => setIsFavoriteSpot(!isFavoriteSpot)}>
+            {isFavoriteSpot ? (
+              <i className="bi bi-heart-fill"></i>
+            ) : (
+              <i className="bi bi-heart"></i>
+            )}
           </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <SocialShareButton color="#23718f" size={40} />
+
+          {/* Social Icon */} 
+          <div className="title-icon" onClick={() => setShowSocialModal(true)}>
+            <i className="bi bi-share-fill"></i>
           </div>
-          {/* TITLE */}
-          <h1 className="spot-title mb-0 ms-2">{props.title}</h1>
+          <SocialModal
+            isOpen={isSocialModalDisplayed}
+            onClose={()=> setShowSocialModal(false)}
+          />
         </div>
+        {/* TITLE */}
+        <h1 className="spot-title mb-0 ms-2">{title}</h1>
       </div>
+
+      
     </React.Fragment>
   );
 }
