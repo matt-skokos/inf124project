@@ -78,7 +78,7 @@
 .logo-underline {
     height: 1px;
     width: 66.666vw;        /* two-thirds of viewport width */
-    max-width: 800px;       /* optional cap */
+    max-width: 576px;       /* optional cap */
     background-color: var(--border-color);
     margin: 0.5rem auto 0.75rem;  /* center horizontally */
 }
