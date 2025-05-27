@@ -2,10 +2,20 @@
 .spot-title-container{
     width: 100%;
 }
+.actions-container{
+    padding-right: 2rem
+}
 
 .title-icon {
     font-size: 1.5rem;
-    color: var(--button-primary)
+    color: var(--button-primary);
+    transition: all 0.2s ease;
+    padding-right: 0.5rem
+}
+
+.title-icon:hover {
+    color: var(--button-secondary);
+    transform: scale(1.05);
 }
 
 .spot-title {
