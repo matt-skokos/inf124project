@@ -51,3 +51,12 @@ In the project directory, you can run:
     shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
 # Project Structure
+project-root/
+├──public
+|
+├──src
+|    ├──
+├──
+|
+└──
+
