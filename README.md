@@ -23,12 +23,14 @@ Local Legend is a react web app for getting AI generated surf condition reports.
 To clone the project simply select "Code" drop down on the github repository page and then clone the project using HTTPS, SSH, or GitHub CLI.
 
 ## Installing Dependencies
+`npm install`
 
-## .env
-`
-REACT_APP_API_URL=http://localhost:8080/api
-REACT_APP_FIREBASE_API_KEY=AIzaSyA9tZxHUaawKQy7rHGoCHZsJHjCNQlvqHA
-`
+## Set up .env
+In the root project directory create a .env to store private variables and API keys.  
+````
+    REACT_APP_API_URL=http://localhost:8080/api
+    REACT_APP_FIREBASE_API_KEY=
+````
 ## Available Scripts
 In the project directory, you can run:
 * `npm start`
