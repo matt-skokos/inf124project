@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Explore.css";
-import HeartSpot from "./Custom/HeartButton.jsx";
 import ContentCard from "./Custom/ContentCard.jsx";
 import PageContainer from "./Custom/PageContainer.jsx";
-import SocialShareButton from "./Custom/SocialShareButton.jsx";
+import SpotTitle from "./Custom/SpotTitle.jsx";
+
 
 const spots = [
   {
@@ -238,9 +238,8 @@ const SpotDetail = ({ spot }) => {
                 flexWrap: "wrap",
               }}
             >
-              <HeartSpot color="#23718f" size={32} className="heart-button" />
-              <SocialShareButton color="#23718f" size={40} />
-              <h1 className="detail-name">{spot.title}</h1>
+              <SpotTitle title={spot.title}/>
+
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
               {[...Array(3)].map((_, index) => (

@@ -5,6 +5,7 @@
 
 .title-icon {
     font-size: 1.5rem;
+    color: var(--button-primary)
 }
 
 .spot-title {
@@ -13,6 +14,7 @@
     color: var(--text-title);
 
 }
+
 /* medium */
 @media (max-width: 768px) {
     .title-icon {
