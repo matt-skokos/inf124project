@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../api";        // helper
 import ContentCard from "./Custom/ContentCard";
 import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
@@ -37,8 +36,11 @@ function Login() {
         throw new Error(data.error.message || "Login Failed")
       }
 
-      // Store ID tokenm for authenticated requests
-      localStorage.setItem("ID_TOKEN", data.idToken); 
+      // Store ID token for authenticated requests
+      localStorage.setItem("ID_TOKEN", data.idToken);
+
+      // Store UID for viewing and updating profile request
+      localStorage.setItem("UID", data.localId)
 
       // redirect users back to home page
       navigate("/");
