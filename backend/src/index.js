@@ -14,7 +14,7 @@ app.use(express.json()); // parse JSON bodies
 
 /// ----ROUTES----
 // Health Check
-app.get('/health-check', (req, res) => {
+app.get('/api/health-check', (req, res) => {
     res.status(200).send('Health Check: OK');
 });
 
