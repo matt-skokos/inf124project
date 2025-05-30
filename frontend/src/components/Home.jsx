@@ -1,5 +1,7 @@
 // src/components/Home.jsx
 import React, { useState } from "react";
+import { useCurrentDate } from "../hooks/useCurrentDate";
+import { useUserLocation } from "../hooks/useUserLocation";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
@@ -7,14 +9,6 @@ import './Home.css';
 // —————————————————————————————
 // Named exports so other modules can import them
 // —————————————————————————————
-
-const mockDate = {
-  date: "April 11, 2025"
-}
-
-const mockLocation = {
-  location: "Near Aliso Viejo, California"
-}
 
 const mockCondition = [ 
   { 
@@ -109,16 +103,19 @@ export function ConditionCard(props) {
   );
 }
 
-export function DateLocationCard(props) {
+export function DateLocationCard({date, location}) {
   return (
     <ContentCard className="date-location-card" >
-      <h2 className="m-0" id="current-date">{props.date}</h2>
-      <p  className="m-0" id="current-time">{props.location}</p>
+      <h2 className="m-0" id="current-date">{date}</h2>
+      <p  className="m-0" id="current-time">{location}</p>
     </ContentCard>
   );
 }
 
 function Home() {
+  const today = useCurrentDate();
+  const {locationName, loading, error} = useUserLocation();
+
   return (
     <PageContainer className="home-container" title="Home" hideTitle={true}>
       <div className="row gx-">
@@ -128,8 +125,8 @@ function Home() {
           <br className="d-none d-md-flex"/>
           <br className="d-none d-md-flex"/>
           <DateLocationCard
-            date={mockDate.date}
-            location={mockLocation.location}
+            date={today}
+            location={loading ? "Detecting Location..." : (error ? error: locationName) }
           />
         </section>
 
