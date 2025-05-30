@@ -12,7 +12,6 @@ import './Home.css';
 
 const mockCondition = [ 
   { 
-    date: "April 11, 2025",
     overview: "Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended.",
     swell_direction: "SSW",
     swell: "2-3 ft",
@@ -133,7 +132,7 @@ function Home() {
         {/* ----CONDITIONS---- */}
         <section className="condition-section col-12 col-md-7 mb-4">
           {mockCondition.map((cond) => (
-          <ConditionCard key={cond.date}
+          <ConditionCard key={today}
             overview        ={cond.overview}
             swell_direction ={cond.swell_direction}
             swell           ={cond.swell}
