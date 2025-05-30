@@ -1,6 +1,7 @@
 // src/components/Home.jsx
 import React, { useState } from "react";
 import { useCurrentDate } from "../hooks/useCurrentDate";
+import { useUserLocation } from "../hooks/useUserLocation";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
@@ -8,10 +9,6 @@ import './Home.css';
 // —————————————————————————————
 // Named exports so other modules can import them
 // —————————————————————————————
-
-const mockLocation = {
-  location: "Near Aliso Viejo, California"
-}
 
 const mockCondition = [ 
   { 
@@ -116,8 +113,8 @@ export function DateLocationCard({date, location}) {
 }
 
 function Home() {
-  const today = useCurrentDate()
-  const currentLocation = mockLocation.location
+  const today = useCurrentDate();
+  const {locationName, loading, error} = useUserLocation();
 
   return (
     <PageContainer className="home-container" title="Home" hideTitle={true}>
@@ -129,7 +126,7 @@ function Home() {
           <br className="d-none d-md-flex"/>
           <DateLocationCard
             date={today}
-            location={currentLocation}
+            location={loading ? "Detecting Location..." : (error ? error: locationName) }
           />
         </section>
 
