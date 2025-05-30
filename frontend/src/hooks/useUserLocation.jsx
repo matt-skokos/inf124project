@@ -9,6 +9,8 @@ export function useUserLocation(){
 
     useEffect(() => {
 
+        let isMounted = true    // flips to clase on cleanup
+
         const fallbackToIP = () => {
             fetch(`${API_URL}/location/ip`)
                 .then(res => {
@@ -26,36 +28,41 @@ export function useUserLocation(){
                 })
         } 
 
+        if(isMounted){
+            // Try browser Geolocation API
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    ({ coords }) => {
+                        fetch(`${API_URL}/location?lat=${coords.latitude}&lng=${coords.longitude}`)
+                            .then(res => {
+                                if(!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(data => {
+                                setLocationName(data.location);
+                                setLoading(false);
+                            })
+                            .catch(err => {
+                                console.warn(err);
+                                fallbackToIP();
+                            });
+                    },
+                    () => {
+                        // User denied or timed out
+                        fallbackToIP();
+                    },
+                    { timeout: 10000}
+                );
+            }else{
+                // no browser support -> fallback
+                fallbackToIP();
+            }
+        }
 
+        return () => {
+            isMounted = false   // stop future setState calls
+        }
 
-        // Try browser Geolocation API
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                ({ coords }) => {
-                    fetch(`${API_URL}/location?lat=${coords.latitude}&lng=${coords.longitude}`)
-                        .then(res => {
-                            if(!res.ok) throw new Error(`HTTP ${res.status}`);
-                            return res.json();
-                        })
-                        .then(data => {
-                            setLocationName(data.location);
-                            setLoading(false);
-                        })
-                        .catch(err => {
-                            console.warn(err);
-                            fallbackToIP();
-                        });
-                },
-                () => {
-                    // User denied or timed out
-                    fallbackToIP();
-                },
-                { timeout: 10000}
-            );
-        }else{
-            // no browser support -> fallback
-            fallbackToIP();
-        }    
     }, []);
 
     return { locationName, loading, error };
