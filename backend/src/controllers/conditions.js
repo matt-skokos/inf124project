@@ -1,6 +1,6 @@
 const fetch =  require("node-fetch");
 const { GoogleGenAI  } = require("@google/genai");
-const {NWSWeatherConditions} = require("../services/")
+const { NWSWeatherConditions } = require("../services/conditionsServices")
 require('dotenv').config(); 
 
 
