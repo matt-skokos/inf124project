@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useCurrentDate } from "../hooks/useCurrentDate";
 import { useUserLocation } from "../hooks/useUserLocation";
+import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
@@ -9,20 +10,6 @@ import './Home.css';
 // —————————————————————————————
 // Named exports so other modules can import them
 // —————————————————————————————
-
-const mockCondition = [ 
-  { 
-    overview: "Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended.",
-    swell_direction: "SSW",
-    swell: "2-3 ft",
-    swell_details: "Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals",
-    wind_direction: "SSW",
-    wind: "4 mph",
-    wind_details: "Light and variable winds, around 4 mph from the southwest.",
-    tide: "Low",
-    tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet",
-  }
-]
 
 export function ConditionOverview({ children, icon, label }) {
   return (
@@ -34,55 +21,35 @@ export function ConditionOverview({ children, icon, label }) {
   );
 }
 
-export function ConditionDetails({ children, label, identifier }) {
-  return (
-    <li>
-      <strong className="condition-label">{label}</strong>
-      <div className="condition-details px-3" id={identifier}>
-        {children}
-      </div>
-    </li>
-  );
-}
-
-export function ConditionCard(props) {
+export function ConditionCard({ overview, swell_direction, swell, wind_direction, wind, tide }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <ContentCard className={`condition-card ${isExpanded ? "expanded" : ""}`} title="Conditions">
       {isExpanded ? (
+        // ----EXPANDED CARD----
         <div className="condition-details">
-          <p>{props.overview}</p>
-          <ul className="list-unstyled">
-            <ConditionDetails label="Swell" identifier="swell-details">
-              <p>{props.swell_details}</p>
-            </ConditionDetails>
-            <ConditionDetails label="Wind" identifier="wind-details">
-              <p>{props.wind_details}</p>
-            </ConditionDetails>
-            <ConditionDetails label="Tides" identifier="tides-details">
-              <p>{props.tide_details}</p>
-            </ConditionDetails>
-          </ul>
-        </div>
+          <p>{overview}</p>
+         </div>
       ) : (
+        // ----COLLAPSED CARD----
         <div className="condition-summary d-flex justify-content-around w-100">
           <ConditionOverview icon="bi bi-tsunami" label="Swell">
             <p>
-              {props.swell_direction}
+              {swell_direction}
               <br />
-              {props.swell}
+              {swell} ft
             </p>
           </ConditionOverview>
           <ConditionOverview icon="bi bi-wind" label="Wind">
             <p>
-              {props.wind_direction}
+              {wind_direction}
               <br />
-              {props.wind}
+              {wind}
             </p>
           </ConditionOverview>
           <ConditionOverview icon="bi bi-water" label="Tide">
-            <p>{props.tide}</p>
+            <p>{tide}</p>
           </ConditionOverview>
         </div>
       )}
@@ -113,7 +80,8 @@ export function DateLocationCard({date, location}) {
 
 function Home() {
   const today = useCurrentDate();
-  const {locationName, loading, error} = useUserLocation();
+  const {lat, lng, locationName, loading: loadingLoc, error: errorLoc} = useUserLocation();
+  const {conditions, loading: loadingCond, error: errorCond } = useCurrentConditions(lat, lng);
 
   return (
     <PageContainer className="home-container" title="Home" hideTitle={true}>
@@ -125,25 +93,36 @@ function Home() {
           <br className="d-none d-md-flex"/>
           <DateLocationCard
             date={today}
-            location={loading ? "Detecting Location..." : (error ? error: locationName) }
+            location={loadingLoc ? "Detecting Location..." : (errorLoc ? errorLoc: locationName) }
           />
         </section>
 
         {/* ----CONDITIONS---- */}
         <section className="condition-section col-12 col-md-7 mb-4">
-          {mockCondition.map((cond) => (
-          <ConditionCard key={today}
-            overview        ={cond.overview}
-            swell_direction ={cond.swell_direction}
-            swell           ={cond.swell}
-            swell_details   ={cond.swell_details}
-            wind_direction  ={cond.wind_direction}
-            wind            ={cond.wind}
-            wind_details    ={cond.wind_details}
-            tide            ={cond.tide}
-            tide_details    ={cond.tide_details}
-          />
-          ))}
+          
+          {loadingCond && (
+            <ContentCard className="condition-card" title="Conditions">
+              <p>Loading conditions…</p>
+            </ContentCard>
+          )}
+
+          {(errorCond && !loadingCond) && (
+            <ContentCard className="condition-card">
+              <p>Error loading conditions: {errorCond}</p>
+            </ContentCard>
+          )}
+
+          {(!loadingCond && !errorCond && conditions) && (
+              <ConditionCard key={today}
+                overview        ={conditions.aiOverview}
+                swell_direction ={conditions.waveDirection}
+                swell           ={conditions.waveHeight}
+                wind_direction  ={conditions.windDirection}
+                wind            ={conditions.wind}
+                tide            ={conditions.tide}
+              />
+          )}
+
         </section>
       </div>
     </PageContainer>
