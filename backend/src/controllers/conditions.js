@@ -77,7 +77,7 @@ exports.getConditionsOverview = async (req, res) => {
             - Tide: ${tide}
             - Tide Details: ${tideDetails}`;
 
-        const aiOverview = genConditionOverview(promptText);
+        const aiOverview = await genConditionOverview(promptText);
 
         // Respond with structured JSON
         return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideDetails, aiOverview });
