@@ -25,6 +25,9 @@ app.use('/api/users', userRouter);
 const locationRouter = require("./routes/location");
 app.use('/api/location', locationRouter);
 
+const conditionsRouter = require("./routes/conditions");
+app.use('/api/conditions', conditionsRouter);
+
 // ----START SERVER----
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

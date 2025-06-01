@@ -2,7 +2,7 @@ const fetch = require("node-fetch")
 
 const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 
-async function reverseGeocode(lat, lng){
+const reverseGeocode = async (lat, lng) => {
         const url = `${GEOCODING_URL}?latlng=${lat},${lng}&key=${process.env.GEOSERVICES_API_KEY}`
         const res = await fetch(url);
         
