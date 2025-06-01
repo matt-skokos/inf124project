@@ -1,6 +1,8 @@
 const fetch =  require("node-fetch");
 
-const NWS_URL = "https://api.weather.gov"
+const NWS_URL = "https://api.weather.gov";
+const NOAA_URL = "https://api.tidesandcurrents.noaa.gov";
+const NDBC_URL = "https://www.ndbc.noaa.gov";
 
 const haversineDistance = (lat1, lng1, lat2, lng2) => {
     const toRad = deg => (deg * Math.PI) / 180;
@@ -20,7 +22,7 @@ const haversineDistance = (lat1, lng1, lat2, lng2) => {
 
 const fetchAllBuoyStations = async () => {
     // Fetch the raw station_table.txt
-    const response = await fetch("https://www.ndbc.noaa.gov/data/stations/station_table.txt");
+    const response = await fetch(`${NDBC_URL}/data/stations/station_table.txt`);
     if (!response.ok) {
     throw new Error(`Failed to download station table: ${response.status} ${response.statusText}`);
     }
@@ -61,7 +63,7 @@ const getSortedBuoys = async (lat, lng, blacklist = []) => {
 }
 
 const fetchBuoyRealtime = async(buoyId) => {
-    const url = `https://www.ndbc.noaa.gov/data/realtime2/${buoyId}.txt`;
+    const url = `${NDBC_URL}/data/realtime2/${buoyId}.txt`;
     const resp = await fetch(url);
     if (!resp.ok) {
         const txt = await resp.text();
@@ -72,20 +74,20 @@ const fetchBuoyRealtime = async(buoyId) => {
 
 const  NWSWeatherConditions = async (lat, lng) => {
     // Fetch gridpoint metadata for the location
-    const pointRes = await fetch(`${NWS_URL}/points/${lat},${lng}`);
+    const nwsPointsURL = `${NWS_URL}/points/${lat},${lng}`
+    const pointRes = await fetch(nwsPointsURL);
     if(!pointRes.ok){
-        throw new Error(`NWS points fetch error: ${pointRes.status}`); 
+        throw new Error(`NWS points fetch error (${pointRes.status}): ${nwsPointsURL}`); 
     }
 
     const pointData = await pointRes.json(); 
     const { gridId, gridX, gridY } = pointData.properties
 
     // Fetch the nearest forecast for the most recent period from NWS (api.weather)
-    const forecastRes = await fetch(
-        `${NWS_URL}/gridpoints/${gridId}/${gridX},${gridY}/forecast`
-    )
+    const nwsGridpointURL = `${NWS_URL}/gridpoints/${gridId}/${gridX},${gridY}/forecast`
+    const forecastRes = await fetch(nwsGridpointURL)
     if(!forecastRes.ok){
-        throw new Error(`NWS forecast fetch error: ${forecastRes.status}`)
+        throw new Error(`NWS forecast fetch error (${forecastRes.status}): ${nwsGridpointURL}`)
     }
 
     const forecastData = await forecastRes.json();
@@ -104,7 +106,7 @@ const  NWSWeatherConditions = async (lat, lng) => {
 // Fetch Tide data from NOAA Tides API
 const NOAATideCurrentConditions = async (lat, lng) => { 
     // retrieve all tide-prediction stations
-    const stationsURL = `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?units=english&type=tidepredictions`;
+    const stationsURL = `${NOAA_URL}/mdapi/prod/webapi/stations.json?units=english&type=tidepredictions`;
     const stationsRes = await fetch(stationsURL); 
     if(!stationsRes.ok){
         const stationsText = await stationsRes.text();
@@ -155,8 +157,7 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     const endDateStr = formatDate(tomorrowDate); 
 
     // Fetch high/low tide predictions
-    const tideURL = 
-        `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=${stationId}` +
+    const tideURL = `${NOAA_URL}/api/prod/datagetter?station=${stationId}` +
         `&product=predictions&interval=hilo&datum=MLLW&units=english&time_zone=lst_ldt` +
         `&format=json&begin_date=${beginDateStr}&end_date=${endDateStr}`;
     const tideRes = await fetch(tideURL); 
@@ -190,7 +191,7 @@ const NOAATideCurrentConditions = async (lat, lng) => {
 }
 
 const NDBCBuoyConditions = async (lat, lng) => {
-    const blacklist = [];
+    const blacklist = ["46230"];
     
     const sortedBuoys = await getSortedBuoys(lat, lng, blacklist); 
     if (sortedBuoys.length === 0){
