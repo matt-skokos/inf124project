@@ -227,7 +227,7 @@ const NDBCBuoyConditions = async (lat, lng) => {
             const waveHeight = mostRecent[idxWVHT];
             const waveDirection = mostRecent[idxMWD];
             
-            console.log(`Nearest active buoy ${nearest.id} ${nearest.name}\nWave Height: ${waveHeight} Wave Direction: ${waveDirection}`);
+            console.log(`Nearest active buoy: ${nearest.id} ${nearest.name}\nWave Height: ${waveHeight} Wave Direction: ${waveDirection}`);
             return { waveHeight, waveDirection };
         } catch (err){
             console.warn(`Failed to fetch data for buoy ${nearest.id} ${nearest.name}; adding to blacklist`); 
