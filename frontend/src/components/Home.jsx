@@ -1,15 +1,10 @@
 // src/components/Home.jsx
-import React, { useState } from "react";
 import { useCurrentDate } from "../hooks/useCurrentDate";
 import { useUserLocation } from "../hooks/useUserLocation";
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
-
-// —————————————————————————————
-// Named exports so other modules can import them
-// —————————————————————————————
 
 export function ConditionOverview({ children, icon, label }) {
   return (
@@ -22,49 +17,37 @@ export function ConditionOverview({ children, icon, label }) {
 }
 
 export function ConditionCard({ overview, swell_direction, swell, wind_direction, wind, tide }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   return (
-    <ContentCard className={`condition-card ${isExpanded ? "expanded" : ""}`} title="Conditions">
-      {isExpanded ? (
-        // ----EXPANDED CARD----
-        <div className="condition-details">
-          <p>{overview}</p>
-         </div>
-      ) : (
-        // ----COLLAPSED CARD----
-        <div className="condition-summary d-flex justify-content-around w-100">
-          <ConditionOverview icon="bi bi-tsunami" label="Swell">
-            <p>
-              {swell_direction}
-              <br />
-              {swell} ft
-            </p>
-          </ConditionOverview>
-          <ConditionOverview icon="bi bi-wind" label="Wind">
-            <p>
-              {wind_direction}
-              <br />
-              {wind}
-            </p>
-          </ConditionOverview>
-          <ConditionOverview icon="bi bi-water" label="Tide">
-            <p>{tide}</p>
-          </ConditionOverview>
+    <ContentCard className="condition-card expanded" title="Conditions">
+        <div className="condition-summary w-100">
+          {/* ─── First row: three ConditionOverview items ─── */}
+          <div className="d-flex justify-content-around">
+            <ConditionOverview icon="bi bi-tsunami" label="Swell">
+              <p>
+                {swell_direction}
+                <br />
+                {swell} ft
+              </p>
+            </ConditionOverview>
+            <ConditionOverview icon="bi bi-wind" label="Wind">
+              <p>
+                {wind_direction}
+                <br />
+                {wind}
+              </p>
+            </ConditionOverview>
+            <ConditionOverview icon="bi bi-water" label="Tide">
+              <p>{tide}</p>
+            </ConditionOverview>
+          </div>
+          {/* ─── Second row: Overview, centered under the three conditions ─── */}
+          <div className="d-flex">
+            <div className="condition-details">
+              <h3 className="condition-label card-subtitle mb-1"><strong>Overview</strong></h3>
+              <div className="condition-overview">{overview}</div>
+            </div>
+          </div>
         </div>
-      )}
-
-      <div
-        className="expand-icon"
-        onClick={() => setIsExpanded((e) => !e)}
-        aria-label={isExpanded ? "Collapse details" : "Expand details"}
-      >
-        {isExpanded ? (
-          <i className="bi bi-arrows-angle-contract"></i>
-        ) : (
-          <i className="bi bi-arrows-angle-expand"></i>
-        )}
-      </div>
     </ContentCard>
   );
 }
