@@ -79,10 +79,10 @@ function DesktopNavbar({ hideTopRow, isLoggedIn }) {
   return (
     <div className="desktop-nav">
       {!hideTopRow && (
-        <div className="d-none d-lg-flex justify-content-center alin-items-center w-100 py-2">
+        <div className="d-none d-lg-flex justify-content-center align-items-center w-100 py-2">
           
           {isLoggedIn && (
-            <ul className="navbar-nav">
+            <ul className="navbar-nav mx-auto">
               <li className="nav-item">
                 <Link className="nav-link" to="/">
                   Home
@@ -107,7 +107,7 @@ function DesktopNavbar({ hideTopRow, isLoggedIn }) {
           )}
 
           {/* profile icon */}
-          <Link to={isLoggedIn ? "/profile" : "/login"} className="navbar-profile" aria-label="profile icon">
+          <Link to={isLoggedIn ? "/profile" : "/login"} className="navbar-profile ms-auto" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         </div>
