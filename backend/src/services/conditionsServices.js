@@ -18,10 +18,7 @@ const haversineDistance = (lat1, lng1, lat2, lng2) => {
     return nm;
 }
 
-const getNearestBuoy = async (lat, lng) => {
-    const userLat = parseFloat(lat);
-    const userLng = parseFloat(lng);
-
+const fetchAllBuoyStations = async () => {
     // Fetch the raw station_table.txt
     const response = await fetch("https://www.ndbc.noaa.gov/data/stations/station_table.txt");
     if (!response.ok) {
@@ -29,47 +26,48 @@ const getNearestBuoy = async (lat, lng) => {
     }
     const rawText = await response.text();
 
-    // Split into lines and filter out header/comment lines
-    const lines = rawText.split("\n").filter(line => {
-        // Skip blank lines or lines starting with "#" (header)
-        return line.trim() !== "" && !line.trim().startsWith("#");
-    });
-
-    // Parse each line into { id, lat, lon }
-    // Format: STATION_ID | OWNER | TTYPE | HULL | NAME | PAYLOAD | LOCATION | TIMEZONE | FORECAST | NOTE
-    const stations = lines.map(line => {
+    const lines = rawText.split("\n").filter(line => line.trim() !== "" && !line.trim().startsWith("#"));
+    return lines.map(line => {
         const fields = line.split("|");
         const stationId = fields[0].trim();
         const stationName = fields[4].trim();
-
-        // LOCATION field looks like:
-        // "37.356 N 122.881 W (37°21'20\" N 122°52'51\" W)"
-        // split on space: [ "37.356", "N", "122.881", "W", "(...)" ]
-        const locationTokens = fields[6].trim().split(" ");
-        let lat = parseFloat(locationTokens[0]);        // locationTokens[0] = latitude number (string)
-        let latHem = locationTokens[1].toUpperCase();   // locationTokens[1] = "N" or "S"
-        let lng = parseFloat(locationTokens[2]);        // locationTokens[2] = longitude number (string)
-        let lngHem = locationTokens[3].toUpperCase();   // locationTokens[3] = "E" or "W"
-
-        if (latHem === "S")  lat = -lat;
-        if (lngHem === "W")  lng = -lng;
-
+        const locTokens = fields[6].trim().split(" ");
+        let lat = parseFloat(locTokens[0]);
+        let latHem = locTokens[1].toUpperCase();
+        let lng = parseFloat(locTokens[2]);
+        let lngHem = locTokens[3].toUpperCase();
+        if (latHem === "S") lat = -lat;
+        if (lngHem === "W") lng = -lng;
         return { id: stationId, name: stationName, lat, lng };
     });
+}
 
-    let nearestStationId = null;
-    let nearestStationName = null; 
-    let minDistance = Infinity; 
-    for (const station of stations){
-        const d = haversineDistance(userLat, userLng, station.lat, station.lng)
-        if (d < minDistance){
-            nearestStationId = station.id; 
-            nearestStationName = station.name;
-            minDistance = d; 
-        }
+const getSortedBuoys = async (lat, lng, blacklist = []) => {
+    const userLat = parseFloat(lat);
+    const userLng = parseFloat(lng);
+
+    const allStations = await fetchAllBuoyStations();
+
+    // filter out blacklist IDs 
+    const candidates = allStations.filter(st => !blacklist.includes(st.id));
+
+    // Sort by haversine distance
+    candidates.sort((a, b) => {
+        const da = haversineDistance(userLat, userLng, a.lat, a.lng);
+        const db = haversineDistance(userLat, userLng, b.lat, b.lng);
+        return da - db;
+    });
+    return candidates;
+}
+
+const fetchBuoyRealtime = async(buoyId) => {
+    const url = `https://www.ndbc.noaa.gov/data/realtime2/${buoyId}.txt`;
+    const resp = await fetch(url);
+    if (!resp.ok) {
+        const txt = await resp.text();
+        throw new Error(`Buoy ${buoyId} fetch error: ${resp.status} ${txt}`);
     }
-    console.log(`Nearest Buoy: (${nearestStationId})${nearestStationName} distance: ${minDistance}` );
-    return {id: nearestStationId, name: nearestStationName, distance: minDistance};
+    return await resp.text();
 }
 
 const  NWSWeatherConditions = async (lat, lng) => {
@@ -191,15 +189,51 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     return { tide, tideDetails };
 }
 
-const NDBCBouyConditions = async (lat, lng) => {
-    const buoy = await getNearestBuoy(lat, lng);
-
-    // Fetch the raw {STATION_ID}.txt
-    const response = await fetch(`https://www.ndbc.noaa.gov/data/realtime2/${buoy.id}.txt`);
-    if (!response.ok) {
-    throw new Error(`Failed to download station table: ${response.status} ${response.statusText}`);
+const NDBCBuoyConditions = async (lat, lng) => {
+    const blacklist = [];
+    
+    const sortedBuoys = await getSortedBuoys(lat, lng, blacklist); 
+    if (sortedBuoys.length === 0){
+        throw new Error('No active buoys foudn within available dataset'); 
     }
-    const rawText = await response.text();
+
+    for(let i = 0; i < sortedBuoys.length; i++){
+        const nearest = sortedBuoys[i]; 
+        try{
+            const rawText = await fetchBuoyRealtime(nearest.id)
+
+            // parse rawtext as needed for wave data
+            const lines = rawText.trim().split("\n"); 
+
+            // first two lines are header: remove '#' and split by whitespace
+            const header = lines[0].replace(/#/g, '').trim().split(/\s+/);
+
+            // data lines follow: skip first two header rows
+            const dataLines = lines.slice(2);
+            if (dataLines.length === 0){
+                throw new Error(`No data rows for buoy ${nearest.id}`);
+            }
+
+            // Get the most recent data row (first element of dataLines)
+            const mostRecent = dataLines[0].trim().split(/\s+/);
+
+            // Find WVHT index
+            const idxWVHT = header.indexOf('WVHT');
+            const idxMWD = header.indexOf('MWD');
+            if (idxWVHT < 0) {
+                throw new Error(`WVHT column not found for buoy ${nearest.id}`);
+            }
+            const waveHeight = mostRecent[idxWVHT];
+            const waveDirection = mostRecent[idxMWD];
+            
+            console.log(`Using buoy ${nearest.id} ${nearest.name} wave height: ${waveHeight} wave direction: ${waveDirection}`);
+            return { waveHeight, waveDirection };
+        } catch (err){
+            console.warn(`Failed to fetch data for buoy ${nearest.id} ${nearest.name}; adding to blacklist`); 
+            blacklist.push(nearest.id)
+            // continue to next buoy
+        }
+    }
 }
 
-module.exports = { NWSWeatherConditions, NOAATideCurrentConditions, NDBCBouyConditions }
+module.exports = { NWSWeatherConditions, NOAATideCurrentConditions, NDBCBuoyConditions }
