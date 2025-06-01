@@ -1,6 +1,6 @@
 const fetch =  require("node-fetch");
 const { reverseGeocode } = require("../services/locationServices");
-const { CACHE_TTL } = require("../utlis");
+const { CACHE_TTL } = require("../utils");
 
 const GEOLOCATION_URL = "https://www.googleapis.com/geolocation/v1/geolocate";
 
