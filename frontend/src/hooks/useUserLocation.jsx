@@ -3,12 +3,13 @@ import {useState, useEffect} from "react";
 const API_URL = process.env.REACT_APP_API_URL
 
 export function useUserLocation(){
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
     const [locationName, setLocationName] = useState(null); 
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null); 
 
     useEffect(() => {
-
         let isMounted = true    // flips to clase on cleanup
 
         const fallbackToIP = () => {
@@ -18,6 +19,8 @@ export function useUserLocation(){
                     return res.json();
                 })
                 .then(data => {
+                    setLat(data.latitude); 
+                    setLng(data.longitude);
                     setLocationName(data.location); 
                     setLoading(false); 
                 })
@@ -39,6 +42,8 @@ export function useUserLocation(){
                                 return res.json();
                             })
                             .then(data => {
+                                setLat(coords.latitude); 
+                                setLng(coords.longitude);
                                 setLocationName(data.location);
                                 setLoading(false);
                             })
@@ -65,6 +70,6 @@ export function useUserLocation(){
 
     }, []);
 
-    return { locationName, loading, error };
+    return { lat, lng, locationName, loading, error };
 }
 
