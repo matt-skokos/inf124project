@@ -1,6 +1,7 @@
 const fetch =  require("node-fetch");
 const { GoogleGenAI  } = require("@google/genai");
 const { NWSWeatherConditions, NOAATideCurrentConditions, NDBCBuoyConditions } = require("../services/conditionsServices")
+const { CACHE_TTL } = require("../utlis");
 require('dotenv').config(); 
 
 const gcpApiKey = process.env.GEMINI_API_KEY;
@@ -12,9 +13,7 @@ exports.getConditions = async (req, res) => {
         return res.status(400).json({ error: "Missing required query parameters: lat, lng" });
     }
 
-    const metersToFeet = (meters) => {
-        return meters * 3.28084;
-    }
+    const metersToFeet = (meters) => meters * 3.28084;
 
     const degreesToDirection = (degree) => {
         const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]; 
@@ -52,6 +51,7 @@ exports.getConditions = async (req, res) => {
         console.log(`AI Overview: ${aiOverview}`)
 
         // Respond with structured JSON
+        res.set('Cache-Control', `public, max-age= ${CACHE_TTL}`); // Set Browser HTTP Cache
         return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideDetails, aiOverview });
     }catch(err){
         console.log("Conditions service error: " , err); 

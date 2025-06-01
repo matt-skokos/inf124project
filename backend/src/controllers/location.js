@@ -1,5 +1,6 @@
 const fetch =  require("node-fetch");
 const { reverseGeocode } = require("../services/locationService");
+const { CACHE_TTL } = require("../utlis");
 
 const GEOLOCATION_URL = "https://www.googleapis.com/geolocation/v1/geolocate";
 
@@ -10,6 +11,9 @@ exports.GetLocation = async(req,res) => {
 
     try{
         const location = await reverseGeocode(lat,lng); 
+        
+        // Respond with structured JSON
+        res.set('Cache-Control', `public, max-age= ${CACHE_TTL}`); // Set Browser HTTP Cache
         res.json({ location });
     }catch(err){
         console.error("reverseGeocode error:", err);
@@ -39,9 +43,12 @@ exports.getLocationIP = async (req,res) => {
         
         const {location: geoLoc} = geoJson;
         const location = await reverseGeocode(geoLoc.lat, geoLoc.lng);
-        return res.json({location}); 
+        
+        // Respond with structured JSON
+        res.set('Cache-Control', `public, max-age= ${CACHE_TTL}`); // Set Browser HTTP Cache
+        return res.json({lat: geoLoc.lat, lng: geoLoc.lng, location}); 
     }catch(err){
-        console.log(err); 
+        console.log(err);
         res.status(500).json({error: `Geocoding failed ${err}}`})
     }
 }
