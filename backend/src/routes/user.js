@@ -5,7 +5,7 @@ const ctrl = require('../controllers/user');
 const auth = require("../middleware/auth")
 
 // Public: user creation 
-router.post('/', ctrl.createUser); 
+router.post('/new', ctrl.createUser); 
 
 // Private: ALL other user routes require valid Firebase ID token
 router.use(auth); 

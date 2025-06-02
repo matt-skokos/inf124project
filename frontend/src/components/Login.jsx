@@ -13,8 +13,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here, e.g., API call to authenticate user
-    console.log("Email:", email);
-    console.log("Password:", password);
 
     try{
       // Sign in with Firebase Auth REST API
@@ -36,11 +34,8 @@ function Login() {
         throw new Error(data.error.message || "Login Failed")
       }
 
-      // Store ID token for authenticated requests
-      localStorage.setItem("ID_TOKEN", data.idToken);
-
-      // Store UID for viewing and updating profile request
-      localStorage.setItem("UID", data.localId)
+      localStorage.setItem("ID_TOKEN", data.idToken); // Store ID token for authenticated requests
+      localStorage.setItem("UID", data.localId)       // Store UID for viewing and updating profile request
 
       // redirect users back to home page
       navigate("/");
@@ -48,6 +43,8 @@ function Login() {
     }catch(err){
       console.log(err);  
       alert(err.message);
+    }finally{
+          console.log(`Successfully logged in: ${email}`);
     }
   };
 
@@ -81,6 +78,7 @@ function Login() {
               type="password"
               className="form-control"
               id="password"
+              autoComplete="on"
               placeholder="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

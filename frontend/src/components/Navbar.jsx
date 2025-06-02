@@ -3,17 +3,17 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
-function MobileNavbar(props) {
+function MobileNavbar({hideTopRow, isLoggedIn}) {
   return (
     <div className="mobile-nav d-lg-none">
       <div
-        className={`d-flex ${
-          props.hideTopRow
-            ? "justify-content-center"
-            : "justify-content-between"
-        } align-items-center w-100 py-2`}
+        className={`d-flex ${ hideTopRow ?
+          "justify-content-center" :
+          "justify-content-between" }
+          align-items-center w-100 py-2`
+        }
       >
-        {!props.hideTopRow && (
+        {(!hideTopRow && isLoggedIn) && (
           <button
             className="navbar-toggler"
             type="button"
@@ -33,76 +33,81 @@ function MobileNavbar(props) {
         </Link>
 
         {/* profile icon */}
-        {!props.hideTopRow && (
-          <Link to="/profile" className="navbar-profile" aria-label="profile icon">
+        {!hideTopRow && (
+          <Link to={isLoggedIn ? "/profile" : "/login"} className="navbar-profile" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         )}
       </div>
 
-      {!props.hideTopRow && (
+      {!hideTopRow && (
         <div
           className="collapse navbar-collapse justify-content-center alin-items-center w-100 py-2"
           id="mobileNavbarNav"
         >
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/forecast">
-                Forecast
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/explore">
-                Explore
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/favorites">
-                Favorites
-              </Link>
-            </li>
-          </ul>
+          {isLoggedIn && (
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/forecast">
+                  Forecast
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/explore">
+                  Explore
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/favorites">
+                  Favorites
+                </Link>
+              </li>
+            </ul>
+            )}
         </div>
       )}
     </div>
   );
 }
 
-function DesktopNavbar(props) {
+function DesktopNavbar({ hideTopRow, isLoggedIn }) {
   return (
     <div className="desktop-nav">
-      {!props.hideTopRow && (
-        <div className="d-none d-lg-flex justify-content-center alin-items-center w-100 py-2">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/forecast">
-                Forecast
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/explore">
-                Explore
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/favorites">
-                Favorites
-              </Link>
-            </li>
-          </ul>
+      {!hideTopRow && (
+        <div className="d-none d-lg-flex justify-content-center align-items-center w-100 py-2">
+          
+          {isLoggedIn && (
+            <ul className="navbar-nav mx-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/forecast">
+                  Forecast
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/explore">
+                  Explore
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/favorites">
+                  Favorites
+                </Link>
+              </li>
+            </ul>
+          )}
 
           {/* profile icon */}
-          <Link to="/login" className="navbar-profile" aria-label="profile icon">
+          <Link to={isLoggedIn ? "/profile" : "/login"} className="navbar-profile ms-auto" aria-label="profile icon">
             <i className="bi bi-person-circle"></i>
           </Link>
         </div>
@@ -122,14 +127,13 @@ function DesktopNavbar(props) {
 function Navbar() {
   const { pathname } = useLocation(); // Get the current location
   const hideTopRow = ["/login", "/registration"].includes(pathname); // Check if the current path is login or registration
+  const isLoggedIn = Boolean(localStorage.getItem("ID_TOKEN"))
 
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container flex-column">
-        <MobileNavbar hideTopRow={hideTopRow} />
-
-        <DesktopNavbar hideTopRow={hideTopRow} />
-
+        <MobileNavbar hideTopRow={hideTopRow} isLoggedIn={isLoggedIn}/>
+        <DesktopNavbar hideTopRow={hideTopRow} isLoggedIn={isLoggedIn}/>
         {/* Underline */}
         <div className="logo-underline"></div>
       </div>

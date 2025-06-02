@@ -3,7 +3,7 @@ const ctrl = require("../controllers/conditions")
 const router = express.Router(); 
 const cacheControl = require("../middleware/cacheControl")
 
-router.use(cacheControl());
+router.use(cacheControl(10*60));
 
 router.get('/', ctrl.getConditionsOverview);
 router.get('/wave', ctrl.getWaveConditions);
