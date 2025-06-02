@@ -50,7 +50,8 @@ INF124PROJECT/
 ├── node_modules/
 ├── .gitignore
 ├── LICENSE
-└── README.md
+├── README.md 
+└── <sp2025-inf124-firebase-adminsdk-*.json>
 ```
 
 ## Dependencies 
@@ -65,18 +66,38 @@ To clone the project simply select "Code" drop down on the github repository pag
 ## Installing Dependencies
 `npm install`
 
+## Creating Firebase Project and Google Cloud Platform Project (Optional)
+Follow this documentation for creating a new Firebase project. 
+Follow this documentation for creating a new Google Cloud prject.
+
+### Required Goggle Cloud Services
+* Geocoding API
+* Geolocation API
+* Generative Language API
+
+## Generating serviceAccountKey
+* Navigate to the project Firebase console home
+* Select gear icon in the left sidepanel to open 'Project Settings'
+* Navigate to 'Service Accoutn'
+* Select 'Generate new private key' at the bottom of the page
+* Wait for .json file to download
+* Move .json file into root directory of local project
+NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC 
+
 ## Set up .env
 The project requires two .env files for setting environment variables to store private variables and API keys. 
 
 **Frontend .env**
 ````
-    REACT_APP_API_URL=http://localhost:8080/api
-    REACT_APP_FIREBASE_API_KEY= <YOUR API KEY>
+REACT_APP_API_URL=http://localhost:8080/api
+REACT_APP_FIREBASE_API_KEY=<YOUR API KEY>
 ````
 **Backend .env**
 ````
-    REACT_APP_API_URL=http://localhost:8080/api
-    REACT_APP_FIREBASE_API_KEY= <YOUR API KEY>
+PORT=8080
+FIREBASE_SERVICE_ACCCOUNT_PATH=../../<sp2025-inf124-firebase-adminsdk-*.json>
+GEMINI_API_KEY=<YOUR GEMINI API KEY>
+GEOSERVICES_API_KEY=<GEOSERVICES API KEY>
 ````
 ## Available Scripts
 ### Frontend Scripts
