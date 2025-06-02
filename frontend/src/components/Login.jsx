@@ -36,11 +36,8 @@ function Login() {
         throw new Error(data.error.message || "Login Failed")
       }
 
-      // Store ID token for authenticated requests
-      localStorage.setItem("ID_TOKEN", data.idToken);
-
-      // Store UID for viewing and updating profile request
-      localStorage.setItem("UID", data.localId)
+      localStorage.setItem("ID_TOKEN", data.idToken); // Store ID token for authenticated requests
+      localStorage.setItem("UID", data.localId)       // Store UID for viewing and updating profile request
 
       // redirect users back to home page
       navigate("/");
