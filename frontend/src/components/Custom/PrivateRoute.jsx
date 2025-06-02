@@ -8,8 +8,7 @@ import { Navigate, Outlet } from "react-router-dom";
  */
 const PrivateRoute = () => {
   const token = localStorage.getItem("ID_TOKEN");
-  console.warn("Warning: Unable to access private route. Please log in");
-  return token ? <Outlet /> : <Navigate to="/" replace />;
+  return token ? <Outlet /> : (<Navigate to="/" replace />);
 };
 
 export default PrivateRoute;
