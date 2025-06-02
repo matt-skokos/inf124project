@@ -13,8 +13,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here, e.g., API call to authenticate user
-    console.log("Email:", email);
-    console.log("Password:", password);
 
     try{
       // Sign in with Firebase Auth REST API
@@ -45,6 +43,8 @@ function Login() {
     }catch(err){
       console.log(err);  
       alert(err.message);
+    }finally{
+          console.log(`Successfully logged in: ${email}`);
     }
   };
 

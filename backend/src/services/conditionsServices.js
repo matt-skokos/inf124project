@@ -161,10 +161,10 @@ const NOAATideCurrentConditions = async (lat, lng) => {
         `&product=predictions&interval=hilo&datum=MLLW&units=english&time_zone=lst_ldt` +
         `&format=json&begin_date=${beginDateStr}&end_date=${endDateStr}`;
     const tideRes = await fetch(tideURL); 
-    if(!tideRes.ok){
-        throw new Error(`NOAA tide fetch error: ${tideRes.status}`); 
-    }
     const tideData = await tideRes.json(); 
+    if(!tideRes.ok){
+        throw new Error(`NOAA tide data fetch error (${tideRes.status}): ${tideData?.message}\n${tideURL}`); 
+    }
     const predictions = tideData.predictions || []; 
 
     // Determine next low and high tides 

@@ -16,7 +16,7 @@ exports.getWaveConditions = async (req, res) => {
         return res.json({ waveHeight, waveDirection});
 
     }catch(err){
-        console.log("Conditions service error: " , err); 
+        console.log("Conditions service error:", err); 
         res.status(500).json({ error: "Failed to fetch wave conditions"});
     }
 }
@@ -82,7 +82,7 @@ exports.getConditionsOverview = async (req, res) => {
         // Respond with structured JSON
         return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideDetails, aiOverview });
     }catch(err){
-        console.log("Conditions service error: " , err); 
+        console.log("Conditions service error:", err); 
         res.status(500).json({ error: "Failed to fetch surf conditions"});
     }
 }
