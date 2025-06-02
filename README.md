@@ -68,15 +68,15 @@ To clone the project simply select "Code" drop down on the github repository pag
 ## Set up .env
 The project requires two .env files for setting environment variables to store private variables and API keys. 
 
-**Frontend directory .env**
+**Frontend .env**
 ````
     REACT_APP_API_URL=http://localhost:8080/api
-    REACT_APP_FIREBASE_API_KEY=
+    REACT_APP_FIREBASE_API_KEY= <YOUR API KEY>
 ````
-**Backend directory .env**
+**Backend .env**
 ````
     REACT_APP_API_URL=http://localhost:8080/api
-    REACT_APP_FIREBASE_API_KEY=
+    REACT_APP_FIREBASE_API_KEY= <YOUR API KEY>
 ````
 ## Available Scripts
 In the project directory, you can run:
