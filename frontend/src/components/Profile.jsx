@@ -1,4 +1,6 @@
 import { useState, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from 'firebase/auth';
 import API from "../api"; // configured Axios/fetch wrapper
 import ContentCard from "./Custom/ContentCard";
 import PageContainer from "./Custom/PageContainer";
@@ -32,7 +34,8 @@ function Profile(){
 
     // Initialize with information from user data API
     const [avatarImg, setAvatarImg]     = useState(null); 
-    const [formState, dispatch] = useReducer(formReducer, initialState); 
+    const [formState, dispatch]         = useReducer(formReducer, initialState); 
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError]         = useState(null);
@@ -128,6 +131,26 @@ function Profile(){
         }
     };
 
+    const handleLogout = async (e) => {
+        try{
+            // Sign out from Firebase auth
+            const auth = getAuth();
+            await signOut(auth);
+
+            // Remove ID_TOKEN from localStoragae
+            localStorage.removeItem("ID_TOKEN");
+            localStorage.removeItem("UID");
+
+            // Navigate back to the home page
+            navigate("/");
+            console.log('Log out successfully');
+        }catch(err){
+            console.error("Error during sign-out:", err);
+            // Optionally show a toast/alert here
+            alert("Failed to log out. Please try again.");
+        }
+    }
+
     return(
         <PageContainer title="Profile" hideTitle={true}>
             {isLoading ? (
@@ -167,6 +190,9 @@ function Profile(){
                         {/* NAME */}
                         <div className="profile-name">
                             <h1>{formState.name}</h1>
+                            <div onClick={handleLogout}>
+                                <i className="bi bi-box-arrow-right"></i>
+                            </div>
                         </div>
                     </div>
                     
@@ -274,7 +300,7 @@ function Profile(){
                             </div>
 
                             <Button type="submit" className="save-button">
-                                Save
+                                Update
                             </Button>
                         </form>
                     </ContentCard>
