@@ -13,6 +13,46 @@ Local Legend is a react web app for getting AI generated surf condition reports.
 * AI generated recommendation for best day to go surf
 
 # Project Setup
+
+# Project Structure
+```
+INF124PROJECT/
+├── backend/
+│   ├── node_modules/
+│   ├── src/
+│       ├── controllers/
+│       ├── middleware/
+│       ├── models/
+│       ├── routes/
+│       ├── services/
+│       ├── db.js
+│       ├── index.js
+│       ├── utils.js
+│   ├── .env
+│   ├── dockerfile
+│   ├── package-lock.json
+│   └── package.json
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│       ├── assets/
+│       ├── components/
+│           ├── Custom/
+│       ├── hooks/
+│       ├── api.js
+│       ├── APP.js
+│       ├── index.css
+│       ├── index.js
+│   ├── .env
+│   ├── package-lock.json
+│   └── package.json
+├── node_modules/
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
 ## Dependencies 
 * Axios
 * Bootstrap
@@ -26,7 +66,14 @@ To clone the project simply select "Code" drop down on the github repository pag
 `npm install`
 
 ## Set up .env
-In the root project directory create a .env to store private variables and API keys.  
+The project requires two .env files for setting environment variables to store private variables and API keys. 
+
+**Frontend directory .env**
+````
+    REACT_APP_API_URL=http://localhost:8080/api
+    REACT_APP_FIREBASE_API_KEY=
+````
+**Backend directory .env**
 ````
     REACT_APP_API_URL=http://localhost:8080/api
     REACT_APP_FIREBASE_API_KEY=
@@ -45,18 +92,5 @@ In the project directory, you can run:
     Builds the app for production to the `build` folder. It correctly bundles React in production mode and optimizes the build for the best performance.\
     The build is minified and the filenames include the hashes. Your app is ready to be deployed!\
     See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-* `npm run eject`
 
-    You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you\
-    shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-# Project Structure
-project-root/
-├──public
-|
-├──src
-|    ├──
-├──
-|
-└──
 
