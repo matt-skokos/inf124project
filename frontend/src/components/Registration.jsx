@@ -66,6 +66,10 @@ function Registration() {
             alert("Passwords do not match!");
             return;
         }
+        if (notifyBy === ""){
+            alert("Missing Notfication settings");
+            return;
+        }
 
         try{
             // create new user in Auth + Firestore
@@ -76,16 +80,32 @@ function Registration() {
                 phone,
                 skill,
                 notifyBy,
-            }).then(
-                console.log(`Name: ${firstName} ${lastName}\n` +
-                    `Email: ${email}\n` +
-                    `Password: ${password}\n` +
-                    `Confirm password: ${confirmPassword}\n` +
-                    `Phone: ${phone}\n` +
-                    `Skill: ${skill}\n` +
-                    `Notify By: ${notifyBy}`
-                )
+            })
+            // log the user in
+            const firebaseResp  = await fetch(
+                `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API_KEY}`,
+                {
+                    method: "POST", 
+                    headers: {"Content-Type": "application/json"}, 
+                    body: JSON.stringify({
+                        email, 
+                        password, 
+                        returnSecureToken: true,
+                    }),
+                }
             )
+            const firebaseData = await firebaseResp.json();
+            if (!firebaseResp.ok) {
+                throw new Error(firebaseData.error?.message || "Firebase login failed");
+            }
+
+            localStorage.setItem("ID_TOKEN", firebaseData.idToken);
+            localStorage.setItem("UID", firebaseData.localId)       // Store UID for viewing and updating profile request
+
+            console.log(`Registration and Login successful:`+
+                `Name: ${firstName} ${lastName}\n`+
+                `Email: ${email}\n`
+            );
 
             //log the new user in 
             dispatch({ type: "RESET_FORM" }); // clear form (optional)
