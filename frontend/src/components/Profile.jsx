@@ -1,6 +1,7 @@
 import { useState, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from 'firebase/auth';
+import { auth } from "../firebase";  
+import { signOut } from 'firebase/auth';
 import API from "../api"; // configured Axios/fetch wrapper
 import ContentCard from "./Custom/ContentCard";
 import PageContainer from "./Custom/PageContainer";
@@ -134,7 +135,6 @@ function Profile(){
     const handleLogout = async (e) => {
         try{
             // Sign out from Firebase auth
-            const auth = getAuth();
             await signOut(auth);
 
             // Remove ID_TOKEN from localStoragae
@@ -186,11 +186,13 @@ function Profile(){
                                 id="avatar-input"
                             />
                         </div>
-
-                        {/* NAME */}
-                        <div className="profile-name">
-                            <h1>{formState.name}</h1>
-                            <div onClick={handleLogout}>
+                        
+                        {/* Profile Header */}
+                        <div className="profile-name d-flex justify-content-center align-items-center">
+                            {/* name */}
+                            <h1 className="px-1">{formState.name}</h1>
+                             {/* log out icon */}
+                            <div className="title-icon" onClick={handleLogout}>
                                 <i className="bi bi-box-arrow-right"></i>
                             </div>
                         </div>

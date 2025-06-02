@@ -40,6 +40,18 @@
     visibility: 'hidden'
 }
 
+.title-icon {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    padding-right: 0.5rem
+}
+
+.title-icon:hover {
+    color: var(--button-secondary);
+    transform: scale(1.05);
+}
+
 /* -----CARD----- */
 .profile-card {
     max-width: 500px;
