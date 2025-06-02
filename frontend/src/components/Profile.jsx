@@ -1,21 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import API from "../api"; // configured Axios/fetch wrapper
 import ContentCard from "./Custom/ContentCard";
 import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
 import './Profile.css'
 
+const initialState = {
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  skill: "Beginner",     // you can set a default if you’d like
+  notifyBy: "",          // e.g. "SMS" or "Email"
+};
+
+function formReducer(state, action) {
+  switch (action.type) {
+    case "FIELD_CHANGE":
+      // action.payload = { field: string, value: any }
+        return {
+            ...state,
+            [action.payload.field]: action.payload.value,
+        };
+    default:
+        return state;
+  }
+}
+
 function Profile(){
     const id = localStorage.getItem("UID");
 
     // Initialize with information from user data API
     const [avatarImg, setAvatarImg]     = useState(null); 
-    const [name, setName]               = useState("");
-    const [email, setEmail]             = useState("");
-    const [phone, setPhone]             = useState("");
-    const [password, setPassword]       = useState("");
-    const [skill, setSkill]             = useState('Beginner');
-    const [notifyBy, setNotifyBy]       = useState('Email');
+    const [formState, dispatch] = useReducer(formReducer, initialState); 
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError]         = useState(null);
@@ -33,12 +50,26 @@ function Profile(){
                 const res = await API.get(`/users/${id}`);
                 const userData = res.data;
 
-                setName(userData.name || "");
-                setEmail(userData.email || "");
-                setPhone(userData.phone || "");
-                setPassword(userData.password || "");
-                setSkill(userData.skill || "Beginner");
-                setNotifyBy(userData.notifyBy || "Email");
+                dispatch({
+                    type: "FIELD_CHANGE",
+                    payload: { field: "name", value: userData.name || "" },
+                });
+                dispatch({
+                    type: "FIELD_CHANGE",
+                    payload: { field: "email", value: userData.email || "" },
+                }); 
+                dispatch({
+                    type: "FIELD_CHANGE",
+                    payload: { field: "phone", value: userData.phone || "" },
+                });
+                dispatch({
+                    type: "FIELD_CHANGE",
+                    payload: { field: "skill", value: userData.skill || "" },
+                });
+                dispatch({
+                    type: "FIELD_CHANGE",
+                    payload: { field: "notifyBy", value: userData.notifyBy || "" },
+                });
 
                 if (userData.avatarUrl) {
                     setAvatarImg(userData.avatarUrl);
@@ -62,15 +93,35 @@ function Profile(){
         reader.readAsDataURL(file);
     }
 
-    const handleSave = async (e) => {
+    // A single change handler for all inputs
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        dispatch({
+            type: "FIELD_CHANGE",
+            payload: { field: name, value },
+        });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault(); 
+
+        const {
+            name,
+            email,
+            password,
+            phone,
+            skill,
+            notifyBy,
+        } = formState;
+
         // TODO: Call API Patch/user/profile {name, email, ...}
         try {
-            const payload = { name, email, phone, password, skill, notifyBy };
+            const payload = { name, email, phone, skill, notifyBy };
             if (avatarImg) payload.avatar = avatarImg;
+            if(password !== "") payload.password = password;
 
             await API.put(`users/${id}`, payload);
-            alert("Profile successfully updaated."); 
+            alert("Profile successfully updated."); 
         } catch(err){
             console.error("Error updating profile:", err);
             alert("Failed to save changes. Please try again.");
@@ -115,12 +166,12 @@ function Profile(){
 
                         {/* NAME */}
                         <div className="profile-name">
-                            <h1>{name}</h1>
+                            <h1>{formState.name}</h1>
                         </div>
                     </div>
                     
                     <ContentCard className="profile-card">
-                        <form className="profile-form" onSubmit={handleSave} aria-label="profile input form">
+                        <form className="profile-form" onSubmit={handleSubmit} aria-label="profile input form">
                             <div className="profile-fields p-1">
                                 
                                 {/* NAME */}
@@ -129,8 +180,9 @@ function Profile(){
                                     <input
                                         type="text"
                                         id="fullName"
-                                        value={name}
-                                        onChange={e => setName(e.target.value)}
+                                        name="name" // name must match state key
+                                        value={formState.name}
+                                        onChange={handleChange}
                                     />
                                 </label>
 
@@ -140,9 +192,10 @@ function Profile(){
                                     <input
                                         type="email"
                                         id="email"
+                                        name="email" // name must match state key
                                         autoComplete="on"
-                                        value={email}
-                                        onChange={e => setEmail(e.target.value)}
+                                        value={formState.email}
+                                        onChange={handleChange}
                                     />
                                 </label>
 
@@ -152,11 +205,12 @@ function Profile(){
                                     <input
                                         type="tel"
                                         id="tel"
+                                        name="phone" // name must match state key
                                         className="profile-input"
                                         placeholder="(xxx)-xxx-xxxx"
                                         autoComplete="on"
-                                        value={phone}
-                                        onChange={e => setPhone(e.target.value)}
+                                        value={formState.phone}
+                                        onChange={handleChange}
                                     />
                                 </label>
 
@@ -166,9 +220,10 @@ function Profile(){
                                     <input
                                         type="password"
                                         id="password"
+                                        name="password" // name must match state key
                                         className="profile-input"
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
+                                        value={formState.password}
+                                        onChange={handleChange}
                                     />
                                 </label>
 
@@ -176,10 +231,11 @@ function Profile(){
                                 <label>
                                     Skill Level
                                     <select
-                                        value={skill}
                                         id="skill"
+                                        name="skill" // name must match state key
                                         className="profile-input"
-                                        onChange={e => setSkill(e.target.value)}
+                                        value={formState.skill}
+                                        onChange={handleChange}
                                     >
                                         <option>Beginner</option>
                                         <option>Intermediate</option>
@@ -195,10 +251,10 @@ function Profile(){
                                         <label className="notify-option">
                                             <input
                                                 type="radio"
-                                                name="notify"
-                                                value="SMS"
-                                                checked={notifyBy === 'sms'}
-                                                onChange={e => setNotifyBy(e.target.value)}
+                                                name="notifyBy"
+                                                value="sms"
+                                                checked={formState.notifyBy === 'sms'}
+                                                onChange={handleChange}
                                             /> 
                                             <span>SMS</span>
                                         </label>
@@ -207,10 +263,10 @@ function Profile(){
                                         <label className="notify-option">
                                             <input
                                                 type="radio"
-                                                name="notify"
-                                                value="Email"
-                                                checked={notifyBy === 'email'}
-                                                onChange={e => setNotifyBy(e.target.value)}
+                                                name="notifyBy"
+                                                value="email"
+                                                checked={formState.notifyBy === 'email'}
+                                                onChange={handleChange}
                                             /> 
                                             <span>Email</span>
                                         </label>
