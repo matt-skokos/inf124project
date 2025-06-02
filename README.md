@@ -79,6 +79,7 @@ The project requires two .env files for setting environment variables to store p
     REACT_APP_FIREBASE_API_KEY= <YOUR API KEY>
 ````
 ## Available Scripts
+### Frontend Scripts
 In the project directory, you can run:
 * `npm start`
 
@@ -93,4 +94,7 @@ In the project directory, you can run:
     The build is minified and the filenames include the hashes. Your app is ready to be deployed!\
     See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### Backend Scripts
+* `npm run dev` - 
 
+    Launches dev server for testing purposes
