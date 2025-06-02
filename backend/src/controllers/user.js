@@ -6,8 +6,11 @@ const bcrypt = require('bcryptjs')
 // Create 
 exports.createUser = async (req,res) => {
     try{
-        const {email, password, name} = req.body; 
-        
+        const {email, password, name, phone, skill, notifyBy } = req.body; 
+
+        // Hash the password for any internal storage
+        const hashed = await bcrypt.hash(password, 12);
+
         // Create user in Firebase Authentication
         const userRecord = await admin.auth().createUser({
             email,
@@ -15,14 +18,15 @@ exports.createUser = async (req,res) => {
             displayName: name,
         })
 
-        // Hash the password for any internal storage
-        const hashed = await bcrypt.hash(password, 12);
-
         // Create Firestore document keyed by the Firebase UID
         await UserModel.doc(userRecord.uid).set({
             email, 
             password: hashed, 
             name,
+            phone,
+            skill,
+            notifyBy,
+            pic: null,
             createdAt: new Date(), 
             updatedAt: new Date()
         })
@@ -32,8 +36,12 @@ exports.createUser = async (req,res) => {
             id: userRecord.uid, 
             email: userRecord.email, 
             name: userRecord.displayName,
+            phone,
+            skill,
+            notifyBy
         }); 
     }catch (err){
+        console.error(`Error: ${err.message}`)
         res.status(400).json({ error: err.message})
     }
 };
