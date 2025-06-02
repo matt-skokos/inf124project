@@ -81,6 +81,7 @@ function Login() {
               type="password"
               className="form-control"
               id="password"
+              autoComplete="on"
               placeholder="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
