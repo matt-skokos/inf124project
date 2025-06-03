@@ -1,7 +1,7 @@
 const fetch = require("node-fetch")
 const { normalize } = require("../utils");
 const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
-const PLACES_TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"; 
+const PLACES_TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
 
 // In‐memory cache: normalized query → { lat, lng } */
 const inMemoryCache = new Map();
@@ -21,18 +21,28 @@ const reverseGeocode = async (lat, lng) => {
 const placesTextSearch = async (query) => {
     if (!query) throw new Error("Missing query for Places Text Search");
     
-    const url = `${PLACES_TEXT_SEARCH_URL}?query=${query}&key=${process.env.GEOSERVICES_API_KEY}`;
-    const res = await fetch(url);
+    const res = await fetch(PLACES_TEXT_SEARCH_URL, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": process.env.GEOSERVICES_API_KEY,
+            "X-Goog-FieldMask": "places.location", // We only need the geometry.location field back
+        }, 
+        body: JSON.stringify({
+            "textQuery": query
+        }),
+    });
     if (!res.ok) {
         throw new Error(`Places Text Search returned HTTP ${res.status}`);
     }
     
     const json = await res.json();
-    if (json.status !== "OK" || !Array.isArray(json.results) || json.results.length === 0) {
-        throw new Error(`No Places results for "${query}". Status: ${json.status}`);
+    if (!Array.isArray(json.places) || json.places.length === 0) {
+        console.log(JSON.stringify(json))
+        throw new Error(`Places(new) found no results for "${query}".`);
     }
 
-    const { lat, lng } = json.results[0].geometry.location;
+    const { latitude: lat, longitude: lng } = json.places[0].location
     return { lat, lng };
 }
 
@@ -68,7 +78,7 @@ const geocode = async (query) =>{
 
     // Try Places Text Search raw
     try{
-        const coords = await placesTextSearch(encodedQuery);
+        const coords = await placesTextSearch(key);
         inMemoryCache.set(key, coords)
         console.log(`Success: Places Text Search returned location coordinates for "${key}"`);
         return coords; 
