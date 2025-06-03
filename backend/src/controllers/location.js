@@ -52,10 +52,15 @@ exports.getLocationIP = async (req,res) => {
 
 exports.getCoords = async (req, res) => {
     const { address } = req.query;
+    if(!address){ 
+        return res.status(400).json({ error: "Missing address parameter" });
+    }
+
     try{
         const { lat, lng } = await geocode(address);
-        return res.json({lat, lng});
+        return res.json({ lat, lng });
     }catch(err){
-        console.log("Unable to get Coords");
+        console.log("getCoords error:", err);
+        return res.status(502).json({ message: "error" }); 
     }
 }

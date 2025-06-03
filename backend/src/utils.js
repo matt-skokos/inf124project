@@ -7,4 +7,6 @@ const degreesToDirection = (degree) => {
     return directions[index];
 }
 
-module.exports = { metersToFeet, degreesToDirection }
+const normalize = (str) => str.trim().toLowerCase();
+
+module.exports = { metersToFeet, degreesToDirection, normalize }
