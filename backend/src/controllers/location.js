@@ -1,5 +1,5 @@
 const fetch =  require("node-fetch");
-const { reverseGeocode } = require("../services/locationServices");
+const { reverseGeocode, geocode } = require("../services/locationServices");
 
 const GEOLOCATION_URL = "https://www.googleapis.com/geolocation/v1/geolocate";
 
@@ -47,5 +47,15 @@ exports.getLocationIP = async (req,res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({error: `Geocoding failed ${err}}`})
+    }
+}
+
+exports.getCoords = async (req, res) => {
+    const { address } = req.query;
+    try{
+        const { lat, lng } = await geocode(address);
+        return res.json({lat, lng});
+    }catch(err){
+        console.log("Unable to get Coords");
     }
 }

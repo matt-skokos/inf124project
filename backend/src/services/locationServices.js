@@ -5,7 +5,6 @@ const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const reverseGeocode = async (lat, lng) => {
         const url = `${GEOCODING_URL}?latlng=${lat},${lng}&key=${process.env.GEOSERVICES_API_KEY}`
         const res = await fetch(url);
-        
         if(!res.ok){
             throw new Error(`Geocoding API returned ${res.status}`);
         }
@@ -15,4 +14,12 @@ const reverseGeocode = async (lat, lng) => {
         return loc?.formatted_address || "Unknown place"; 
 }
 
-module.exports = { reverseGeocode }
+const geocode = async (address) =>{
+    const url = `${GEOCODING_URL}?address=${address}&key=${process.env.GEOSERVICES_API_KEY}`
+    const res = await fetch(url);
+    if(!res.ok){
+        throw new Error(`Geocoding API returned ${res.status}`);
+    }
+}
+
+module.exports = { reverseGeocode, geocode }

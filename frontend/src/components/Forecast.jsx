@@ -91,15 +91,49 @@ function ForecastReport(props)
             {/* 3 Day Forecast */}
             <ContentCard title="3 Day Forecast">
                 {mockForecast.forecast_3_day.map((forecast)=>(
-                <ForecastDay key={forecast.date}
-                    date=   {forecast.date}
-                    swell=  {forecast.swell}
-                    wind=   {forecast.wind}
-                    tide=   {forecast.tide}
-                />
+                    <ForecastDay key={forecast.date}
+                        date=   {forecast.date}
+                        swell=  {forecast.swell}
+                        wind=   {forecast.wind}
+                        tide=   {forecast.tide}
+                    />
                 ))}
             </ContentCard>
         </React.Fragment>
+    );
+}
+
+function ForecastForm({ location, setLocation, setSubmitted}){
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setSubmitted(true);
+    };
+
+    return(
+        <ContentCard className="forecast-form-card">
+            {/* ----FORM---- */}
+            <form className="forecast-form px-2" onSubmit={handleSubmit}>
+                
+                {/* LOCATION */}
+                <div className="mb-3">
+                    <label className="visually-hidden" htmlFor="location">Location</label>
+                    <input
+                        type="text"
+                        className="form-control forecast-input"
+                        id="location"
+                        placeholder="Select location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                    />
+                </div>
+
+                {/* SUBMIT */}
+                <Button type="submit" className="get-report-button">
+                    Get Report
+                </Button>
+            </form>
+        </ContentCard>
     );
 }
 
@@ -107,42 +141,12 @@ function Forecast(){
     const [location, setLocation] = useState("");
     const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setSubmitted(true);
-    };
-
     return (
         <PageContainer title="Forecast" hideTitle={!submitted ? false:true}>
             {!submitted ? (
-            <ContentCard className="forecast-form-card">
-                {/* ----FORM---- */}
-                <form className="forecast-form px-2" onSubmit={handleSubmit}>
-                    
-                    {/* LOCATION */}
-                    <div className="mb-3">
-                        <label className="visually-hidden" htmlFor="location">Location</label>
-                        <input
-                            type="text"
-                            className="form-control forecast-input"
-                            id="location"
-                            placeholder="Select location"
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    {/* SUBMIT */}
-                    <Button type="submit" className="get-report-button">
-                        Get Report
-                    </Button>
-                </form>
-            </ContentCard>
+                <ForecastForm location={location} setLocation={setLocation} setSubmitted={setSubmitted}/>
             ) : (
-            <ForecastReport
-                location = {location}
-            />
+            <ForecastReport location = {location}/>
             )}
         </PageContainer>
     );
