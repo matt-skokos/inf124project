@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import API from "../api"; // configured Axios/fetch wrapper
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './Forecast.css';
+import { useCurrentConditions } from "../hooks/useCurrentConditions";
 
 const mockForecast = {
     best_day: ` All three days offer similar conditions with consistent SSW swells and fair surf quality.
@@ -24,33 +26,7 @@ const mockForecast = {
             wind_details: "Light and variable winds, around 4 mph from the southwest.",
             tide: "Low",
             tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet",
-        }, 
-        {
-            date: "Sunday, April 13th",
-            overview: `Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. 
-                        However, the water temperature is quite cool, so appropriate wetsuits are recommended.`,
-            swell_direction: "SSE",
-            swell: "3-4 ft",
-            swell_details: "Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals",
-            wind_direction: "SSW",
-            wind: "8 mph",
-            wind_details: "Light and variable winds, around 4 mph from the southwest.",
-            tide: "Low",
-            tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
-        }, 
-        {
-            date: "Monday, April 14th",
-            overview: `Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. 
-                        However, the water temperature is quite cool, so appropriate wetsuits are recommended.`,
-            swell_direction: "SSW",
-            swell: "1-3 ft",
-            swell_details: "Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals",
-            wind_direction: "SSW",
-            wind: "5 mph",
-            wind_details: "Light and variable winds, around 4 mph from the southwest.",
-            tide: "High",
-            tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
-        }
+        },
     ]
 }
 
@@ -73,12 +49,50 @@ function ForecastDay({ date, swell, wind, tide }) {
     );
 }
 
-function ForecastReport(props)
+function ForecastReport({ location, lat, lng })
 {
+    console.log(lat,lng, location)
+    const {
+        conditions : waveCond,
+        loading: waveLoading,
+        error: waveError,
+    } = useCurrentConditions(lat, lng, "wave");
+    const {
+        conditions : windCond,
+        loading: windLoading,
+        error: windError,
+    } = useCurrentConditions(lat, lng, "wind");
+    const {
+        conditions : tideCond,
+        loading: tideLoading,
+        error: tideError,
+    } = useCurrentConditions(lat, lng, "tide");
+
+    // If any of the three is still loading, show a loading state
+    if (waveLoading || windLoading || tideLoading) {
+        <ContentCard className="mb-4">
+            <p>Loading current conditions for {location}…</p>
+        </ContentCard>
+    }
+
+    // If any of the three has an error, show an error message
+    if (waveError || windError || tideError) {
+        return (
+        <ContentCard className="mb-4">
+            <p className="text-danger">
+                {waveError && `Wave data error: ${waveError}`}
+                {windError && ` Wind data error: ${windError}`}
+                {tideError && ` Tide data error: ${tideError}`}
+            </p>
+        </ContentCard>
+        );
+    }
+
+    const forecast = mockForecast["forecast_3_day"][0];
     return( 
         <React.Fragment>
             <SpotTitle
-                title={props.location}
+                title={location}
             />
 
             {/* Best Day */}
@@ -90,29 +104,22 @@ function ForecastReport(props)
 
             {/* 3 Day Forecast */}
             <ContentCard title="3 Day Forecast">
-                {mockForecast.forecast_3_day.map((forecast)=>(
-                    <ForecastDay key={forecast.date}
-                        date=   {forecast.date}
-                        swell=  {forecast.swell}
-                        wind=   {forecast.wind}
-                        tide=   {forecast.tide}
-                    />
-                ))}
+                <ForecastDay key={forecast.date}
+                    date=   {forecast.date}
+                    swell=  {waveCond.waveHeight}
+                    wind=   {windCond.wind}
+                    tide=   {tideCond.tide}
+                />
             </ContentCard>
         </React.Fragment>
     );
 }
 
-function ForecastForm({ location, setLocation, setSubmitted}){
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setSubmitted(true);
-    };
-
+function ForecastForm({ location, setLocation, onSearch, errorMessage}){
     return(
         <ContentCard className="forecast-form-card">
             {/* ----FORM---- */}
-            <form className="forecast-form px-2" onSubmit={handleSubmit}>
+            <form className="forecast-form px-2" onSubmit={onSearch}>
                 
                 {/* LOCATION */}
                 <div className="mb-3">
@@ -126,6 +133,12 @@ function ForecastForm({ location, setLocation, setSubmitted}){
                         onChange={(e) => setLocation(e.target.value)}
                         required
                     />
+
+                    {errorMessage && (
+                        <div className="text-danger mt-2">
+                            {errorMessage}
+                        </div>
+                    )}
                 </div>
 
                 {/* SUBMIT */}
@@ -139,14 +152,46 @@ function ForecastForm({ location, setLocation, setSubmitted}){
 
 function Forecast(){
     const [location, setLocation] = useState("");
+    const [lat, setLat] = useState("");
+    const [lng, setLng] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleSearch = async (e) => {
+        e.preventDefault(); 
+        setErrorMessage(""); 
+
+        try{
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/location/coords?address=${encodeURIComponent(location)}`);
+            if(!res.ok){
+                const errJson = await res.json().catch(() => ({})); 
+                throw new Error(errJson.error || "Unable to resolve coordinates");
+            }
+
+            const data = await res.json(); 
+            if(!data.lat || !data.lng){
+                throw new Error("No coordinates found");
+            }
+            setLat(data.lat); 
+            setLng(data.lng);
+            setSubmitted(true);
+        }catch(err){
+            setErrorMessage(`Sorry, we couldn't find "${location}". Please try another beach or address.`); 
+            console.error("Location lookup failed:", err);
+        }
+    }
 
     return (
         <PageContainer title="Forecast" hideTitle={!submitted ? false:true}>
             {!submitted ? (
-                <ForecastForm location={location} setLocation={setLocation} setSubmitted={setSubmitted}/>
+                <ForecastForm 
+                    location={location} 
+                    setLocation={setLocation} 
+                    onSearch={handleSearch}
+                    errorMessage={errorMessage}
+                />
             ) : (
-            <ForecastReport location = {location}/>
+                <ForecastReport location = {location} lat={lat} lng={lng}/>
             )}
         </PageContainer>
     );
