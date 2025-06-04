@@ -7,6 +7,7 @@ import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './Forecast.css';
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
+import { useCurrentDate } from "../hooks/useCurrentDate";
 
 const mockForecast = {
     best_day: ` All three days offer similar conditions with consistent SSW swells and fair surf quality.
@@ -52,6 +53,7 @@ function ForecastDay({ date, swell, wind, tide }) {
 function ForecastReport({ location, lat, lng })
 {
     console.log(lat,lng, location)
+    const today = useCurrentDate();
     const {
         conditions : waveCond,
         loading: waveLoading,
@@ -70,9 +72,9 @@ function ForecastReport({ location, lat, lng })
 
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {
-        <ContentCard className="mb-4">
+        return(<ContentCard className="mb-4">
             <p>Loading current conditions for {location}…</p>
-        </ContentCard>
+        </ContentCard>)
     }
 
     // If any of the three has an error, show an error message
@@ -81,8 +83,8 @@ function ForecastReport({ location, lat, lng })
         <ContentCard className="mb-4">
             <p className="text-danger">
                 {waveError && `Wave data error: ${waveError}`}
-                {windError && ` Wind data error: ${windError}`}
-                {tideError && ` Tide data error: ${tideError}`}
+                {windError && `Wind data error: ${windError}`}
+                {tideError && `Tide data error: ${tideError}`}
             </p>
         </ContentCard>
         );
@@ -104,8 +106,8 @@ function ForecastReport({ location, lat, lng })
 
             {/* 3 Day Forecast */}
             <ContentCard title="3 Day Forecast">
-                <ForecastDay key={forecast.date}
-                    date=   {forecast.date}
+                <ForecastDay key={today}
+                    date=   {today}
                     swell=  {waveCond.waveHeight}
                     wind=   {windCond.wind}
                     tide=   {tideCond.tide}

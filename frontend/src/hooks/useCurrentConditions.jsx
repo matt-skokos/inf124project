@@ -6,18 +6,13 @@ export function useCurrentConditions(lat, lng, measurement=""){
     const [conditions, setConditions] = useState(null); 
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null);
-    console.log(`Call useCurrentConditions; (${lat}, ${lng}) ${measurement}`);
 
     useEffect(() => {
-        console.log(`useEffect Start`);
         // Only attempt to fetch once lat/lng is fetched
         if( lat == null || lng == null){
-            console.log(`lat/lng check`);
-            setError("Missing latitude or longitude."); 
             setLoading(true); 
             return; 
         }
-        console.log(`Pass lat/lng check`);
 
         const fetchConditions = async () => {
             setLoading(true); 
