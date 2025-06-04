@@ -119,6 +119,16 @@ In the project directory, you can run:
 
      Firebase Hosting has a local emulator so you can test exactly what will end up on your live site:
 
+* `firebase deploy --only hosting`
+
+    Once you’re satisfied with the build locally, deploy using this command. The CLI prints out a live URL under Hosting URL. Open that URL in your browser to see your React app live.   
+
+* `firebase hosting:channel:deploy preview-1`
+
+    Preview changes on a temporary “preview channel”. If you want teammates (or clients) to see updates before going live, use a preview channel.
+    This builds (if needed) and deploys to a unique temporary URL. Share that URL; it’s valid for 7 days (by default).
+    
+
 ### Backend Scripts
 * `npm run dev` - 
 
