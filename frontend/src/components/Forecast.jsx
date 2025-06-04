@@ -90,7 +90,6 @@ function ForecastReport({ location, lat, lng })
         );
     }
 
-    const forecast = mockForecast["forecast_3_day"][0];
     return( 
         <React.Fragment>
             <SpotTitle

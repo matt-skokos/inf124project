@@ -32,7 +32,6 @@ export function useCurrentConditions(lat, lng, measurement=""){
                         break;
                     default:
                         resp = await fetch(`${API_URL}/conditions?lat=${lat}&lng=${lng}`); 
-
                 }
                 
                 if(!resp.ok){
