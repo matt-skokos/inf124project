@@ -7,8 +7,11 @@ const app = express();
 const PORT = process.env.PORT || 8080; 
 
 // ----MIDDLEWARE----
+// CORs(Cross Origin Reference)
 app.use(cors({
-    origin: ['http://localhost:3000'] //adjust to React dev server or prod URL
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5000', 'https://sp2025-inf124.web.app', 'https://sp2025-inf124.firebaseapp.com'], //adjust to React dev server or prod URL
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    credentials: true
 }));
 app.use(express.json()); // parse JSON bodies
 
