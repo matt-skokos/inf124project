@@ -30,7 +30,8 @@ INF124PROJECT/
 │       ├── utils.js
 │   ├── .env
 │   ├── package-lock.json
-│   └── package.json
+│   ├── package.json
+│   └── <sp2025-inf124-firebase-adminsdk-*.json>
 ├── frontend/
 │   ├── node_modules/
 │   ├── public/
@@ -53,8 +54,7 @@ INF124PROJECT/
 ├── node_modules/
 ├── .gitignore
 ├── LICENSE
-├── README.md 
-└── <sp2025-inf124-firebase-adminsdk-*.json>
+└── README.md 
 ```
 
 ## Dependencies 
@@ -85,6 +85,7 @@ Follow this documentation for creating a new Google Cloud prject.
 * Select 'Generate new private key' at the bottom of the page
 * Wait for .json file to download
 * Move .json file into root directory of local project
+
 NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC 
 
 ## Set up .env
@@ -95,13 +96,13 @@ The project requires two .env files for setting environment variables to store p
 .env.development
 ````
 REACT_APP_API_URL=http://localhost:8080/api
-REACT_APP_FIREBASE_API_KEY=<YOUR API KEY>
+REACT_APP_FIREBASE_API_KEY=<Browser key (auto created by Firebase) API KEY>
 ````
 
 .env.production
 ````
 REACT_APP_API_URL=https://sp2025-inf124-app-489605456999.us-west1.run.app/api
-REACT_APP_FIREBASE_API_KEY=<YOUR API KEY>
+REACT_APP_FIREBASE_API_KEY=<Browser key (auto created by Firebase) API KEY>
 ````
 **Backend**
 
