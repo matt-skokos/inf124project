@@ -29,7 +29,6 @@ INF124PROJECT/
 │       ├── index.js
 │       ├── utils.js
 │   ├── .env
-│   ├── dockerfile
 │   ├── package-lock.json
 │   └── package.json
 ├── frontend/
@@ -44,7 +43,11 @@ INF124PROJECT/
 │       ├── APP.js
 │       ├── index.css
 │       ├── index.js
-│   ├── .env
+│   ├── .env.development
+│   ├── .env.production
+│   ├── .firebaserc
+│   ├── .gitignore
+│   ├── .firebase.json
 │   ├── package-lock.json
 │   └── package.json
 ├── node_modules/
@@ -87,12 +90,22 @@ NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC
 ## Set up .env
 The project requires two .env files for setting environment variables to store private variables and API keys. 
 
-**Frontend .env**
+**Frontend**
+
+.env.development
 ````
 REACT_APP_API_URL=http://localhost:8080/api
 REACT_APP_FIREBASE_API_KEY=<YOUR API KEY>
 ````
-**Backend .env**
+
+.env.production
+````
+REACT_APP_API_URL=https://sp2025-inf124-app-489605456999.us-west1.run.app/api
+REACT_APP_FIREBASE_API_KEY=<YOUR API KEY>
+````
+**Backend**
+
+.env
 ````
 PORT=8080
 FIREBASE_SERVICE_ACCCOUNT_PATH=../../<sp2025-inf124-firebase-adminsdk-*.json>
@@ -136,5 +149,5 @@ In the project directory, you can run:
 
 * `gcloud run deploy my-service --source . --region us-west1 --allow-unauthenticated`
 
-Deploying from Source. Cloud Run can auto-generate a Dockerfile using Cloud Build if you run gcloud run deploy --source . from your project root. 
-This is the quickest approach for a standard Express app.
+    Deploying from Source. Cloud Run can auto-generate a Dockerfile using Cloud Build if you run gcloud run deploy --source . from your project root. 
+    This is the quickest approach for a standard Express app.
