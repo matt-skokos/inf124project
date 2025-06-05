@@ -1,5 +1,5 @@
 // src/components/Home.jsx
-import { useCurrentDate } from "../hooks/useCurrentDate";
+import { useDate } from "../hooks/useDate";
 import { useUserLocation } from "../hooks/useUserLocation";
 import { useSurfConditions } from "../hooks/useSurfConditions";
 import PageContainer from "./Custom/PageContainer";
@@ -62,7 +62,7 @@ export function DateLocationCard({date, location}) {
 }
 
 function Home() {
-  const today = useCurrentDate();
+  const today = useDate();
   const {lat, lng, locationName, loading: loadingLoc, error: errorLoc} = useUserLocation();
   const {conditions, loading: loadingCond, error: errorCond } = useSurfConditions(lat, lng);
 

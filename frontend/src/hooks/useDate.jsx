@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 // If you need locale-aware formatting adjust options or locale string
 const DATE_OPTIONS = { year: "numeric", month: "long", day: "numeric"};
 
-export function useCurrentDate(locale = "en-US", options = DATE_OPTIONS){
+export function useDate(locale = "en-US", options = DATE_OPTIONS){
     const [currentDate, setCurrentDate]= useState(""); 
 
     useEffect(()=>{

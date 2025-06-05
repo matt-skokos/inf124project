@@ -7,7 +7,7 @@ import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './Forecast.css';
 import { useSurfConditions } from "../hooks/useSurfConditions";
-import { useCurrentDate } from "../hooks/useCurrentDate";
+import { useDate } from "../hooks/useDate";
 
 const mockForecast = {
     best_day: ` All three days offer similar conditions with consistent SSW swells and fair surf quality.
@@ -53,7 +53,7 @@ function ForecastDay({ date, swell, wind, tide }) {
 function ForecastReport({ location, lat, lng })
 {
     console.log(lat,lng, location)
-    const today = useCurrentDate();
+    const today = useDate();
     const {
         conditions : waveCond,
         loading: waveLoading,
