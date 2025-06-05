@@ -23,8 +23,8 @@ export function ConditionCard({ location, conditions, loading, error }) {
       className="condition-card expanded" 
       title={`Local Surf at ${(!loading && !error && location) ? location: "..."}`}
     >
-      {(loading) && (<p>loading conditions...</p>)}
-      {(!loading && error) && (<p>Error: {error}</p>)}
+      {(loading) && (<p className="condition-overview">loading conditions...</p>)}
+      {(!loading && error) && (<p className="condition-overview">Error: {error}</p>)}
 
       {(!loading && !error && conditions) && (
         <div className="condition-summary w-100">
@@ -57,7 +57,7 @@ export function ConditionCard({ location, conditions, loading, error }) {
           {/* ─── Second row: Overview, centered under the three conditions ─── */}
           <div className="condition-details">
             <h3 className="condition-label card-subtitle mb-1"><strong>Overview</strong></h3>
-            <div className="condition-overview">{conditions.aiOverview}</div>
+            <div className="condition-overview">{conditions.aiReport}</div>
           </div>
 
         </div>
@@ -97,8 +97,7 @@ function Home() {
   }
 
   // Call useSurfConditions with (beachLat, beachLng).  Until `beachLat` or `beachLng` is non-null
-  const { conditions, loading: loadingCond, error: errorCond } = useSurfConditions(beachLat, beachLng);
-
+  const { conditions, loading: loadingCond, error: errorCond } = useSurfConditions(beachLat, beachLng, "overview", beachName);
   // Combine the loading/error states for global `loading` & 'error' flag .
   const loading = (loadingLoc ? true : (loadingPlaces ? true : loadingCond));
   const error = (errorLoc || errorPlaces || errorCond);

@@ -3,7 +3,7 @@ import './ContentCard.css';
 
 function ContentCard({children, className, ...props}){
     return(
-        <div className="card-container">
+        <div className={`card-container ${className}`}>
 
             {/* ----TITLE---- */}
             {props.title && (
