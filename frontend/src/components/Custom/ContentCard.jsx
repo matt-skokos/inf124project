@@ -7,7 +7,7 @@ function ContentCard({children, className, ...props}){
 
             {/* ----TITLE---- */}
             {props.title && (
-            <h2 className="section-title mb-0">{props.title}</h2>
+            <h2 className="section-title mb-2">{props.title}</h2>
             )}
 
             {/* ----BODY---- */}
