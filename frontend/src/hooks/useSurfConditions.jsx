@@ -33,9 +33,10 @@ export function useSurfConditions(lat, lng, measurement=""){
                     default:
                         resp = await fetch(`${API_URL}/conditions?lat=${lat}&lng=${lng}`); 
                 }
-                
                 if(!resp.ok){
-                    throw new Error(`Conditions fetch error: ${resp.status}`); 
+                    const errorData = await resp.json(); 
+
+                    throw new Error(`Conditions fetch error (${resp.status}): ${JSON.stringify(errorData)}`); 
                 }
                 const data = await resp.json(); 
                 setConditions(data);

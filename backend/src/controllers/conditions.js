@@ -62,7 +62,7 @@ exports.getConditionsOverview = async (req, res) => {
     try{
         let { waveHeight, waveDirection } = await NDBCBuoyConditions(lat, lng);
         const { conditionDetails, windDirection, wind } = await NWSWeatherConditions(lat, lng);
-        const { tide, tideDetails} = await NOAATideCurrentConditions(lat,lng); 
+        const { tide, tideTime, tideDetails} = await NOAATideCurrentConditions(lat,lng); 
 
         waveHeight = metersToFeet(waveHeight).toFixed(1);
         waveDirection = degreesToDirection(waveDirection);
@@ -80,7 +80,7 @@ exports.getConditionsOverview = async (req, res) => {
         const aiOverview = await genConditionOverview(promptText);
 
         // Respond with structured JSON
-        return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideDetails, aiOverview });
+        return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideTime, aiOverview });
     }catch(err){
         console.log("Conditions service error:", err); 
         res.status(500).json({ error: "Failed to fetch surf conditions"});

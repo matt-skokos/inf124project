@@ -104,7 +104,7 @@ const  NWSWeatherConditions = async (lat, lng) => {
 }
 
 // Fetch Tide data from NOAA Tides API
-const NOAATideCurrentConditions = async (lat, lng) => { 
+const NOAATideCurrentConditions = async (lat, lng, timePeriod=1) => { 
     // retrieve all tide-prediction stations
     const stationsURL = `${NOAA_URL}/mdapi/prod/webapi/stations.json?units=english&type=tidepredictions`;
     const stationsRes = await fetch(stationsURL); 
@@ -144,7 +144,7 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     // Build date Strings for today
     const now = new Date(); 
     const tomorrowDate = new Date(now); 
-    tomorrowDate.setDate(now.getDate() + 1);
+    tomorrowDate.setDate(now.getDate() + timePeriod);
 
     const formatDate = date => {
         const yyyy = date.getFullYear()
@@ -172,22 +172,29 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     const nextLow = upcoming.find(p => p.type === 'L');
     const nextHigh = upcoming.find(p => p.type === 'H');
 
-    let tide = 'N/A'; 
+    let tide = 'N/A';
+    let tideTime = "N/A";
+    let tideValue = "N/A";
     let tideDetails = 'Tide data is unavailable for the selected coordinates and date.'; 
     if(nextLow && nextHigh){
         const lowTime = new Date(nextLow.t); 
         const highTime = new Date(nextHigh.t); 
         if (lowTime < highTime){
-            tide = 'Low'; 
+            tide = 'Low';
+            tideTime = lowTime;
+            tideValue = nextLow.v;
             tideDetails = `Low tide at ${nextLow.t}: ${nextLow.v} ft. High tide at ${nextHigh.t}: ${nextHigh.v} ft.`; 
         }else{ 
-            tide = 'High'; 
+            tide = 'High';
+            tideTime = highTime;
+            tideValue = nextHigh.v;
             tideDetails = `High tide at ${nextHigh.t}: ${nextHigh.v}  ft. Low tide at ${nextLow.t}: ${nextLow.v} ft.`; 
         }
     }
-    console.log(`Tide: ${tide} - ${tideDetails}`)
+    tideTime = tideTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+    console.log(`${tide} tide at ${tideTime}: ${tideDetails}`)
 
-    return { tide, tideDetails };
+    return { tide, tideTime , tideDetails };
 }
 
 const NDBCBuoyConditions = async (lat, lng) => {
