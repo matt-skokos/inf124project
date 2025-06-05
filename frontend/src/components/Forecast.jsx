@@ -4,46 +4,37 @@ import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
-import { ConditionOverview } from "./Home";
-import './Forecast.css';
-import { useSurfConditions } from "../hooks/useSurfConditions";
 import { useDate } from "../hooks/useDate";
+import { ConditionOverview } from "./Home";
+import { useSurfConditions } from "../hooks/useSurfConditions";
+import { useSurfPrediction } from "../hooks/useSurfPrediction";
+import './Forecast.css';
 
-const mockForecast = {
-    best_day: ` All three days offer similar conditions with consistent SSW swells and fair surf quality.
-                Given the steady wave height and light onshore winds, any of these days would be suitable
-                for surfing at ____. However, if you're looking for slightly better conditions, 
-                Saturday morning may offer the cleanest waves before the onshore winds pick up later in the day.`,
-    forecast_3_day: [
-        {
-            date: "Saturday, April 12th",
-            overview: `Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. 
-                        However, the water temperature is quite cool, so appropriate wetsuits are recommended.`,
-            swell_direction: "SSW",
-            swell: "2-3 ft",
-            swell_details: "Approximately 3 feet with a primary south-southwest (SSW) swell of 4.5 feet at 18-second intervals",
-            wind_direction: "SSW",
-            wind: "4 mph",
-            wind_details: "Light and variable winds, around 4 mph from the southwest.",
-            tide: "Low",
-            tide_details: "Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet",
-        },
-    ]
-}
-
-function ForecastDay({ date, swell, wind, tide }) {
+function ForecastDay({ date, waveCond, windCond, tideCond }) {
     return (
         <div className="forecast-day-container">
             <h3 className="forecast-day-title">{date}</h3>
             <div className="forecast-conditions-container">
                 <ConditionOverview icon="bi bi-tsunami" label="Swell">
-                    <p>{swell}</p>
+                    <p>
+                        {waveCond.waveDirection}
+                        <br />
+                        {waveCond.waveHeight} ft
+                    </p>
                 </ConditionOverview>
                 <ConditionOverview icon="bi bi-wind" label="Wind">
-                    <p>{wind}</p>
+                    <p>
+                        {windCond.windDirection}
+                        <br />
+                        {windCond.wind}
+                    </p>
                 </ConditionOverview>
                 <ConditionOverview icon="bi bi-water" label="Tide">
-                    <p>{tide}</p>
+                    <p>
+                        {tideCond.tide}
+                        <br />
+                        {tideCond.tideTime}
+                    </p>
                 </ConditionOverview>
             </div>
         </div>
@@ -52,7 +43,6 @@ function ForecastDay({ date, swell, wind, tide }) {
 
 function ForecastReport({ location, lat, lng })
 {
-    console.log(lat,lng, location)
     const today = useDate();
     const {
         conditions : waveCond,
@@ -70,10 +60,18 @@ function ForecastReport({ location, lat, lng })
         error: tideError,
     } = useSurfConditions(lat, lng, "tide");
 
+    const {
+        prediction,
+        loading: predictionLoading,
+        error: predictionError,
+    } = useSurfPrediction(location, lat, lng, 3);
+
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {
         return(<ContentCard className="mb-4">
-            <p>Loading current conditions for {location}…</p>
+            <p className="condition-overview">
+                Loading current conditions for {location}…
+            </p>
         </ContentCard>)
     }
 
@@ -96,21 +94,23 @@ function ForecastReport({ location, lat, lng })
                 title={location}
             />
 
-            {/* Best Day */}
-            <ContentCard className="mb-4" title="Best Day">
-                <p className="small mb-0">
-                    {mockForecast.best_day}
-                </p>
-            </ContentCard>
-
-            {/* 3 Day Forecast */}
-            <ContentCard title="3 Day Forecast">
+            {/* Current Conditions */}
+            <ContentCard className="mb-2" title="Current Conditions">
                 <ForecastDay key={today}
                     date=   {today}
-                    swell=  {waveCond.waveHeight}
-                    wind=   {windCond.wind}
-                    tide=   {tideCond.tide}
+                    waveCond=  {waveCond}
+                    windCond=   {windCond}
+                    tideCond=   {tideCond}
                 />
+            </ContentCard>
+
+            {/* Surf Report */}
+            <ContentCard className="mb-2" title="Surf Report">
+                <p className="condition-overview mb-0">
+                    {predictionLoading && ("Loading AI surf report...")}
+                    {(!predictionLoading && predictionError) && (`Error: ${predictionError}`)}
+                    {(!predictionLoading && !predictionError) && (prediction.aiReport)}
+                </p>
             </ContentCard>
         </React.Fragment>
     );
