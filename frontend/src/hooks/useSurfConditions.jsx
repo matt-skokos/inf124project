@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export function useCurrentConditions(lat, lng, measurement=""){
+export function useSurfConditions(lat, lng, measurement=""){
     const [conditions, setConditions] = useState(null); 
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null);

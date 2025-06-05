@@ -6,7 +6,7 @@ import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
 import { ConditionOverview } from "./Home";
 import './Forecast.css';
-import { useCurrentConditions } from "../hooks/useCurrentConditions";
+import { useSurfConditions } from "../hooks/useSurfConditions";
 import { useCurrentDate } from "../hooks/useCurrentDate";
 
 const mockForecast = {
@@ -58,17 +58,17 @@ function ForecastReport({ location, lat, lng })
         conditions : waveCond,
         loading: waveLoading,
         error: waveError,
-    } = useCurrentConditions(lat, lng, "wave");
+    } = useSurfConditions(lat, lng, "wave");
     const {
         conditions : windCond,
         loading: windLoading,
         error: windError,
-    } = useCurrentConditions(lat, lng, "wind");
+    } = useSurfConditions(lat, lng, "wind");
     const {
         conditions : tideCond,
         loading: tideLoading,
         error: tideError,
-    } = useCurrentConditions(lat, lng, "tide");
+    } = useSurfConditions(lat, lng, "tide");
 
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {

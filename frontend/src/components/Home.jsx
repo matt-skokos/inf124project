@@ -1,7 +1,7 @@
 // src/components/Home.jsx
 import { useCurrentDate } from "../hooks/useCurrentDate";
 import { useUserLocation } from "../hooks/useUserLocation";
-import { useCurrentConditions } from "../hooks/useCurrentConditions";
+import { useSurfConditions } from "../hooks/useSurfConditions";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
@@ -64,7 +64,7 @@ export function DateLocationCard({date, location}) {
 function Home() {
   const today = useCurrentDate();
   const {lat, lng, locationName, loading: loadingLoc, error: errorLoc} = useUserLocation();
-  const {conditions, loading: loadingCond, error: errorCond } = useCurrentConditions(lat, lng);
+  const {conditions, loading: loadingCond, error: errorCond } = useSurfConditions(lat, lng);
 
   return (
     <PageContainer className="home-container" title="Home" hideTitle={true}>
