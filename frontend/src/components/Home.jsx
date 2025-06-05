@@ -1,7 +1,8 @@
 // src/components/Home.jsx
-import { useCurrentDate } from "../hooks/useCurrentDate";
+import { useDate } from "../hooks/useDate";
 import { useUserLocation } from "../hooks/useUserLocation";
-import { useCurrentConditions } from "../hooks/useCurrentConditions";
+import { useNearbyPlaces } from "../hooks/useNearbyPlaces";
+import { useSurfConditions } from "../hooks/useSurfConditions";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import './Home.css';
@@ -16,38 +17,51 @@ export function ConditionOverview({ children, icon, label }) {
   );
 }
 
-export function ConditionCard({ overview, swell_direction, swell, wind_direction, wind, tide }) {
+export function ConditionCard({ location, conditions, loading, error }) {
   return (
-    <ContentCard className="condition-card expanded" title="Conditions">
+    <ContentCard 
+      className="condition-card expanded" 
+      title={`Local Surf at ${(!loading && !error && location) ? location: "..."}`}
+    >
+      {(loading) && (<p className="condition-overview">loading conditions...</p>)}
+      {(!loading && error) && (<p className="condition-overview">Error: {error}</p>)}
+
+      {(!loading && !error && conditions) && (
         <div className="condition-summary w-100">
           {/* ─── First row: three ConditionOverview items ─── */}
+          <h3 className="condition-label card-subtitle mb-1"><strong>Conditions</strong></h3>
           <div className="d-flex justify-content-around">
             <ConditionOverview icon="bi bi-tsunami" label="Swell">
               <p>
-                {swell_direction}
+                {conditions.waveDirection}
                 <br />
-                {swell} ft
+                {conditions.waveHeight} ft
               </p>
             </ConditionOverview>
             <ConditionOverview icon="bi bi-wind" label="Wind">
               <p>
-                {wind_direction}
+                {conditions.windDirection}
                 <br />
-                {wind}
+                {conditions.wind}
               </p>
             </ConditionOverview>
             <ConditionOverview icon="bi bi-water" label="Tide">
-              <p>{tide}</p>
+              <p>
+                {conditions.tide}
+                <br />
+                {conditions.tideTime}
+              </p>
             </ConditionOverview>
           </div>
+
           {/* ─── Second row: Overview, centered under the three conditions ─── */}
-          <div className="d-flex">
-            <div className="condition-details">
-              <h3 className="condition-label card-subtitle mb-1"><strong>Overview</strong></h3>
-              <div className="condition-overview">{overview}</div>
-            </div>
+          <div className="condition-details">
+            <h3 className="condition-label card-subtitle mb-1"><strong>Overview</strong></h3>
+            <div className="condition-overview">{conditions.aiReport}</div>
           </div>
+
         </div>
+    )}
     </ContentCard>
   );
 }
@@ -62,9 +76,31 @@ export function DateLocationCard({date, location}) {
 }
 
 function Home() {
-  const today = useCurrentDate();
-  const {lat, lng, locationName, loading: loadingLoc, error: errorLoc} = useUserLocation();
-  const {conditions, loading: loadingCond, error: errorCond } = useCurrentConditions(lat, lng);
+  // Get the current date/time string
+  const today = useDate();
+
+  // Get the user’s lat/lng + locationName
+  const { lat, lng, locationName, loading: loadingLoc, error: errorLoc } = useUserLocation();
+  
+  // Find nearby “beach” places based on user lat/lng
+  const { places, loading: loadingPlaces, error: errorPlaces } = useNearbyPlaces(lat, lng, 1);
+  
+  // Derive "beachName", “beachLat” & “beachLng” only after `places[0]` confirmed present.
+  let beachName = ""
+  let beachLat = null; 
+  let beachLng = null; 
+
+  if(Array.isArray(places) && places.length > 0 && places[0].location){
+    beachName = `${places[0].addressComponents[0].shortText}`;
+    beachLat = places[0].location.latitude;
+    beachLng = places[0].location.longitude;
+  }
+
+  // Call useSurfConditions with (beachLat, beachLng).  Until `beachLat` or `beachLng` is non-null
+  const { conditions, loading: loadingCond, error: errorCond } = useSurfConditions(beachLat, beachLng, "overview", beachName);
+  // Combine the loading/error states for global `loading` & 'error' flag .
+  const loading = (loadingLoc ? true : (loadingPlaces ? true : loadingCond));
+  const error = (errorLoc || errorPlaces || errorCond);
 
   return (
     <PageContainer className="home-container" title="Home" hideTitle={true}>
@@ -81,31 +117,13 @@ function Home() {
         </section>
 
         {/* ----CONDITIONS---- */}
-        <section className="condition-section col-12 col-md-7 mb-4">
-          
-          {loadingCond && (
-            <ContentCard className="condition-card" title="Conditions">
-              <p>Loading conditions…</p>
-            </ContentCard>
-          )}
-
-          {(errorCond && !loadingCond) && (
-            <ContentCard className="condition-card">
-              <p>Error loading conditions: {errorCond}</p>
-            </ContentCard>
-          )}
-
-          {(!loadingCond && !errorCond && conditions) && (
-              <ConditionCard key={today}
-                overview        ={conditions.aiOverview}
-                swell_direction ={conditions.waveDirection}
-                swell           ={conditions.waveHeight}
-                wind_direction  ={conditions.windDirection}
-                wind            ={conditions.wind}
-                tide            ={conditions.tide}
-              />
-          )}
-
+        <section className="condition-section col-12 col-md-7 mb-4">          
+            <ConditionCard
+              location    ={beachName}
+              conditions  ={conditions}
+              loading     ={loading}
+              error       ={error}
+            />
         </section>
       </div>
     </PageContainer>

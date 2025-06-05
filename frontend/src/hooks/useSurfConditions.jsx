@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export function useCurrentConditions(lat, lng, measurement=""){
+export function useSurfConditions(lat, lng, measurement="", location=""){
     const [conditions, setConditions] = useState(null); 
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export function useCurrentConditions(lat, lng, measurement=""){
             setError(null); 
 
             try{
-                let resp = ""; 
+                let resp = "";
                 switch (measurement){
                     case "wave":
                         resp = await fetch(`${API_URL}/conditions/wave?lat=${lat}&lng=${lng}`); 
@@ -30,12 +30,13 @@ export function useCurrentConditions(lat, lng, measurement=""){
                     case "tide":
                         resp = await fetch(`${API_URL}/conditions/tide?lat=${lat}&lng=${lng}`); 
                         break;
+                    case "overview":
                     default:
-                        resp = await fetch(`${API_URL}/conditions?lat=${lat}&lng=${lng}`); 
+                        resp = await fetch(`${API_URL}/conditions?loc=${location}&lat=${lat}&lng=${lng}`); 
                 }
-                
                 if(!resp.ok){
-                    throw new Error(`Conditions fetch error: ${resp.status}`); 
+                    const errorData = await resp.json(); 
+                    throw new Error(`Conditions fetch error (${resp.status}): ${JSON.stringify(errorData)}`); 
                 }
                 const data = await resp.json(); 
                 setConditions(data);
@@ -46,6 +47,6 @@ export function useCurrentConditions(lat, lng, measurement=""){
             }
         }
         fetchConditions();
-    }, [lat, lng, measurement]); 
+    }, [location, lat, lng, measurement]); 
     return {conditions, loading, error}
 }

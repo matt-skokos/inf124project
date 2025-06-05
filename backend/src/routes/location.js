@@ -8,5 +8,6 @@ router.use(cacheControl());
 router.get("/", ctrl.GetLocation); // From explicit coords to get town/neighborhood
 router.get("/ip", ctrl.getLocationIP); // Fallback
 router.get("/coords", ctrl.getCoords);
+router.get("/nearby", ctrl.getNearby);
 
 module.exports = router;

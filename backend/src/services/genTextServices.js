@@ -4,7 +4,7 @@ require('dotenv').config();
 const gcpApiKey = process.env.GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey: gcpApiKey });
 
-const genConditionOverview = async (prompt) => {
+const genReport = async (prompt) => {
 
     const aiRes = await ai.models.generateContent({
         model: "gemini-2.0-flash", 
@@ -13,10 +13,10 @@ const genConditionOverview = async (prompt) => {
             systemInstruction: "You are a professional broadcast meteorologist.",
         },
     }); 
-    const aiOverview = aiRes.text;
-    console.log(`AI Overview: ${aiOverview}`)
+    const aiReport = aiRes.text;
+    console.log(`AI Report: ${aiReport}`)
     
-    return aiOverview;
+    return aiReport;
 }
 
-module.exports = { genConditionOverview }
+module.exports = { genReport }

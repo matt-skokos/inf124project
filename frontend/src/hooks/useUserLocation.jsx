@@ -19,8 +19,8 @@ export function useUserLocation(){
                     return res.json();
                 })
                 .then(data => {
-                    setLat(data.latitude); 
-                    setLng(data.longitude);
+                    setLat(data.lat); 
+                    setLng(data.lng);
                     setLocationName(data.location); 
                     setLoading(false); 
                 })

@@ -72,7 +72,7 @@ const fetchBuoyRealtime = async(buoyId) => {
     return await resp.text();
 }
 
-const  NWSWeatherConditions = async (lat, lng) => {
+const  NWSWeatherPredicitions = async (lat, lng, timeperiod=1) => {
     // Fetch gridpoint metadata for the location
     const nwsPointsURL = `${NWS_URL}/points/${lat},${lng}`
     const pointRes = await fetch(nwsPointsURL);
@@ -91,7 +91,15 @@ const  NWSWeatherConditions = async (lat, lng) => {
     }
 
     const forecastData = await forecastRes.json();
-    const forecastPeriods = forecastData.properties.periods;
+    let forecastPeriods = forecastData.properties.periods;
+    forecastPeriods = forecastPeriods.filter((p) => p.isDaytime);   // Filter only daytime periods
+    forecastPeriods = forecastPeriods.slice(0, parseInt(timeperiod));   // Take the first n daytime periods
+    return forecastPeriods;
+}
+
+const  NWSWeatherConditions = async (lat, lng) => {
+    // Get conditions for today
+    const forecastPeriods = await NWSWeatherPredicitions(lat, lng);
     const currentConditions = forecastPeriods[0]
 
     // Extract surf-related data
@@ -104,7 +112,7 @@ const  NWSWeatherConditions = async (lat, lng) => {
 }
 
 // Fetch Tide data from NOAA Tides API
-const NOAATideCurrentConditions = async (lat, lng) => { 
+const NOAATidePredictions = async (lat, lng, timeperiod=1) => { 
     // retrieve all tide-prediction stations
     const stationsURL = `${NOAA_URL}/mdapi/prod/webapi/stations.json?units=english&type=tidepredictions`;
     const stationsRes = await fetch(stationsURL); 
@@ -141,10 +149,10 @@ const NOAATideCurrentConditions = async (lat, lng) => {
         return { stationId: nearestStation.id, stationName: nearestStation.name };
     })(lat, lng);
 
-    // Build date Strings for today
+    // Build date strings
     const now = new Date(); 
-    const tomorrowDate = new Date(now); 
-    tomorrowDate.setDate(now.getDate() + 1);
+    const endDate = new Date(now); 
+    endDate.setDate(now.getDate() + parseInt(timeperiod));
 
     const formatDate = date => {
         const yyyy = date.getFullYear()
@@ -154,7 +162,7 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     };
 
     const beginDateStr = formatDate(now); 
-    const endDateStr = formatDate(tomorrowDate); 
+    const endDateStr = formatDate(endDate); 
 
     // Fetch high/low tide predictions
     const tideURL = `${NOAA_URL}/api/prod/datagetter?station=${stationId}` +
@@ -165,29 +173,41 @@ const NOAATideCurrentConditions = async (lat, lng) => {
     if(!tideRes.ok){
         throw new Error(`NOAA tide data fetch error (${tideRes.status}): ${tideData?.message}\n${tideURL}`); 
     }
+    
     const predictions = tideData.predictions || []; 
+    return  predictions.filter(p => new Date(p.t) >= now);
+}
 
+const NOAATideConditions = async (lat, lng) => {
+    const predictions = await NOAATidePredictions(lat, lng);
+    
     // Determine next low and high tides 
-    const upcoming = predictions.filter(p => new Date(p.t) >= now);
-    const nextLow = upcoming.find(p => p.type === 'L');
-    const nextHigh = upcoming.find(p => p.type === 'H');
+    const nextLow = predictions.find(p => p.type === 'L');
+    const nextHigh = predictions.find(p => p.type === 'H');
 
-    let tide = 'N/A'; 
+    let tide = 'N/A';
+    let tideTime = new Date();
+    let tideValue = "N/A";
     let tideDetails = 'Tide data is unavailable for the selected coordinates and date.'; 
     if(nextLow && nextHigh){
         const lowTime = new Date(nextLow.t); 
         const highTime = new Date(nextHigh.t); 
         if (lowTime < highTime){
-            tide = 'Low'; 
-            tideDetails = `Low tide at ${nextLow.t}: ${nextLow.v} ft. High tide at ${nextHigh.t}: ${nextHigh.v} ft.`; 
+            tide = 'Low';
+            tideTime = lowTime;
+            tideValue = nextLow.v;
+            tideDetails = `Low tide at ${nextLow.t}: ${nextLow.v}ft. High tide at ${nextHigh.t}: ${nextHigh.v}ft.`; 
         }else{ 
-            tide = 'High'; 
-            tideDetails = `High tide at ${nextHigh.t}: ${nextHigh.v}  ft. Low tide at ${nextLow.t}: ${nextLow.v} ft.`; 
+            tide = 'High';
+            tideTime = highTime;
+            tideValue = nextHigh.v;
+            tideDetails = `High tide at ${nextHigh.t}: ${nextHigh.v}ft. Low tide at ${nextLow.t}: ${nextLow.v}ft.`; 
         }
     }
-    console.log(`Tide: ${tide} - ${tideDetails}`)
+    tideTime = tideTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+    console.log(`${tide} tide at ${tideTime}: ${tideDetails}`)
 
-    return { tide, tideDetails };
+    return { tide, tideTime, tideDetails };
 }
 
 const NDBCBuoyConditions = async (lat, lng) => {
@@ -237,4 +257,4 @@ const NDBCBuoyConditions = async (lat, lng) => {
     }
 }
 
-module.exports = { NWSWeatherConditions, NOAATideCurrentConditions, NDBCBuoyConditions }
+module.exports = { NWSWeatherPredicitions, NOAATidePredictions, NWSWeatherConditions, NOAATideConditions, NDBCBuoyConditions }
