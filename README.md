@@ -1,5 +1,5 @@
 # Overview
-Local Legend is a react web app for getting AI generated surf condition reports. This repository contains the frontend code base. For the backend code base please visit [inf124project-backend github](http://github.com) 
+Local Legend is a react web app for getting AI generated surf condition reports.
 
 ## Features
 * User login/registration
@@ -85,6 +85,10 @@ Follow this documentation for creating a new Google Cloud prject.
 * Select 'Generate new private key' at the bottom of the page
 * Wait for .json file to download
 * Move .json file into root directory of local project
+
+## Getting Access to Google Cloud Project and Firebase Project
+
+### Credentials 
 
 NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC 
 
