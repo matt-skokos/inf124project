@@ -1,5 +1,5 @@
 const fetch =  require("node-fetch");
-const { reverseGeocode, geocode } = require("../services/locationServices");
+const { reverseGeocode, geocode, nearbyPlaces } = require("../services/locationServices");
 
 const GEOLOCATION_URL = "https://www.googleapis.com/geolocation/v1/geolocate";
 
@@ -61,6 +61,17 @@ exports.getCoords = async (req, res) => {
         return res.json({ lat, lng });
     }catch(err){
         console.log("getCoords error:", err);
+        return res.status(502).json({ message: "error" }); 
+    }
+}
+
+exports.getNearby = async(req, res) => {
+    const { query, lat, lng, maxResults } = req.query;
+    try{
+        const places = await nearbyPlaces(query, lat, lng, maxResults)
+        return res.json(places);
+    }catch(err){
+        console.log("getNearby error:", err);
         return res.status(502).json({ message: "error" }); 
     }
 }

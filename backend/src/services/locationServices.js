@@ -2,6 +2,7 @@ const fetch = require("node-fetch")
 const { normalize } = require("../utils");
 const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const PLACES_TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
+const PLACES_NEARBY_SEARCH_URL="https://places.googleapis.com/v1/places:searchNearby";
 
 // In‐memory cache: normalized query → { lat, lng } */
 const inMemoryCache = new Map();
@@ -44,6 +45,40 @@ const placesTextSearch = async (query) => {
 
     const { latitude: lat, longitude: lng } = json.places[0].location
     return { lat, lng };
+}
+
+const nearbyPlaces = async (query, lat, lng, maxResultCount) => {
+    const res = await fetch(PLACES_NEARBY_SEARCH_URL, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": process.env.GEOSERVICES_API_KEY,
+            "X-Goog-FieldMask": "places.formattedAddress,places.location,places.addressComponents.shortText", // We only need the geometry.location field back
+        }, 
+        body: JSON.stringify({
+            "includedTypes": [query],
+            "maxResultCount": maxResultCount,
+            "locationRestriction": {
+                "circle": {
+                "center": {
+                    "latitude": lat,
+                    "longitude": lng},
+                "radius": 50000.0
+                }
+            }
+        }),
+    })
+    if (!res.ok) {
+        throw new Error(`Places(new) Nearby search returned HTTP ${res.status}`);
+    }
+
+    const json = await res.json();
+    if (!Array.isArray(json.places) || json.places.length === 0) {
+        console.log(JSON.stringify(json))
+        throw new Error(`Places(new) found no results for "${query}".`);
+    }
+
+    return json;
 }
 
 const classicGeocode = async (query) => {
@@ -95,7 +130,6 @@ const geocode = async (query) =>{
     } catch(err){
         console.warn(`geocoding search("${query}") failed: ${err.message}`);
     }
-
 }
 
-module.exports = { reverseGeocode, geocode }
+module.exports = { reverseGeocode, geocode, nearbyPlaces}
