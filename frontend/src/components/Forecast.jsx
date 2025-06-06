@@ -70,7 +70,7 @@ function ForecastReport({ location, lat, lng })
     if (waveLoading || windLoading || tideLoading) {
         return(<ContentCard className="mb-4">
             <p className="condition-overview">
-                Loading current conditions for {location}…
+                Loading forecast for {location}…
             </p>
         </ContentCard>)
     }
