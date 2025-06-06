@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import API from "../api"; // configured Axios/fetch wrapper
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
+import ImageCarousel from "./Custom/ImageCarousel";
 import { useDate } from "../hooks/useDate";
 import { ConditionOverview } from "./Home";
 import { useSurfConditions } from "../hooks/useSurfConditions";
@@ -69,9 +69,10 @@ function ForecastReport({ location, lat, lng })
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {
         return(<ContentCard className="mb-4">
-            <p className="condition-overview">
-                Loading forecast for {location}…
-            </p>
+            <div className="d-flex align-items-center">
+                <strong>Loading {location} forecast...</strong>
+                <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+            </div>
         </ContentCard>)
     }
 
@@ -94,6 +95,8 @@ function ForecastReport({ location, lat, lng })
                 title={location}
             />
 
+            <ImageCarousel locationName={location}/>
+
             {/* Current Conditions */}
             <ContentCard className="mb-2" title="Current Conditions">
                 <ForecastDay key={today}
@@ -106,11 +109,19 @@ function ForecastReport({ location, lat, lng })
 
             {/* Surf Report */}
             <ContentCard className="mb-2" title="Surf Report">
-                <p className="condition-overview mb-0">
-                    {predictionLoading && ("Loading AI surf report...")}
-                    {(!predictionLoading && predictionError) && (`Error: ${predictionError}`)}
-                    {(!predictionLoading && !predictionError) && (prediction.aiReport)}
-                </p>
+                {predictionLoading && (
+                    <div className="d-flex align-items-center">
+                        <strong>"Loading AI surf report......</strong>
+                        <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+                    </div>
+                )}
+                {(!predictionLoading && predictionError) && (
+                    <p className="condition-overview text-danger mb-0">{`Error: ${predictionError}`}</p>
+                )}
+
+                {(!predictionLoading && !predictionError) && (
+                    <p className="condition-overview mb-0">{prediction.aiReport}</p>
+                )}
             </ContentCard>
         </React.Fragment>
     );

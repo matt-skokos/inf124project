@@ -23,7 +23,13 @@ export function ConditionCard({ location, conditions, loading, error }) {
       className="condition-card expanded" 
       title={`Local Surf at ${(!loading && !error && location) ? location: "..."}`}
     >
-      {(loading) && (<p className="condition-overview">loading conditions...</p>)}
+      {(loading) && (
+        <div className="d-flex align-items-center">
+          <strong>Loading current conditions......</strong>
+          <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+        </div>
+      )}
+      
       {(!loading && error) && (<p className="condition-overview">Error: {error}</p>)}
 
       {(!loading && !error && conditions) && (
