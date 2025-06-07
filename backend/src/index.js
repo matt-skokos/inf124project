@@ -4,7 +4,12 @@ const cors = require('cors');
 const db = require('./db')  // Firestore instance
 
 const app = express(); 
-const PORT = process.env.PORT || 8080; 
+const PORT = parseInt(process.env.PORT, 10) || 8080; 
+
+// ----START SERVER----
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
+})
 
 // ----MIDDLEWARE----
 // CORs(Cross Origin Reference)
@@ -31,7 +36,3 @@ app.use('/api/location', locationRouter);
 const conditionsRouter = require("./routes/conditions");
 app.use('/api/conditions', conditionsRouter);
 
-// ----START SERVER----
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
