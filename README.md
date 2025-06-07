@@ -88,6 +88,10 @@ Follow this documentation for creating a new Google Cloud prject.
 
 ## Getting Access to Google Cloud Project and Firebase Project
 
+### Install Firebase CLI
+
+`npm install -g firebase-tools`
+
 ### Credentials 
 
 NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC 
