@@ -165,7 +165,7 @@ In the project directory, you can run:
 
     Launches dev server for testing purposes
 
-* `gcloud run deploy my-service --source . --region us-west1 --allow-unauthenticated`
+* `gcloud run deploy sp2025-inf124-app --source . --region us-west1 --allow-unauthenticated`
 
     Deploying from Source. Cloud Run can auto-generate a Dockerfile using Cloud Build if you run gcloud run deploy --source . from your project root. 
     This is the quickest approach for a standard Express app.
