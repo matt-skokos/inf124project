@@ -36,3 +36,5 @@ app.use('/api/location', locationRouter);
 const conditionsRouter = require("./routes/conditions");
 app.use('/api/conditions', conditionsRouter);
 
+const favoritesRouter = require("./routes/favorites"); 
+app.use('/api/favorites', favoritesRouter)
