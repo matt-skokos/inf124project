@@ -11,27 +11,34 @@ import Registration from './components/Registration';
 import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Explore from "./components/Explore";
+import PrivateRoute from "./components/Custom/PrivateRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="app-container">
-        <Navbar />
+        <Navbar/>
 
         <div className="main-content">
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/forecast" element={<Forecast/>} />
-            <Route path="/favorites" element={<Favorites />} />
-            {/* Add other routes here: Forecast, Explore Spots, Favorites */}
+
+            {/* Private Routes */}
+            {/* If no ID_TOKEN → Redirect to "/" */}
+            <Route element={<PrivateRoute/>}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/forecast" element={<Forecast/>} />
+              <Route path="/favorites" element={<Favorites />} />
+            </Route>
+
           </Routes>
         </div>
 
-        <Footer />
+        <Footer/>
       </div>
     </BrowserRouter>
   );
