@@ -198,7 +198,7 @@ function Profile(){
                         </div>
                     </div>
                     
-                    <ContentCard className="profile-card">
+                    <ContentCard className="profile-card mx-auto">
                         <form className="profile-form" onSubmit={handleSubmit} aria-label="profile input form">
                             <div className="profile-fields p-1">
                                 

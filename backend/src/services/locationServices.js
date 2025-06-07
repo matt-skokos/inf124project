@@ -1,6 +1,5 @@
 const fetch = require("node-fetch")
 const { normalize } = require("../utils");
-const { query } = require("express");
 const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const PLACES_TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
 const PLACES_NEARBY_SEARCH_URL="https://places.googleapis.com/v1/places:searchNearby";

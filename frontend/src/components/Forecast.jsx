@@ -13,7 +13,6 @@ import './Forecast.css';
 function ForecastDay({ date, waveCond, windCond, tideCond }) {
     return (
         <div className="forecast-day-container">
-            <h3 className="forecast-day-title">{date}</h3>
             <div className="forecast-conditions-container">
                 <ConditionOverview icon="bi bi-tsunami" label="Swell">
                     <p>
@@ -65,6 +64,15 @@ function ForecastReport({ location, lat, lng })
         loading: predictionLoading,
         error: predictionError,
     } = useSurfPrediction(location, lat, lng, 3);
+
+    const handleDirectionsSubmit = () => {
+        // Build the Google Maps Directions URL for this lat/lng
+        const destination = `${lat},${lng}`;
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1` +
+                        `&destination=${encodeURIComponent(destination)}` +
+                        `&travelmode=driving`;
+        window.open(mapsUrl, "_blank", "noopener"); // Open in a new tab
+    }
 
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {
@@ -123,6 +131,11 @@ function ForecastReport({ location, lat, lng })
                     <p className="condition-overview mb-0">{prediction.aiReport}</p>
                 )}
             </ContentCard>
+
+            <Button className="btn-block mb-2 " onClick={handleDirectionsSubmit}>
+                <i className="bi bi-map me-2"></i>
+                Directions
+            </Button>
         </React.Fragment>
     );
 }
