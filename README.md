@@ -89,8 +89,17 @@ Follow this documentation for creating a new Google Cloud prject.
 ## Getting Access to Google Cloud Project and Firebase Project
 
 ### Install Firebase CLI
+[firebase CLI documentation](https://firebase.google.com/docs/cli#windows-npm)
 
 `npm install -g firebase-tools`
+
+### Download/INstall gloud CLI[
+[gcloud CLI documentation](https://cloud.google.com/sdk/docs/install)
+
+```
+(New-Object Net.WebClient).DownloadFile("https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe", "$env:Temp\GoogleCloudSDKInstaller.exe")
+& $env:Temp\GoogleCloudSDKInstaller.exe
+```
 
 ### Credentials 
 
