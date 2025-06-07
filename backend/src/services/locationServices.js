@@ -27,7 +27,7 @@ const placesTextSearch = async (query) => {
         headers:{
             "Content-Type": "application/json",
             "X-Goog-Api-Key": process.env.GEOSERVICES_API_KEY,
-            "X-Goog-FieldMask": "places.location", // We only need the geometry.location field back
+            "X-Goog-FieldMask": "places.location", // We only need the places.location field back
         }, 
         body: JSON.stringify({
             "textQuery": query
@@ -46,6 +46,61 @@ const placesTextSearch = async (query) => {
     const { latitude: lat, longitude: lng } = json.places[0].location
     return { lat, lng };
 }
+
+const placesTextSearchPhotos = async (query) => {
+    if (!query) throw new Error("Missing query for Places Text Search");
+    
+    const res = await fetch(PLACES_TEXT_SEARCH_URL, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": process.env.GEOSERVICES_API_KEY,
+            "X-Goog-FieldMask": "places.photos.name,places.photos.widthPx,places.photos.heightPx", // We only need the geometry.photos field back
+        }, 
+        body: JSON.stringify({
+            "textQuery": query
+        }),
+    });
+    if (!res.ok) {
+        throw new Error(`Places Text Search returned HTTP ${res.status}`);
+    }
+    
+    const json = await res.json();
+    if (!Array.isArray(json.places) || json.places.length === 0) {
+        console.log(JSON.stringify(json))
+        throw new Error(`Places(new) found no results for "${query}".`);
+    }
+
+    const photos = json.places[0].photos;
+    return photos;
+}
+
+const getPlacePhotoUrls = async (query, maxWidthPx = 400, maxHeightPx = 400) => {
+  const photos = await placesTextSearchPhotos(query);
+  if (!Array.isArray(photos) || photos.length === 0) {
+    return [];
+  }
+
+  // 2. Map each photo.name → full GET URL
+  //    https://places.googleapis.com/v1/{photo.name}/media
+  //      ?key=YOUR_API_KEY
+  //      &maxWidthPx=...
+  //      &maxHeightPx=...
+  return photos.map(({ name, widthPx, heightPx }) => {
+    const baseMediaUrl = `https://places.googleapis.com/v1/${name}/media`;
+    const url = new URL(baseMediaUrl);
+    url.searchParams.set("key", process.env.GEOSERVICES_API_KEY);
+    url.searchParams.set("maxWidthPx", String(maxWidthPx));
+    url.searchParams.set("maxHeightPx", String(maxHeightPx));
+    
+    // We return an array of objects { url, widthPx, heightPx }
+    return {
+      url: url.toString(),
+      originalWidth: widthPx,
+      originalHeight: heightPx,
+    };
+  });
+};
 
 const nearbyPlaces = async (query, lat, lng, maxResultCount) => {
     const res = await fetch(PLACES_NEARBY_SEARCH_URL, {
@@ -77,7 +132,6 @@ const nearbyPlaces = async (query, lat, lng, maxResultCount) => {
         console.log(JSON.stringify(json))
         throw new Error(`Places(new) found no results for "${query}".`);
     }
-
     return json;
 }
 
@@ -132,4 +186,4 @@ const geocode = async (query) =>{
     }
 }
 
-module.exports = { reverseGeocode, geocode, nearbyPlaces}
+module.exports = { reverseGeocode, geocode, nearbyPlaces, getPlacePhotoUrls}

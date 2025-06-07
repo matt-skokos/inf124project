@@ -21,3 +21,7 @@
 .btn-custom:hover {
     background-color: var(--button-hover);
 }
+
+.btn-custom:active {
+    background-color: var(--button-primary);
+}

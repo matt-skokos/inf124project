@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import API from "../api"; // configured Axios/fetch wrapper
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
 import Button from "./Custom/Button";
+import ImageCarousel from "./Custom/ImageCarousel";
 import { useDate } from "../hooks/useDate";
 import { ConditionOverview } from "./Home";
 import { useSurfConditions } from "../hooks/useSurfConditions";
@@ -13,7 +13,6 @@ import './Forecast.css';
 function ForecastDay({ date, waveCond, windCond, tideCond }) {
     return (
         <div className="forecast-day-container">
-            <h3 className="forecast-day-title">{date}</h3>
             <div className="forecast-conditions-container">
                 <ConditionOverview icon="bi bi-tsunami" label="Swell">
                     <p>
@@ -66,12 +65,22 @@ function ForecastReport({ location, lat, lng })
         error: predictionError,
     } = useSurfPrediction(location, lat, lng, 3);
 
+    const handleDirectionsSubmit = () => {
+        // Build the Google Maps Directions URL for this lat/lng
+        const destination = `${lat},${lng}`;
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1` +
+                        `&destination=${encodeURIComponent(destination)}` +
+                        `&travelmode=driving`;
+        window.open(mapsUrl, "_blank", "noopener"); // Open in a new tab
+    }
+
     // If any of the three is still loading, show a loading state
     if (waveLoading || windLoading || tideLoading) {
         return(<ContentCard className="mb-4">
-            <p className="condition-overview">
-                Loading current conditions for {location}…
-            </p>
+            <div className="d-flex align-items-center">
+                <strong>Loading {location} forecast...</strong>
+                <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+            </div>
         </ContentCard>)
     }
 
@@ -94,6 +103,8 @@ function ForecastReport({ location, lat, lng })
                 title={location}
             />
 
+            <ImageCarousel locationName={location}/>
+
             {/* Current Conditions */}
             <ContentCard className="mb-2" title="Current Conditions">
                 <ForecastDay key={today}
@@ -106,12 +117,25 @@ function ForecastReport({ location, lat, lng })
 
             {/* Surf Report */}
             <ContentCard className="mb-2" title="Surf Report">
-                <p className="condition-overview mb-0">
-                    {predictionLoading && ("Loading AI surf report...")}
-                    {(!predictionLoading && predictionError) && (`Error: ${predictionError}`)}
-                    {(!predictionLoading && !predictionError) && (prediction.aiReport)}
-                </p>
+                {predictionLoading && (
+                    <div className="d-flex align-items-center">
+                        <strong>"Loading AI surf report......</strong>
+                        <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+                    </div>
+                )}
+                {(!predictionLoading && predictionError) && (
+                    <p className="condition-overview text-danger mb-0">{`Error: ${predictionError}`}</p>
+                )}
+
+                {(!predictionLoading && !predictionError) && (
+                    <p className="condition-overview mb-0">{prediction.aiReport}</p>
+                )}
             </ContentCard>
+
+            <Button className="btn-block mb-2 " onClick={handleDirectionsSubmit}>
+                <i className="bi bi-map me-2"></i>
+                Directions
+            </Button>
         </React.Fragment>
     );
 }

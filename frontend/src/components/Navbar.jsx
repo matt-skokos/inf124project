@@ -78,9 +78,19 @@ function MobileNavbar({hideTopRow, isLoggedIn}) {
 function DesktopNavbar({ hideTopRow, isLoggedIn }) {
   return (
     <div className="desktop-nav">
+
+      {/* ---Logo Row---- */}
+      <div className="logo-row d-none d-lg-block w-100 text-center">
+        {/* Logo */}
+        <Link to="/" aria-label="Local Legend icon">
+          <img src={logo} className="navbar-logo" alt="Local Legend Logo" />
+        </Link>
+      </div>
+      
+      {/* Navrow row */}
       {!hideTopRow && (
         <div className="d-none d-lg-flex justify-content-center align-items-center w-100 py-2">
-          
+          {/* Navlinks */}
           {isLoggedIn && (
             <ul className="navbar-nav mx-auto">
               <li className="nav-item">
@@ -113,13 +123,6 @@ function DesktopNavbar({ hideTopRow, isLoggedIn }) {
         </div>
       )}
 
-      {/* ---Logo Row---- */}
-      <div className="logo-row d-none d-lg-block w-100 text-center">
-        {/* Logo */}
-        <Link to="/" aria-label="Local Legend icon">
-          <img src={logo} className="navbar-logo" alt="Local Legend Logo" />
-        </Link>
-      </div>
     </div>
   );
 }

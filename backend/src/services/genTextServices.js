@@ -10,7 +10,10 @@ const genReport = async (prompt) => {
         model: "gemini-2.0-flash", 
         contents: prompt,
         config: {
-            systemInstruction: "You are a professional broadcast meteorologist.",
+            systemInstruction: `You are a senior broadcast meteorologist and experienced surfer.
+                Do not use special characters in reponse.`,
+            maxOutputTokens: 200,
+            temperature: 0.35,
         },
     }); 
     const aiReport = aiRes.text;
