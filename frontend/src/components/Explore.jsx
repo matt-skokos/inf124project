@@ -4,31 +4,6 @@ import ContentCard from "./Custom/ContentCard.jsx";
 import PageContainer from "./Custom/PageContainer.jsx";
 import SpotTitle from "./Custom/SpotTitle.jsx";
 
-
-const spots = [
-  {
-    imgURL: "https://source.unsplash.com/random/150x150?surf",
-    title: "Sunset Cliffs",
-    description:
-      "A scenic coastal location with stunning sunset views and rugged cliffs. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Beginner",
-  },
-  {
-    imgURL: `https://source.unsplash.com/150x150/?surf&sig=${Math.random()}`,
-    title: "Black's Beach",
-    description:
-      "A peaceful hiking trail leads down to a natural reserve sand break. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Intermediate",
-  },
-  {
-    imgURL: "https://source.unsplash.com/150x150/?beach,cliff,coast",
-    title: "Tourmaline Street",
-    description:
-      "An easy access beach break and point break with parking and showers. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Beginner",
-  },
-];
-
 function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
@@ -127,25 +102,85 @@ function ConditionCard(props) {
 }
 
 const Explore = () => {
-  const [selectedSpot, setSelectedSpot] = useState(null); // State for selected spot
-  const [spotList, setSpotList] = useState(spots); // State for spot list
+  const [selectedSpot, setSelectedSpot] = useState(null);
+  const [spotList, setSpotList] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // useEffect to update images with random URLs
+  // Get user location from localStorage on component mount and fetch spots
   useEffect(() => {
-    const randomBeachImages = [
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-    ];
+    const storedLocation = localStorage.getItem("userLocation");
+    setUserLocation(storedLocation || null);
 
-    const updatedSpotList = spots.map((spot, i) => ({
-      ...spot,
-      imgURL: randomBeachImages[i],
-    }));
+    if (storedLocation) {
+      setLoading(true);
 
-    setSpotList(updatedSpotList);
+      // Make sure we're using the correct API URL
+      const API_URL =
+        process.env.REACT_APP_API_URL || "http://localhost:8080/api";
+
+      console.log(
+        `Using API URL: ${API_URL}, fetching spots for ${storedLocation}`
+      );
+
+      // Use fetch with mode: 'cors' to avoid CORS issues in development
+      fetch(
+        `${API_URL}/location/surfspots?location=${encodeURIComponent(
+          storedLocation
+        )}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            console.error(`Error response: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("API response:", data);
+
+          if (
+            data &&
+            data.spots &&
+            Array.isArray(data.spots) &&
+            data.spots.length > 0
+          ) {
+            const transformedSpots = data.spots.map((spot, index) => ({
+              id: `spot-${index}`,
+              title: spot.name,
+              description: spot.description,
+              skillLevel: spot.difficulty || "Intermediate",
+              imgURL: `https://source.unsplash.com/featured/150x150/?surf,${encodeURIComponent(
+                spot.name
+              )}&sig=${index}`,
+            }));
+            setSpotList(transformedSpots);
+          } else {
+            setError("Unable to locate any spots in your current location.");
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching spots:", err);
+          setError(`Network error: ${err.message}`);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setError("Geolocation not enabled");
+      setLoading(false);
+    }
   }, []);
 
+  // The rest of your component logic
   if (selectedSpot) {
     return (
       <div className="explore-page explore-detail-container">
@@ -176,18 +211,42 @@ const Explore = () => {
 
   return (
     <PageContainer title="Explore Spots">
+      <div className="location-subheading">
+        {userLocation ? (
+          <span>Spots near {userLocation}</span>
+        ) : (
+          <span>Geolocation not enabled</span>
+        )}
+      </div>
       <div className="explore-page explore-list-container">
-        <ul className="spotItems">
-          {spotList.map((spot) => (
-            <li
-              className="content-card"
-              key={spot.title}
-              onClick={() => setSelectedSpot(spot)}
-            >
-              <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <div className="loading-container text-center my-4">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2">Searching for surf spots...</p>
+          </div>
+        ) : error ? (
+          <ContentCard className="error-message">
+            <p className="text-center">{error}</p>
+          </ContentCard>
+        ) : spotList.length > 0 ? (
+          <ul className="spotItems">
+            {spotList.map((spot) => (
+              <li
+                className="content-card"
+                key={spot.id || spot.title}
+                onClick={() => setSelectedSpot(spot)}
+              >
+                <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ContentCard className="error-message">
+            <p className="text-center">No surf spots found in your area.</p>
+          </ContentCard>
+        )}
       </div>
     </PageContainer>
   );
@@ -238,8 +297,7 @@ const SpotDetail = ({ spot }) => {
                 flexWrap: "wrap",
               }}
             >
-              <SpotTitle title={spot.title}/>
-
+              <SpotTitle title={spot.title} />
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
               {[...Array(3)].map((_, index) => (

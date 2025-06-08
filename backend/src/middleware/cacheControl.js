@@ -1,9 +1,14 @@
 //                Hour * Min * Sec
-const CACHE_TTL = 1 * 5 * 60;   // set to 5 minutes
+const CACHE_TTL = 1 * 5 * 60; // set to 5 minutes
 
-module.exports = function cacheControl (maxAge=CACHE_TTL){
-    return function (req, res, next) {
-        res.set('Cache-Control', `public, max-age= ${maxAge}`); // Set Browser HTTP Cache
-        next();
-    }
-}
+/**
+ * Middleware to set Cache-Control headers
+ * @param {number} maxAge Max age in seconds
+ */
+module.exports = function cacheControl(maxAge = 60) {
+  return (req, res, next) => {
+    // Set Cache-Control header
+    res.setHeader("Cache-Control", `public, max-age=${maxAge}`);
+    next();
+  };
+};
