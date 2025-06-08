@@ -75,32 +75,28 @@ function ForecastReport({ location, lat, lng })
     }
 
     // If any of the three is still loading, show a loading state
-    if (waveLoading || windLoading || tideLoading) {
-        return(<ContentCard className="mb-4">
-            <div className="d-flex align-items-center">
-                <strong>Loading {location} forecast...</strong>
-                <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
-            </div>
-        </ContentCard>)
-    }
+    if (waveLoading || windLoading || tideLoading) {return(
+        <div className="d-flex align-items-center">
+            <strong>Loading {location} forecast...</strong>
+            <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+        </div>
+    );}
 
     // If any of the three has an error, show an error message
-    if (waveError || windError || tideError) {
-        return (
-        <ContentCard className="mb-4">
-            <p className="text-danger">
-                {waveError && `Wave data error: ${waveError}`}
-                {windError && `Wind data error: ${windError}`}
-                {tideError && `Tide data error: ${tideError}`}
-            </p>
-        </ContentCard>
-        );
-    }
+    if (waveError || windError || tideError) {return (
+        <p className="text-danger">
+            {waveError && `Wave data error: ${waveError}`}
+            {windError && `Wind data error: ${windError}`}
+            {tideError && `Tide data error: ${tideError}`}
+        </p>
+    );}
 
     return( 
         <React.Fragment>
             <SpotTitle
                 title={location}
+                lat={lat}
+                lng={lng}
             />
 
             <ImageCarousel locationName={location}/>
