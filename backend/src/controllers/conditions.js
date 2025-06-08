@@ -98,15 +98,31 @@ exports.getPredictionOverview = async (req, res) => {
         const tidePredictions               = await NOAATidePredictions(lat,lng, timeperiod);
 
         // Generate a natural-language overview via GCP Generative Langauge API
-        const promptText = `Generate a concise recommendation on the best time go surfing in the next ${timeperiod} days at ${location}.
-        Use the following forecast data:
-            - Wave Height: ${metersToFeet(waveHeight)} ft
-            - Wave Direction: ${degreesToDirection(waveDirection)}
-            - 3-day weather forecast: ${JSON.stringify(weatherPredictions)}
-            - 3-day tide forecast: ${JSON.stringify(tidePredictions)}`;
+        const promptText = `Based on the following surf conditions and forecast data, respond ONLY with a JSON object with two fields:
+- recommendation: a concise statement (e.g., "Sunday morning is the best time.").
+- explanation: a 2-3 sentence explanation of why, using the data provided.
 
-        const aiReport = await genReport(promptText);
-        return res.json({ aiReport });
+Data:
+- Location: ${location}
+- Wave Height: ${waveHeight} ft
+- Wave Direction: ${waveDirection}
+- Weather Predictions: ${JSON.stringify(weatherPredictions)}
+- Tide Predictions: ${JSON.stringify(tidePredictions)}
+`;
+        console.log(promptText);
+        const aiResponseRaw = await genReport(promptText);
+        let aiResponse = aiResponseRaw;
+        let aiReport;
+        try {
+            aiResponse = aiResponse.replace(/```json|```/g, '').trim();
+            aiReport = JSON.parse(aiResponse);
+        } catch (e) {
+            aiReport = {
+                recommendation: "No recommendation available.",
+                explanation: aiResponseRaw
+            };
+        }
+        return res.json(aiReport);
 
     }catch(err){
         console.log("Conditions controller error:", err); 
@@ -132,19 +148,33 @@ exports.getConditionsOverview = async (req, res) => {
         waveDirection = degreesToDirection(waveDirection);
 
         // Generate a natural-language overview via GCP Generative Langauge API
-        const promptText = `Generate a concise overview of surf conditions at ${location}. Use the following data:
-            - Condition Details: ${conditionDetails}
-            - Wave Height: ${waveHeight} ft
-            - Wave Direction: ${waveDirection}
-            - Wind: ${wind}
-            - Wind Direction: ${windDirection}
-            - Tide: ${tide}
-            - Tide Details: ${tideDetails}`;
+        const promptText = `Based on the following surf conditions and forecast data, respond ONLY with a JSON object with two fields:
+- recommendation: a concise statement (e.g., "Sunday morning is the best time.").
+- explanation: a 2-3 sentence explanation of why, using the data provided.
 
-        const aiReport = await genReport(promptText);
-
+Data:
+- Location: ${location}
+- Wave Height: ${waveHeight} ft
+- Wave Direction: ${waveDirection}
+- Wind: ${wind}
+- Wind Direction: ${windDirection}
+- Tide: ${tide}
+- Tide Details: ${tideDetails}
+`;
+        const aiResponseRaw = await genReport(promptText);
+        let aiResponse = aiResponseRaw;
+        let aiReport;
+        try {
+            aiResponse = aiResponse.replace(/```json|```/g, '').trim();
+            aiReport = JSON.parse(aiResponse);
+        } catch (e) {
+            aiReport = {
+                recommendation: "No recommendation available.",
+                explanation: aiResponseRaw
+            };
+        }
         // Respond with structured JSON
-        return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideTime, aiReport });
+        return res.json({ waveHeight, waveDirection, wind, windDirection, tide, tideTime, ...aiReport });
     }catch(err){
         console.log("Conditions controller error:", err); 
         res.status(500).json({ error: "Failed to fetch surf conditions"});

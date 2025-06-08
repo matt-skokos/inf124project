@@ -5,6 +5,7 @@ import { useNearbyPlaces } from "../hooks/useNearbyPlaces";
 import { useSurfConditions } from "../hooks/useSurfConditions";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
+import ReactMarkdown from "react-markdown";
 import './Home.css';
 
 export function ConditionOverview({ children, icon, label }) {
@@ -23,13 +24,7 @@ export function ConditionCard({ location, conditions, loading, error }) {
       className="condition-card expanded" 
       title={`Local Surf at ${(!loading && !error && location) ? location: "..."}`}
     >
-      {(loading) && (
-        <div className="d-flex align-items-center">
-          <strong>Loading current conditions......</strong>
-          <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
-        </div>
-      )}
-      
+      {(loading) && (<p className="condition-overview">loading conditions...</p>)}
       {(!loading && error) && (<p className="condition-overview">Error: {error}</p>)}
 
       {(!loading && !error && conditions) && (
@@ -63,7 +58,10 @@ export function ConditionCard({ location, conditions, loading, error }) {
           {/* ─── Second row: Overview, centered under the three conditions ─── */}
           <div className="condition-details">
             <h3 className="condition-label card-subtitle mb-1"><strong>Overview</strong></h3>
-            <div className="condition-overview">{conditions.aiReport}</div>
+            <div className="condition-overview">
+              <h5><strong>{conditions.recommendation}</strong></h5>
+              <ReactMarkdown>{conditions.explanation}</ReactMarkdown>
+            </div>
           </div>
 
         </div>
@@ -85,13 +83,13 @@ function Home() {
   // Get the current date/time string
   const today = useDate();
 
-  // Get the user’s lat/lng + locationName
+  // Get the user's lat/lng + locationName
   const { lat, lng, locationName, loading: loadingLoc, error: errorLoc } = useUserLocation();
   
-  // Find nearby “beach” places based on user lat/lng
+  // Find nearby "beach" places based on user lat/lng
   const { places, loading: loadingPlaces, error: errorPlaces } = useNearbyPlaces(lat, lng, 1);
   
-  // Derive "beachName", “beachLat” & “beachLng” only after `places[0]` confirmed present.
+  // Derive "beachName", "beachLat" & "beachLng" only after `places[0]` confirmed present.
   let beachName = ""
   let beachLat = null; 
   let beachLng = null; 
