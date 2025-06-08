@@ -1,105 +1,75 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import ContentCard from "./Custom/ContentCard";
 import PageContainer from "./Custom/PageContainer";
 import Button from "./Custom/Button";
-import './Login.css'
+import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here, e.g., API call to authenticate user
-
-    try{
-      // Sign in with Firebase Auth REST API
-      const res = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API_KEY}`,
-        {
-          method: "POST", 
-          headers: {"Content-Type": "application/json"}, 
-          body: JSON.stringify({
-            email, 
-            password, 
-            returnSecureToken: true,
-          }),
-        }
-      );
-
-      const data = await res.json();
-      if(!res.ok){
-        throw new Error(data.error.message || "Login Failed")
-      }
-
-      localStorage.setItem("ID_TOKEN", data.idToken); // Store ID token for authenticated requests
-      localStorage.setItem("UID", data.localId)       // Store UID for viewing and updating profile request
-
-      // redirect users back to home page
-      navigate("/");
-
-    }catch(err){
-      console.log(err);  
-      alert(err.message);
-    }finally{
-          console.log(`Successfully logged in: ${email}`);
+    setError("");
+    try {
+      // sign in via Firebase Auth
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      // force‐refresh to guarantee a valid token
+      const idToken = await user.getIdToken(/* forceRefresh= */ true);
+      localStorage.setItem("ID_TOKEN", idToken);
+      localStorage.setItem("UID", user.uid); // Store UID for profile and other user-specific requests
+      console.log(`Logged in as ${user.email}`);
+      navigate("/"); // or wherever your app's home is
+    } catch (err) {
+      console.error("Login failed", err);
+      setError(err.message || "Login error");
     }
   };
 
   return (
-    <PageContainer title="Log In">
+    <PageContainer>
       <ContentCard>
-        <form className="login-form" onSubmit={handleSubmit}>
-          
-          {/* EMAIL */}
+        <h2 className="text-center mb-4">Log In</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="visually-hidden" htmlFor="email">
-              Email
-            </label>
+            <label htmlFor="email" className="form-label">Email address</label>
             <input
               type="email"
-              className="form-control"
               id="email"
-              placeholder="email"
+              className="form-control"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
             />
           </div>
-
-          {/* PASSWORD */}
           <div className="mb-3">
-            <label className="visually-hidden" htmlFor="password">
-              Password
-            </label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
-              className="form-control"
               id="password"
-              autoComplete="on"
-              placeholder="password"
+              className="form-control"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
             />
           </div>
-
-          {/* BUTTON */}
-          <Button type="submit">
-            Login
-          </Button>
+          <div className="d-grid mb-3">
+            <Button type="submit">Log In</Button>
+          </div>
           <div className="text-center">
             <p>
               Don't have an account? <a href="/registration">Register</a>
             </p>
           </div>
-
         </form>
       </ContentCard>
     </PageContainer>
-
   );
 }
 

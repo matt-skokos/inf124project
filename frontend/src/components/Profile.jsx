@@ -13,7 +13,7 @@ const initialState = {
   email: "",
   phone: "",
   password: "",
-  skill: "Beginner",     // you can set a default if you’d like
+  skill: "Beginner",     // you can set a default if you'd like
   notifyBy: "",          // e.g. "SMS" or "Email"
 };
 
@@ -90,7 +90,7 @@ function Profile(){
     }, [id])
 
     const handleAvatarChange = e =>{
-        const file = e.taget.files[0]
+        const file = e.target.files[0]
         if(!file) return; 
         const reader = new FileReader(); 
         reader.onload = () => setAvatarImg(reader.result); 
@@ -239,6 +239,7 @@ function Profile(){
                                         autoComplete="on"
                                         value={formState.phone}
                                         onChange={handleChange}
+                                        required={formState.notifyBy === 'sms'}
                                     />
                                 </label>
 
@@ -283,7 +284,7 @@ function Profile(){
                                                 value="sms"
                                                 checked={formState.notifyBy === 'sms'}
                                                 onChange={handleChange}
-                                            /> 
+                                            /> 
                                             <span>SMS</span>
                                         </label>
                                         
@@ -295,7 +296,7 @@ function Profile(){
                                                 value="email"
                                                 checked={formState.notifyBy === 'email'}
                                                 onChange={handleChange}
-                                            /> 
+                                            /> 
                                             <span>Email</span>
                                         </label>
                                 </fieldset>
@@ -312,4 +313,4 @@ function Profile(){
     );
 }
 
-export default Profile
+export default Profile;
