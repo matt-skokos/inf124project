@@ -1,0 +1,17 @@
+.carousel{
+    width: 100%; 
+    max-width: 75%;
+}
+
+
+@media (max-width: 768px) {
+    .carousel{
+        width: 100%; 
+        max-width: 100%;
+    }
+}
+
+.carousel-image{ 
+    height: 400px;
+    object-fit: cover;
+}

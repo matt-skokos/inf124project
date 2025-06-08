@@ -88,6 +88,19 @@ Follow this documentation for creating a new Google Cloud prject.
 
 ## Getting Access to Google Cloud Project and Firebase Project
 
+### Install Firebase CLI
+[firebase CLI documentation](https://firebase.google.com/docs/cli#windows-npm)
+
+`npm install -g firebase-tools`
+
+### Download/INstall gloud CLI[
+[gcloud CLI documentation](https://cloud.google.com/sdk/docs/install)
+
+```
+(New-Object Net.WebClient).DownloadFile("https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe", "$env:Temp\GoogleCloudSDKInstaller.exe")
+& $env:Temp\GoogleCloudSDKInstaller.exe
+```
+
 ### Credentials 
 
 NOTICE: DO NOT SHARE PRIVATE KEY OR MAKE PUBLIC 
@@ -113,7 +126,7 @@ REACT_APP_FIREBASE_API_KEY=<Browser key (auto created by Firebase) API KEY>
 .env
 ````
 PORT=8080
-FIREBASE_SERVICE_ACCCOUNT_PATH=../../<sp2025-inf124-firebase-adminsdk-*.json>
+FIREBASE_SERVICE_ACCCOUNT_PATH=../<sp2025-inf124-firebase-adminsdk-*.json>
 GEMINI_API_KEY=<YOUR GEMINI API KEY>
 GEOSERVICES_API_KEY=<GEOSERVICES API KEY>
 ````
@@ -152,7 +165,7 @@ In the project directory, you can run:
 
     Launches dev server for testing purposes
 
-* `gcloud run deploy my-service --source . --region us-west1 --allow-unauthenticated`
+* `gcloud run deploy sp2025-inf124-app --source . --region us-west1 --allow-unauthenticated`
 
     Deploying from Source. Cloud Run can auto-generate a Dockerfile using Cloud Build if you run gcloud run deploy --source . from your project root. 
     This is the quickest approach for a standard Express app.

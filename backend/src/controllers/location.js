@@ -1,5 +1,5 @@
 const fetch =  require("node-fetch");
-const { reverseGeocode, geocode, nearbyPlaces } = require("../services/locationServices");
+const { reverseGeocode, geocode, nearbyPlaces, getPlacePhotoUrls } = require("../services/locationServices");
 
 const GEOLOCATION_URL = "https://www.googleapis.com/geolocation/v1/geolocate";
 
@@ -74,4 +74,22 @@ exports.getNearby = async(req, res) => {
         console.log("getNearby error:", err);
         return res.status(502).json({ message: "error" }); 
     }
+}
+
+exports.getPlacesPhotos = async(req, res) => {
+    const { loc: location } = req.query;
+    if (!location) {
+        return res.status(400).json({ error: "Missing 'loc' query parameter" });
+    }
+
+    try{
+        const maxHeightPx = 500;
+        const maxWidthPx = 500;
+        const photoUrls = await getPlacePhotoUrls(location, maxHeightPx, maxWidthPx);
+        res.json(photoUrls);
+    }catch(err){
+        console.log("getPlacesPhotos error:", err);
+        return res.status(502).json({ message: "error" }); 
+    }
+
 }

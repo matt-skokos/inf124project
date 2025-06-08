@@ -1,37 +1,31 @@
-require('dotenv').config(); // load .env into process.env
-const express = require('express'); 
-const cors = require('cors'); 
-const db = require('./db')  // Firestore instance
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const db = require('./db');                      // your Firestore wrapper
+const authMiddleware = require('./middleware/auth');
+const userRouter = require('./routes/user');
+const locationRouter = require('./routes/location');
+const conditionsRouter = require('./routes/conditions');
+const notificationsRouter = require('./routes/notifications');
 
-const app = express(); 
-const PORT = process.env.PORT || 8080; 
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-// ----MIDDLEWARE----
-// CORs(Cross Origin Reference)
-app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:5000', 'https://sp2025-inf124.web.app', 'https://sp2025-inf124.firebaseapp.com'], //adjust to React dev server or prod URL
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-    credentials: true
-}));
-app.use(express.json()); // parse JSON bodies
-
-/// ----ROUTES----
-// Health Check
+// Health check
 app.get('/api/health-check', (req, res) => {
-    res.status(200).send('Health Check: OK');
+  res.status(200).send('Health Check: OK');
 });
 
-// Other routers go here 
-const userRouter = require('./routes/user'); 
+// Core routes
 app.use('/api/users', userRouter);
-
-const locationRouter = require("./routes/location");
 app.use('/api/location', locationRouter);
-
-const conditionsRouter = require("./routes/conditions");
 app.use('/api/conditions', conditionsRouter);
 
-// ----START SERVER----
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+// Protected endpoints will use authMiddleware internally if needed
+
+// Notifications (FCM + SMS)
+app.use('/api/notifications', notificationsRouter);
+
+const PORT = parseInt(process.env.PORT, 10) || 8080;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

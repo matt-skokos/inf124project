@@ -1,17 +1,23 @@
-import axios from 'axios'; 
+import axios from 'axios';
+import { auth } from './firebase';
 
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-}); 
+  baseURL: process.env.REACT_APP_API_URL,
+});
 
-// Automatically attach your Firebase ID token to every outgoing request
-// no need to manually set headers in every component. (middleware for every request)
-API.interceptors.request.use(config => {
-    const token = localStorage.getItem('ID_TOKEN'); 
-    if (token){
-        config.headers.Authorization = `Bearer ${token}`; 
-    }
-    return config;
-}); 
+// Automatically attach a fresh Firebase ID token to every outgoing request
+API.interceptors.request.use(async (config) => {
+  const user = auth.currentUser;
+  if (user) {
+    // refresh if expired, otherwise return cached token
+    const freshToken = await user.getIdToken(/* forceRefresh= */ false);
+    config.headers.Authorization = `Bearer ${freshToken}`;
+    // keep localStorage in sync (optional)
+    localStorage.setItem('ID_TOKEN', freshToken);
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
 export default API;

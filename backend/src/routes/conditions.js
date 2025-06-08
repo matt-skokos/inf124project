@@ -3,7 +3,7 @@ const ctrl = require("../controllers/conditions")
 const router = express.Router(); 
 const cacheControl = require("../middleware/cacheControl")
 
-router.use(cacheControl(1*5));
+// router.use(cacheControl(5*60));
 
 router.get('/', ctrl.getConditionsOverview);
 router.get('/prediction', ctrl.getPredictionOverview);

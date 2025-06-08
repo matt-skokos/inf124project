@@ -98,14 +98,13 @@ exports.getPredictionOverview = async (req, res) => {
         const tidePredictions               = await NOAATidePredictions(lat,lng, timeperiod);
 
         // Generate a natural-language overview via GCP Generative Langauge API
-        const promptText = `Generate a concise forecast report predicting the best time to surf
-            in the next ${timeperiod} days at ${location} using the following data:
-            - Beach name: ${location}
-            - Wave Height: ${waveHeight} ft
-            - Wave Direction: ${waveDirection}
-            - weatherPredictions: ${JSON.stringify(weatherPredictions)}
-            - tidePredictions: ${JSON.stringify(tidePredictions)}`;
-        console.log(promptText);
+        const promptText = `Generate a concise recommendation on the best time go surfing in the next ${timeperiod} days at ${location}.
+        Use the following forecast data:
+            - Wave Height: ${metersToFeet(waveHeight)} ft
+            - Wave Direction: ${degreesToDirection(waveDirection)}
+            - 3-day weather forecast: ${JSON.stringify(weatherPredictions)}
+            - 3-day tide forecast: ${JSON.stringify(tidePredictions)}`;
+
         const aiReport = await genReport(promptText);
         return res.json({ aiReport });
 
@@ -133,8 +132,7 @@ exports.getConditionsOverview = async (req, res) => {
         waveDirection = degreesToDirection(waveDirection);
 
         // Generate a natural-language overview via GCP Generative Langauge API
-        const promptText = `Generate a concise surf report overview using the following data:
-            - Beach name: ${location}
+        const promptText = `Generate a concise overview of surf conditions at ${location}. Use the following data:
             - Condition Details: ${conditionDetails}
             - Wave Height: ${waveHeight} ft
             - Wave Direction: ${waveDirection}

@@ -1,9 +1,9 @@
+/* ----FORM---- */
 /* FOR CARD */
 .forecast-form-card{
     min-height: 300px;
 }
 
-/* ----FORM---- */
 .forecast-form {
     width: 70%;
     margin: 0 auto;
@@ -24,7 +24,6 @@
 
 /* ----3 DAY---- */
 .forecast-day-container {
-    padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
 }
 
