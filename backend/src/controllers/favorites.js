@@ -55,15 +55,37 @@ exports.getFavorites = async (req, res) => {
   }
 }
 
+exports.getLocation = async (req, res) => {
+    let { lat, lng } = req.query;
+    if ( lat == null || lng == null) {
+        return res.status(400).json({ error: 'name, lat, and lng are required' });
+    }
+    lat = parseFloat(lat);
+    lng = parseFloat(lng);
+    
+    const geohash = geohashForLocation([lat, lng]);
+    const favId = geohash; 
+    const uid = req.user.uid;
+    try{ 
+        const doc = await FavoriteModel.doc(uid, favId).get();
+        if (!doc.exists){
+            return res.json({ location: null }); 
+        }
+        return res.json({ location: {id: doc.id, ...doc.data() }}); 
+    }catch(err){
+        console.error('Error checking favorite:', err);
+        return res.status(500).json({ error: 'Failed to check favorite' });
+    }
+}
+
 // Remove a specific favorite spot.
 // DELETE /api/favorites   {favId }
 exports.removeFavorite = async (req, res) => {
-    const { favId } = req.query;
-    console.log(favId);
-    if (!favId) {
-        return res.status(400).json({ error: 'favId param is required' });
+    const { lat, lng } = req.query;
+    if (lat == null || lng == null) {
+        return res.status(400).json({ error: 'name, lat, and lng are required' });
     }
-
+    const favId = geohashForLocation([parseFloat(lat), parseFloat(lng)]);
     const uid = req.user.uid;
 
     try{
