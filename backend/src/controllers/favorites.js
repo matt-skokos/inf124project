@@ -1,26 +1,37 @@
 const admin         = require('firebase-admin');
+const {
+  geohashForLocation,
+  geohashQueryBounds,
+  distanceBetween,
+} = require('geofire-common');
 const FavoriteModel = require('../models/favorite');
 
-const arrayUnion  = admin.firestore.FieldValue.arrayUnion;
-const arrayRemove = admin.firestore.FieldValue.arrayRemove;
+const GeoPoint = admin.firestore.GeoPoint;
+const serverTs = admin.firestore.FieldValue.serverTimestamp();
 
 // Add a favorite spot to the current user's doc.
 // POST /api/favorites   { name, lat, lng }
 exports.addFavorite = async (req, res) => {
-    const { name, lat, lng } = req.body;
+    let { name, lat, lng } = req.body;
     if (!name || lat == null || lng == null) {
         return res.status(400).json({ error: 'name, lat, and lng are required' });
     }
+    lat = parseFloat(lat);
+    lng = parseFloat(lng);
 
     const uid = req.user.uid;
+    const col = FavoriteModel.collection(uid);
+    const geohash = geohashForLocation([lat, lng]);
+    const favID = geohash;
 
     try {
-        // merges in the new spot into locations[] (creates the doc if needed)
-        await FavoriteModel.doc(uid).set({
-            locations: arrayUnion({ name, lat, lng })
+        await col.doc(favID).set({
+            name,
+            location: new GeoPoint(lat, lng),
+            geohash,
+            addedAt: serverTs,
         }, { merge: true });
-
-        return res.status(201).json({ message: 'Favorite added' });
+        return res.status(201).json({ message: `Added Favorites: ${name} to user #${uid}` });
     } catch (err) {
         console.error('Error adding favorite:', err);
         return res.status(500).json({ error: 'Failed to add favorite' });
@@ -32,12 +43,12 @@ exports.addFavorite = async (req, res) => {
 exports.getFavorites = async (req, res) => {
   const uid = req.user.uid;
   try {
-    const snap = await FavoriteModel.doc(uid).get();
-    if (!snap.exists) {
-      return res.json({ favorites: [] });
-    }
-    const locations = snap.data().locations || [];
-    return res.json({ favorites: locations });
+    const snap = await FavoriteModel.collection(uid).get();
+    const favorites = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+    return res.json({ favorites });
   } catch (err) {
     console.error('Error fetching favorites:', err);
     return res.status(500).json({ error: 'Failed to fetch favorites' });
@@ -45,21 +56,20 @@ exports.getFavorites = async (req, res) => {
 }
 
 // Remove a specific favorite spot.
-// DELETE /api/favorites   { name, lat, lng }
+// DELETE /api/favorites   {favId }
 exports.removeFavorite = async (req, res) => {
-    const { name, lat, lng } = req.body;
-    if (!name || lat == null || lng == null) {
-        return res.status(400).json({ error: 'name, lat, and lng are required' });
+    const { favId } = req.query;
+    console.log(favId);
+    if (!favId) {
+        return res.status(400).json({ error: 'favId param is required' });
     }
 
     const uid = req.user.uid;
 
     try{
         // atomically remove object from array
-        await FavoriteModel.doc(uid).update({
-            locations: arrayRemove({ name, lat, lng})
-        }); 
-        return res.json({ message: "Removed favorite"})
+        await FavoriteModel.doc(uid, favId).delete();
+        return res.json({ message: `Removed Favorite: ${favId}` });
     }catch(err){
         console.error('Error removing favorite:', err); 
         return res.status(500).json({ error: 'Failed to remove favorite' }); 
