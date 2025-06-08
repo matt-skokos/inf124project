@@ -209,21 +209,10 @@
   margin-bottom: 1.5rem;
 }
 
-/* Condition card */
-.explore-page .condition-card {
+/* .explore-page .sources-card .card-header,
+.explore-page .sources-card .card-body {
   background-color: var(--card-bg);
-  border-radius: 10px;
-  margin: 1rem 0 0 0;
-  padding: 0.75rem 1rem;
-  box-shadow: none;
-  padding-bottom: 1rem;
-}
-
-/* Source card */
-.explore-page .sources-card {
-  background-color: var(--card-bg);
-  padding: 1rem 0.5rem;
-}
+} */
 
 .explore-page .source-link {
   color: var(--text-primary);
@@ -335,4 +324,10 @@
   .explore-page .action-button {
     width: 100%;
   }
+}
+
+/* Make sure all card headers in explore page have the same background */
+.explore-page .card-header {
+  background-color: var(--card-bg, #e1eee8) !important;
+  border-bottom-color: rgba(5, 55, 71, 0.1) !important;
 }

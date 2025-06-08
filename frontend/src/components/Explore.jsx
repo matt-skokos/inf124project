@@ -7,8 +7,11 @@ import SpotTitle from "./Custom/SpotTitle.jsx";
 function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
-      <i className={`condition-icon ${icon}`}></i>
-      <strong className="condition-label card-subtitle mb-1">{label}</strong>
+      <i
+        className={`condition-icon ${icon} mb-2`}
+        style={{ fontSize: "2rem" }}
+      ></i>
+      <strong className="condition-label card-subtitle mb-2">{label}</strong>
       <div className="condition-overview">{children}</div>
     </div>
   );
@@ -55,7 +58,7 @@ function ConditionCard(props) {
           </ul>
         </div>
       ) : (
-        <div className="condition-summary d-flex justify-content-around w-100">
+        <div className="condition-summary d-flex justify-content-around w-100 py-3">
           {/* SWELL */}
           <ConditionOverview icon={"bi bi-tsunami"} label="Swell">
             <p>
@@ -100,6 +103,31 @@ function ConditionCard(props) {
     </ContentCard>
   );
 }
+
+// Update the utility function with better formatted URLs for surf sources
+const generateSurfSources = (spotName, location) => {
+  // Clean the spot name for searches
+  const cleanSpotName = spotName.trim();
+
+  return [
+    {
+      name: `${spotName} Surf Report`,
+      url: `https://www.surfline.com/search/${encodeURIComponent(
+        cleanSpotName
+      )}`,
+    },
+    {
+      name: `Google Search: ${spotName} Surf Conditions`,
+      url: `https://www.google.com/search?q=${encodeURIComponent(
+        cleanSpotName + " surf forecast"
+      )}`,
+    },
+    {
+      name: `NOAA Marine Weather`,
+      url: `https://www.weather.gov/marine`,
+    },
+  ];
+};
 
 const Explore = () => {
   const [selectedSpot, setSelectedSpot] = useState(null);
@@ -292,6 +320,17 @@ const SpotDetail = ({ spot }) => {
   const idealTide = spot.idealTide || "High tide";
   const crowdFactor = spot.crowdFactor || "Generally uncrowded";
 
+  // Generate relevant surf sources for this specific spot
+  const surfSources = generateSurfSources(
+    spot.title,
+    localStorage.getItem("userLocation") || ""
+  );
+
+  // Generate Google Maps URL for directions
+  const googleMapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(
+    `${spot.title} surf spot`
+  )}`;
+
   return (
     <PageContainer>
       <div className="container ">
@@ -344,10 +383,10 @@ const SpotDetail = ({ spot }) => {
             </div>
             {/* Date between images and details */}
             <div className="spot-date-row">{today}</div>
-            <div style={{ width: "100%" }}>
+            {/* <div style={{ width: "100%" }}>
               <ConditionCard
                 title="Current Conditions"
-                className=""
+                className="d-flex flex-row justify-content-between w-100"
                 overview="Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended."
                 swell_direction="SSW"
                 swell="2-3 ft"
@@ -358,7 +397,8 @@ const SpotDetail = ({ spot }) => {
                 tide="Low"
                 tide_details="Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
               />
-            </div>
+            </div> */}
+
             <div style={{ width: "100%", marginTop: "1rem" }}>
               <ContentCard
                 className="spot-attributes-card"
@@ -405,39 +445,38 @@ const SpotDetail = ({ spot }) => {
               </ContentCard>
             </div>
 
-            {/* Sources Card */}
+            {/* Sources Card  */}
             <div style={{ width: "100%", marginTop: "1.5rem" }}>
               <ContentCard className="sources-card" title="Sources">
                 <ul className="list-unstyled text-center mb-0">
-                  <li className="mb-2">
-                    <a href="./" className="source-link">
-                      Visit {spot.title}
-                    </a>
-                  </li>
-                  <li className="mb-2">
-                    <a href="./" className="source-link">
-                      {spot.title} Community
-                    </a>
-                  </li>
-                  <li>
-                    <a href="./" className="source-link">
-                      Swell Magnet
-                    </a>
-                  </li>
+                  {surfSources.map((source, index) => (
+                    <li key={index} className="mb-2">
+                      <a
+                        href={source.url}
+                        className="source-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {source.name}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </ContentCard>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Simplified forecast link */}
             <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
-              <a href="./" className="btn action-button directions-button">
+              <a
+                href={googleMapsUrl}
+                className="btn action-button directions-button"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i className="bi bi-map me-2"></i>
                 Directions
               </a>
-              <a
-                href="/forecast-forum"
-                className="btn action-button forecast-button"
-              >
+              <a href="/forecast" className="btn action-button forecast-button">
                 <i className="bi bi-cloud me-2"></i>
                 Forecast
               </a>
