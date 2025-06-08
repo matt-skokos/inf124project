@@ -101,6 +101,8 @@ function ForecastReport({ location, lat, lng })
         <React.Fragment>
             <SpotTitle
                 title={location}
+                lat={lat}
+                lng={lng}
             />
 
             <ImageCarousel locationName={location}/>
