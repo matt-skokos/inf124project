@@ -1,5 +1,6 @@
 const { GoogleGenAI } = require("@google/genai");
 require("dotenv").config();
+const { getPlacePhotoUrls } = require("./locationServices");
 
 const gcpApiKey = process.env.GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey: gcpApiKey });
@@ -69,6 +70,27 @@ const genLocalSurfSpots = async (location) => {
 
       // Try to parse the JSON
       const result = JSON.parse(cleanedResponse);
+
+      // For each spot, fetch photo URLs
+      console.log("Fetching photos for each surf spot...");
+      for (const spot of result.spots) {
+        try {
+          // Use the spot name to get photos
+          const searchQuery = `${spot.name} surf spot ${location}`;
+          console.log(`Fetching photos for: ${searchQuery}`);
+
+          const photoUrls = await getPlacePhotoUrls(searchQuery, 400, 400);
+          console.log(`Found ${photoUrls.length} photos for ${spot.name}`);
+          console.log("Photo URLs:", photoUrls.slice(0, 3)); // Log up to 3 URLs
+
+          // Store up to 3 photo URLs with the spot
+          spot.photoUrls = photoUrls.slice(0, 3).map((photo) => photo.url);
+        } catch (photoError) {
+          console.error(`Error fetching photos for ${spot.name}:`, photoError);
+          spot.photoUrls = []; // Empty array if no photos found
+        }
+      }
+
       return result;
     } catch (parseError) {
       console.error("Error parsing JSON from Gemini response:", parseError);

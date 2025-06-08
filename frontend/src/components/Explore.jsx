@@ -153,15 +153,17 @@ const Explore = () => {
             Array.isArray(data.spots) &&
             data.spots.length > 0
           ) {
-            const transformedSpots = data.spots.map((spot, index) => ({
-              id: `spot-${index}`,
-              title: spot.name,
-              description: spot.description,
-              skillLevel: spot.difficulty || "Intermediate",
-              imgURL: `https://source.unsplash.com/featured/150x150/?surf,${encodeURIComponent(
-                spot.name
-              )}&sig=${index}`,
-            }));
+            const transformedSpots = data.spots.map((spot, index) => {
+              // Simply pass the photoUrls array through to the component
+              return {
+                id: `spot-${index}`,
+                title: spot.name,
+                description: spot.description,
+                skillLevel: spot.difficulty || "Intermediate",
+                photoUrls: spot.photoUrls || [],
+                // No fallback to Unsplash, let the component handle missing images
+              };
+            });
             setSpotList(transformedSpots);
           } else {
             setError("Unable to locate any spots in your current location.");
@@ -254,11 +256,17 @@ const Explore = () => {
 
 export default Explore;
 
-const Spot = ({ imgURL, title, description, skillLevel, onClick }) => (
+const Spot = ({ photoUrls, title, description, skillLevel, onClick }) => (
   <div className="spot-card" onClick={onClick}>
     <div className="spot-card-inner">
       <div className="imageWrapper">
-        <img src={imgURL} alt={title} className="spotImage" />
+        {photoUrls && photoUrls.length > 0 ? (
+          <img src={photoUrls[0]} alt={title} className="spotImage" />
+        ) : (
+          <div className="spotImage d-flex align-items-center justify-content-center bg-light">
+            <span className="text-center p-2">{title}</span>
+          </div>
+        )}
       </div>
       <div className="spot-card-content">
         <h2 className="title">{title}</h2>
@@ -300,19 +308,39 @@ const SpotDetail = ({ spot }) => {
               <SpotTitle title={spot.title} />
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
-              {[...Array(3)].map((_, index) => (
-                <img
-                  key={index}
-                  src={spot.imgURL}
-                  alt={spot.title}
-                  style={{
-                    width: 200,
-                    height: 200,
-                    objectFit: "cover",
-                    padding: ".5rem",
-                  }}
-                />
-              ))}
+              {/* If the spot has photoUrls, use those; otherwise show placeholder */}
+              {spot.photoUrls && spot.photoUrls.length > 0
+                ? // Map through available photoUrls (up to 3)
+                  spot.photoUrls.slice(0, 3).map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`${spot.title} view ${index + 1}`}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        objectFit: "cover",
+                        padding: ".5rem",
+                      }}
+                    />
+                  ))
+                : // Fallback: show placeholders with text
+                  [...Array(3)].map((_, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        backgroundColor: "#f0f0f0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: ".5rem",
+                      }}
+                    >
+                      <span className="text-center">{spot.title}</span>
+                    </div>
+                  ))}
             </div>
             {/* Date between images and details */}
             <div className="spot-date-row">{today}</div>
