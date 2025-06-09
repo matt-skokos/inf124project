@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"; 
-
-const API_URL = process.env.REACT_APP_API_URL
+import API from "../api";
 
 export function useSurfConditions(lat, lng, measurement="", location=""){
     const [conditions, setConditions] = useState(null); 
@@ -13,6 +12,8 @@ export function useSurfConditions(lat, lng, measurement="", location=""){
             setLoading(true); 
             return; 
         }
+        
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone       // e.g. “America/Los_Angeles”
 
         const fetchConditions = async () => {
             setLoading(true); 
@@ -22,25 +23,21 @@ export function useSurfConditions(lat, lng, measurement="", location=""){
                 let resp = "";
                 switch (measurement){
                     case "wave":
-                        resp = await fetch(`${API_URL}/conditions/wave?lat=${lat}&lng=${lng}`); 
+                        resp = await API.get('/conditions/wave', { params: { lat, lng, loc: location, timezone } });
                         break;
                     case "wind":
-                        resp = await fetch(`${API_URL}/conditions/wind?lat=${lat}&lng=${lng}`); 
+                        resp = await API.get('/conditions/wind', { params: { lat, lng, loc: location, timezone } });
                         break;
                     case "tide":
-                        resp = await fetch(`${API_URL}/conditions/tide?lat=${lat}&lng=${lng}`); 
+                        resp = await API.get('/conditions/tide', { params: { lat, lng, loc: location, timezone } });
                         break;
                     case "overview":
                     default:
-                        resp = await fetch(`${API_URL}/conditions?loc=${location}&lat=${lat}&lng=${lng}`); 
+                        resp = await API.get('/conditions', { params: { lat, lng, loc: location, timezone } });
                 }
-                if(!resp.ok){
-                    const errorData = await resp.json(); 
-                    throw new Error(`Conditions fetch error (${resp.status}): ${JSON.stringify(errorData)}`); 
-                }
-                const data = await resp.json(); 
-                setConditions(data);
+                setConditions(resp.data);
             } catch(err){
+                console.error(err.message)
                 setError(err.message); 
             }finally{
                 setLoading(false); 
