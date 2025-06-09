@@ -14,7 +14,8 @@ export function useSurfConditions(lat, lng, measurement="", location=""){
         }
         
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone       // e.g. “America/Los_Angeles”
-
+        const offset   = new Date().getTimezoneOffset() // minutes *behind* UTC (PDT → 420)
+        
         const fetchConditions = async () => {
             setLoading(true); 
             setError(null); 
@@ -23,17 +24,17 @@ export function useSurfConditions(lat, lng, measurement="", location=""){
                 let resp = "";
                 switch (measurement){
                     case "wave":
-                        resp = await API.get('/conditions/wave', { params: { lat, lng, loc: location, timezone } });
+                        resp = await API.get('/conditions/wave', { params: { lat, lng, loc: location, timezone, offset } });
                         break;
                     case "wind":
-                        resp = await API.get('/conditions/wind', { params: { lat, lng, loc: location, timezone } });
+                        resp = await API.get('/conditions/wind', { params: { lat, lng, loc: location, timezone, offset } });
                         break;
                     case "tide":
-                        resp = await API.get('/conditions/tide', { params: { lat, lng, loc: location, timezone } });
+                        resp = await API.get('/conditions/tide', { params: { lat, lng, loc: location, timezone, offset } });
                         break;
                     case "overview":
                     default:
-                        resp = await API.get('/conditions', { params: { lat, lng, loc: location, timezone } });
+                        resp = await API.get('/conditions', { params: { lat, lng, loc: location, timezone, offset } });
                 }
                 setConditions(resp.data);
             } catch(err){

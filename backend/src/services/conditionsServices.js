@@ -174,14 +174,17 @@ const NOAATidePredictions = async (lat, lng, timeperiod=1) => {
         throw new Error(`NOAA tide data fetch error (${tideRes.status}): ${tideData?.message}\n${tideURL}`); 
     }
     
-    const predictions = tideData.predictions || []; 
-    return  predictions.filter(p => new Date(p.t) >= now);
+    return tideData.predictions || [];
 }
 
-const NOAATideConditions = async (lat, lng, userTimezone = 'UTC') => {
-    const predictions = await NOAATidePredictions(lat, lng);
-    
-    userOffset = new Date().getTimezoneOffset(userTimezone)
+const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = new Date().getTimezoneOffset()) => {
+    const predictions = await NOAATidePredictions(lat, lng,);
+    console.log(`predictions - ${JSON.stringify(predictions)}`)
+
+    userOffset   = parseInt(userOffset, 10);
+    console.log(`userTimezone - ${userTimezone}`);
+    console.log(`userOffset - ${userOffset}`);
+
     const withEpoch = predictions.map(p => {
         const [datePart, timePart] = p.t.split(' ')
         const year  = parseInt(datePart.slice(0, 4), 10)
