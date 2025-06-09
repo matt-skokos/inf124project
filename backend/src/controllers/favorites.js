@@ -44,10 +44,48 @@ exports.getFavorites = async (req, res) => {
   const uid = req.user.uid;
   try {
     const snap = await FavoriteModel.collection(uid).get();
-    const favorites = snap.docs.map(doc => ({
+    let favorites = snap.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
     }));
+
+    // If user has no favorites, add some default California surf spots
+    if (favorites.length === 0) {
+      const defaultSpots = [
+        { name: "Huntington Beach", lat: 33.6595, lng: -117.9988 },
+        { name: "Malibu", lat: 34.0351, lng: -118.6804 },
+        { name: "Manhattan Beach", lat: 33.8847, lng: -118.4109 },
+        { name: "Santa Monica", lat: 34.0195, lng: -118.4912 },
+        { name: "Laguna Beach", lat: 33.5427, lng: -117.7854 }
+      ];
+
+      const col = FavoriteModel.collection(uid);
+      const batch = admin.firestore().batch();
+
+      for (const spot of defaultSpots) {
+        const geohash = geohashForLocation([spot.lat, spot.lng]);
+        const favID = geohash;
+        const docRef = col.doc(favID);
+        
+        batch.set(docRef, {
+          name: spot.name,
+          location: new GeoPoint(spot.lat, spot.lng),
+          geohash,
+          addedAt: serverTs,
+        });
+      }
+
+      await batch.commit();
+      console.log(`Added ${defaultSpots.length} default favorites for user ${uid}`);
+
+      // Fetch the newly added favorites
+      const newSnap = await FavoriteModel.collection(uid).get();
+      favorites = newSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+      }));
+    }
+
     return res.json({ favorites });
   } catch (err) {
     console.error('Error fetching favorites:', err);

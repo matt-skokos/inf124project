@@ -6,6 +6,15 @@
     border: none;
     padding: 0;
     cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .notifications-button.enabled {
+    color: #0f374f;
+  }
+
+  .notifications-button:hover {
+    color: #0f374f;
   }
   .modal-backdrop {
     position: fixed;
@@ -74,6 +83,45 @@
     color: #fff;
     border-color: #0f374f;
   }
+  .spot-name {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .notification-info {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: #f0fdf4;
+    border-radius: 0.25rem;
+    border: 1px solid #bbf7d0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .test-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    background: #3b82f6;
+    color: white;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .test-btn:hover {
+    background: #2563eb;
+  }
+
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .save-btn 
   {
     width: 100%;
@@ -83,15 +131,30 @@
     background: #8ac9fb;
     color: #fff;
     font-size: 1rem;
-    margin-bottom: 0.5rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
   }
+
+  .save-btn:hover:not(:disabled) {
+    background: #7bb8e8;
+  }
+
+  .save-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
   .close-btn 
   {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.75rem;
-    font-size: 1.5rem;
-    color: #555;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    color: #333;
   }
   
