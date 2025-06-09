@@ -3,6 +3,7 @@ import "./Explore.css";
 import ContentCard from "./Custom/ContentCard.jsx";
 import PageContainer from "./Custom/PageContainer.jsx";
 import SpotTitle from "./Custom/SpotTitle.jsx";
+import { useUserLocation } from "../hooks/useUserLocation.jsx";
 
 function ConditionOverview({ children, icon, label }) {
   return (
@@ -136,79 +137,97 @@ const Explore = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Use our location hook as a backup
+  const {
+    locationName,
+    lat,
+    lng,
+    loading: locationLoading,
+  } = useUserLocation();
+
   // Get user location from localStorage on component mount and fetch spots
   useEffect(() => {
     const storedLocation = localStorage.getItem("userLocation");
-    setUserLocation(storedLocation || null);
 
+    // If we have a stored location, use it
     if (storedLocation) {
-      setLoading(true);
-
-      // Make sure we're using the correct API URL
-      const API_URL =
-        process.env.REACT_APP_API_URL || "http://localhost:8080/api";
-
-      console.log(
-        `Using API URL: ${API_URL}, fetching spots for ${storedLocation}`
-      );
-
-      // Use fetch with mode: 'cors' to avoid CORS issues in development
-      fetch(
-        `${API_URL}/location/surfspots?location=${encodeURIComponent(
-          storedLocation
-        )}`,
-        {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            console.error(`Error response: ${response.status}`);
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("API response:", data);
-
-          if (
-            data &&
-            data.spots &&
-            Array.isArray(data.spots) &&
-            data.spots.length > 0
-          ) {
-            const transformedSpots = data.spots.map((spot, index) => {
-              // Simply pass the photoUrls array through to the component
-              return {
-                id: `spot-${index}`,
-                title: spot.name,
-                description: spot.description,
-                skillLevel: spot.difficulty || "Intermediate",
-                photoUrls: spot.photoUrls || [],
-                // No fallback to Unsplash, let the component handle missing images
-              };
-            });
-            setSpotList(transformedSpots);
-          } else {
-            setError("Unable to locate any spots in your current location.");
-          }
-        })
-        .catch((err) => {
-          console.error("Error fetching spots:", err);
-          setError(`Network error: ${err.message}`);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
+      setUserLocation(storedLocation);
+      fetchSurfSpots(storedLocation);
+    }
+    // Otherwise, wait for the location hook to return data
+    else if (locationName && !locationLoading) {
+      // Save the location to localStorage for future use
+      localStorage.setItem("userLocation", locationName);
+      setUserLocation(locationName);
+      fetchSurfSpots(locationName);
+    }
+    // If both are not available, show an error
+    else if (!locationLoading && !locationName) {
       setError("Geolocation not enabled");
       setLoading(false);
     }
-  }, []);
+  }, [locationName, locationLoading]);
+
+  const fetchSurfSpots = (location) => {
+    setLoading(true);
+
+    // Make sure we're using the correct API URL
+    const API_URL =
+      process.env.REACT_APP_API_URL || "http://localhost:8080/api";
+
+    console.log(`Using API URL: ${API_URL}, fetching spots for ${location}`);
+
+    // Use fetch with mode: 'cors' to avoid CORS issues in development
+    fetch(
+      `${API_URL}/location/surfspots?location=${encodeURIComponent(location)}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          console.error(`Error response: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("API response:", data);
+
+        if (
+          data &&
+          data.spots &&
+          Array.isArray(data.spots) &&
+          data.spots.length > 0
+        ) {
+          const transformedSpots = data.spots.map((spot, index) => {
+            // Simply pass the photoUrls array through to the component
+            return {
+              id: `spot-${index}`,
+              title: spot.name,
+              description: spot.description,
+              skillLevel: spot.difficulty || "Intermediate",
+              photoUrls: spot.photoUrls || [],
+              // No fallback to Unsplash, let the component handle missing images
+            };
+          });
+          setSpotList(transformedSpots);
+        } else {
+          setError("Unable to locate any spots in your current location.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching spots:", err);
+        setError(`Network error: ${err.message}`);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   // The rest of your component logic
   if (selectedSpot) {

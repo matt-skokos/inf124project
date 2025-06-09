@@ -49,6 +49,7 @@ const genLocalSurfSpots = async (location) => {
       model: "gemini-2.0-flash",
       contents: prompt,
       config: {
+        response_mime_type: "application/json",
         systemInstruction: "You are a surf expert. Return valid JSON only.",
         maxOutputTokens: 800,
         temperature: 0.35, // Match the working temperature
