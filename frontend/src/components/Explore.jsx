@@ -218,14 +218,15 @@ const Explore = () => {
           data.spots.length > 0
         ) {
           const transformedSpots = data.spots.map((spot, index) => {
-            // Simply pass the photoUrls array through to the component
             return {
               id: `spot-${index}`,
               title: spot.name,
               description: spot.description,
               skillLevel: spot.difficulty || "Intermediate",
               photoUrls: spot.photoUrls || [],
-              // No fallback to Unsplash, let the component handle missing images
+              // Add coordinates if available from the API
+              lat: spot.lat || null,
+              lng: spot.lng || null,
             };
           });
           setSpotList(transformedSpots);
@@ -343,6 +344,12 @@ const Spot = ({ photoUrls, title, description, skillLevel, onClick }) => (
 );
 
 const SpotDetail = ({ spot }) => {
+  const [spotCoordinates, setSpotCoordinates] = useState({
+    lat: spot.lat || null,
+    lng: spot.lng || null,
+  });
+  const [loadingCoords, setLoadingCoords] = useState(false);
+
   // Get today's date in a readable format
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -360,10 +367,39 @@ const SpotDetail = ({ spot }) => {
   // Generate relevant surf sources for this specific spot
   const surfSources = generateSurfSources(spot.title, locationName || "");
 
+  // If we don't have coordinates, try to get them using geocoding
+  useEffect(() => {
+    if (spotCoordinates.lat == null || spotCoordinates.lng == null) {
+      setLoadingCoords(true);
+
+      // Try to geocode the spot name to get coordinates
+      fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/location/coords?address=${encodeURIComponent(spot.title)}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.lat && data.lng) {
+            setSpotCoordinates({ lat: data.lat, lng: data.lng });
+          }
+        })
+        .catch((err) => {
+          console.error("Error geocoding spot:", err);
+        })
+        .finally(() => {
+          setLoadingCoords(false);
+        });
+    }
+  }, [spot.title, spotCoordinates.lat, spotCoordinates.lng]);
+
   // Generate Google Maps URL for directions
-  const googleMapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(
-    `${spot.title} surf spot`
-  )}`;
+  const googleMapsUrl =
+    spotCoordinates.lat && spotCoordinates.lng
+      ? `https://www.google.com/maps/dir/?api=1&destination=${spotCoordinates.lat},${spotCoordinates.lng}&travelmode=driving`
+      : `https://www.google.com/maps/search/${encodeURIComponent(
+          `${spot.title} surf spot`
+        )}`;
 
   return (
     <PageContainer>
@@ -378,7 +414,14 @@ const SpotDetail = ({ spot }) => {
                 flexWrap: "wrap",
               }}
             >
-              <SpotTitle title={spot.title} />
+              <SpotTitle
+                title={spot.title}
+                lat={spotCoordinates.lat}
+                lng={spotCoordinates.lng}
+              />
+              {loadingCoords && (
+                <small className="text-muted">Getting location...</small>
+              )}
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
               {/* If the spot has photoUrls, use those; otherwise show placeholder */}
@@ -499,7 +542,7 @@ const SpotDetail = ({ spot }) => {
               </ContentCard>
             </div>
 
-            {/* Action Buttons - Simplified forecast link */}
+            {/* Action Buttons - Updated directions link */}
             <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
               <a
                 href={googleMapsUrl}
@@ -510,7 +553,16 @@ const SpotDetail = ({ spot }) => {
                 <i className="bi bi-map me-2"></i>
                 Directions
               </a>
-              <a href="/forecast" className="btn action-button forecast-button">
+              <a
+                href={
+                  spotCoordinates.lat && spotCoordinates.lng
+                    ? `/forecast?address=${encodeURIComponent(
+                        spot.title
+                      )}&lat=${spotCoordinates.lat}&lng=${spotCoordinates.lng}`
+                    : "/forecast"
+                }
+                className="btn action-button forecast-button"
+              >
                 <i className="bi bi-cloud me-2"></i>
                 Forecast
               </a>

@@ -1,48 +1,57 @@
 /* ----TITLE---- */
-.spot-title-container{
-    width: 100%;
+.spot-title-container {
+  width: 100%;
 }
-.actions-container{
-    padding-right: 2rem
+.actions-container {
+  padding-right: 2rem;
 }
 
 .title-icon {
-    font-size: 1.5rem;
-    color: var(--button-primary);
-    transition: all 0.2s ease;
-    padding-right: 0.5rem
+  font-size: 1.5rem;
+  color: var(--button-primary);
+  transition: all 0.2s ease;
+  padding-right: 0.5rem;
 }
 
 .title-icon:hover {
-    color: var(--button-secondary);
-    transform: scale(1.05);
+  color: var(--button-secondary);
+  transform: scale(1.05);
+}
+
+.title-icon.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.title-icon.disabled:hover {
+  transform: none;
+  color: inherit;
 }
 
 .spot-title {
-    font-size: 3rem;
-    font-weight: bold;
-    color: var(--text-title);
-
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--text-title);
 }
 
 /* medium */
 @media (max-width: 768px) {
-    .title-icon {
-        font-size: 1.5rem;
-    }
+  .title-icon {
+    font-size: 1.5rem;
+  }
 
-    .spot-title {
-      font-size: 2.5rem;  /* whatever size you like */
-    }
+  .spot-title {
+    font-size: 2.5rem; /* whatever size you like */
+  }
 }
 
 /* small */
 @media (max-width: 576px) {
-    .title-icon {
-        font-size: 1rem;
-    }
+  .title-icon {
+    font-size: 1rem;
+  }
 
-    .spot-title {
-      font-size: 2rem;  /* whatever size you like */
-    }
+  .spot-title {
+    font-size: 2rem; /* whatever size you like */
+  }
 }
