@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-/* For WebKit browsers like Chrome/Safari */
+/* Custom scrollbar for WebKit browsers */
 .explore-page::-webkit-scrollbar {
   width: 8px;
 }
@@ -21,6 +21,14 @@
   border-radius: 20px;
 }
 
+/* Location subheading */
+.location-subheading {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
 /* Spots List */
 .explore-page .spotItems {
   list-style: none;
@@ -31,10 +39,9 @@
 }
 
 .explore-page .spotItems li {
-  list-style: none;
-  padding: 0;
   cursor: pointer;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 /* Individual spot card */
@@ -46,12 +53,16 @@
 .spot-card-inner {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
   width: 100%;
   background-color: var(--card-bg);
   border-radius: 12px;
   padding: 0.5rem;
   filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  transition: transform 0.2s ease;
+}
+
+.spot-card-inner:hover {
+  transform: translateY(-2px);
 }
 
 .explore-page .imageWrapper {
@@ -79,30 +90,28 @@
 
 .explore-page .title {
   font-weight: bold;
-  color: #053747;
+  color: var(--text-primary);
   font-size: 2.5rem;
   margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
 .explore-page .skill {
   font-size: 1rem;
   margin-bottom: 0;
+  color: var(--text-primary);
 }
 
-/* Back to Spots button styling */
-.explore-page .back-button-container {
+/* Back button styling */
+.back-button-container {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 1.5rem;
 }
 
-.explore-page .back-button-container a,
-.explore-page .back-button-container .back-button {
-  background-color: var(
-    --ocean-blue,
-    #23718f
-  ); /* Use the ocean blue color or theme color */
+.back-button {
+  background-color: var(--button-primary);
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -116,49 +125,23 @@
   cursor: pointer;
 }
 
-.explore-page .back-button-container a:hover,
-.explore-page .back-button-container .back-button:hover {
-  background-color: var(
-    --ocean-hover,
-    #1c5a72
-  ); /* Slightly darker blue on hover */
+.back-button:hover {
+  background-color: var(--button-hover);
+  color: white;
   transform: translateY(-2px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  outline: 2px solid rgba(255, 255, 255, 0.3); /* Add white outline on hover */
+  text-decoration: none;
 }
 
-.explore-page .back-button-container a svg,
-.explore-page .back-button-container a i,
-.explore-page .back-button-container .back-button i {
-  margin-right: 0.5rem;
-}
-
-.spot-detail-wrapper {
-  width: 100%;
-}
-
-/* Social share button styling to match heart button */
-.explore-page .social-share-btn {
-  color: #23718f;
-  background-color: transparent;
-  border-color: #23718f;
-  transition: all 0.2s ease;
-}
-
-.explore-page .social-share-btn:hover {
-  background-color: rgba(35, 113, 143, 0.1);
-  transform: scale(1.05);
-}
-
-/* Spot detail */
-.explore-page .spot-detail-centered {
+/* Spot detail layout */
+.spot-detail-centered {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   width: 100%;
 }
 
-.explore-page .spot-detail {
+.spot-detail {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -166,66 +149,16 @@
   max-width: 800px;
 }
 
-.explore-page .spot-detail > div,
-.explore-page .spot-detail > h1,
-.explore-page .spot-detail > h2,
-.explore-page .spot-detail > p {
+.spot-date-row {
   text-align: center;
-}
-
-.explore-page .detail-name {
-  padding-left: 3rem;
-  color: #23718f;
-  font-weight: bold;
-}
-
-/* Cards */
-.explore-page .content-card {
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  border: none;
-  filter: drop-shadow(0px 4px 2px var(--drop-shadow));
+  margin: 1rem 0;
+  font-size: 1.1rem;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
-/* Update section titles for ContentCard */
-.explore-page .section-title {
-  font-size: 1.75rem;
-  font-weight: bold;
-  color: var(--text-primary);
-  margin-bottom: 0.75rem;
-  width: 100%;
-}
-
-/* Remove unnecessary margin-top since titles are now outside cards */
-.explore-page h2 {
-  padding-top: 0;
-}
-
-/* Add some spacing between cards */
-.explore-page .card-container {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-/* Condition card */
-.explore-page .condition-card {
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  margin: 1rem 0 0 0;
-  padding: 0.75rem 1rem;
-  box-shadow: none;
-  padding-bottom: 1rem;
-}
-
-/* Source card */
-.explore-page .sources-card {
-  background-color: var(--card-bg);
-  padding: 1rem 0.5rem;
-}
-
-.explore-page .source-link {
+/* Source links */
+.source-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
@@ -234,16 +167,17 @@
   padding: 0.4rem 0;
 }
 
-.explore-page .source-link:hover {
+.source-link:hover {
   color: var(--text-hover);
+  text-decoration: none;
 }
 
-/* Action Buttons */
-.explore-page .spot-actions {
+/* Action buttons */
+.spot-actions {
   margin: 1.5rem 0;
 }
 
-.explore-page .action-button {
+.action-button {
   width: 48%;
   color: white;
   text-decoration: none;
@@ -251,42 +185,51 @@
   background-color: var(--button-primary);
   border: none;
   padding: 0.8rem 0;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.explore-page .action-button:hover {
+.action-button:hover {
   background-color: var(--button-hover);
+  color: white;
   transform: translateY(-3px);
+  text-decoration: none;
 }
 
-.explore-page .action-button i {
+.action-button i {
   font-size: 1.2rem;
+}
+
+/* Error and loading states */
+.error-message {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.loading-container {
+  text-align: center;
+  margin: 2rem 0;
 }
 
 /* RESPONSIVE BREAKPOINTS */
 @media (max-width: 768px) {
-  /* Remove redundant height declaration that was causing scrolling issues */
   .spot-card-inner {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
   .explore-page .imageWrapper {
     margin-bottom: 1rem;
     width: 100%;
-    display: flex;
-    justify-content: center;
   }
 
   .explore-page .spotImage {
     width: 200px;
     height: 200px;
-    margin-right: 0;
-  }
-
-  .spot-card-content {
-    text-align: center;
-    width: 100%;
   }
 
   .explore-page .title {
@@ -294,29 +237,19 @@
     margin-top: 0.5rem;
   }
 
-  /* Spot Detail responsive adjustments */
-  .explore-page .spot-detail img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* Stack images in spot detail on small screens */
-  .explore-page .spot-detail div[style*="display: flex; gap: 1rem"] {
+  /* Stack images in spot detail */
+  .spot-detail div[style*="display: flex; gap: 1rem"] {
     flex-direction: column;
+    align-items: center;
   }
 
-  .explore-page .section-title {
-    font-size: 1.5rem;
-    text-align: center;
+  .spot-detail div[style*="display: flex; gap: 1rem"] img {
+    width: 150px !important;
+    height: 150px !important;
   }
 }
 
-/* Even smaller screens like phones */
 @media (max-width: 576px) {
-  .explore-page .spotItems {
-    width: 95%;
-  }
-
   .explore-page .title {
     font-size: 1.75rem;
   }
@@ -326,13 +259,19 @@
     height: 150px;
   }
 
-  /* Adjust action buttons for mobile */
-  .explore-page .spot-actions {
+  /* Stack action buttons on mobile */
+  .spot-actions {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .explore-page .action-button {
+  .action-button {
     width: 100%;
+  }
+
+  /* Smaller spot detail images on mobile */
+  .spot-detail div[style*="display: flex; gap: 1rem"] img {
+    width: 120px !important;
+    height: 120px !important;
   }
 }
