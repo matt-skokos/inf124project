@@ -1,62 +1,47 @@
-require("dotenv").config();
+require("dotenv").config(); // load .env into process.env
 const express = require("express");
 const cors = require("cors");
-const db = require("./db"); // your Firestore wrapper
-const authMiddleware = require("./middleware/auth");
-const userRouter = require("./routes/user");
-const locationRouter = require("./routes/location");
-const conditionsRouter = require("./routes/conditions");
-const notificationsRouter = require("./routes/notifications");
+const db = require("./db"); // Firestore instance
 
 const app = express();
+const PORT = parseInt(process.env.PORT, 10) || 8080;
 
-// IMPORTANT: CORS setup must come before any route handlers
-// Use a more permissive CORS configuration for development
+// ----START SERVER----
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+// ----MIDDLEWARE----
+// CORs(Cross Origin Reference)
 app.use(
   cors({
-    origin: "*", // Allow all origins in development
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:5000",
+      "https://sp2025-inf124.web.app",
+      "https://sp2025-inf124.firebaseapp.com",
+    ], //adjust to React dev server or prod URL
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   })
 );
+app.use(express.json()); // parse JSON bodies
 
-app.use(express.json());
-
-// Request logging for debugging
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  next();
-});
-
-// Health check
+/// ----ROUTES----
+// Health Check
 app.get("/api/health-check", (req, res) => {
-  res.status(200).json({ status: "OK", message: "Health Check: OK" });
+  res.status(200).send("Health Check: OK");
 });
 
-// Simple test route at root level
-app.get("/api/test", (req, res) => {
-  res.status(200).json({ message: "API root test endpoint working" });
-});
-
-// Core routes
-console.log("Registering routes...");
+// Other routers go here
+const userRouter = require("./routes/user");
 app.use("/api/users", userRouter);
+
+const locationRouter = require("./routes/location");
 app.use("/api/location", locationRouter);
+
+const conditionsRouter = require("./routes/conditions");
 app.use("/api/conditions", conditionsRouter);
-app.use("/api/notifications", notificationsRouter);
-console.log("Routes registered");
 
-// Catch-all for 404s
-app.use((req, res) => {
-  console.log(`404 - Route not found: ${req.url}`);
-  res.status(404).json({ error: "Route not found" });
-});
-
-const PORT = parseInt(process.env.PORT, 10) || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Test API at: http://localhost:${PORT}/api/test`);
-});
+const favoritesRouter = require("./routes/favorites");
+app.use("/api/favorites", favoritesRouter);

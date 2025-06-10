@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
@@ -75,32 +76,28 @@ function ForecastReport({ location, lat, lng })
     }
 
     // If any of the three is still loading, show a loading state
-    if (waveLoading || windLoading || tideLoading) {
-        return(<ContentCard className="mb-4">
-            <div className="d-flex align-items-center">
-                <strong>Loading {location} forecast...</strong>
-                <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
-            </div>
-        </ContentCard>)
-    }
+    if (waveLoading || windLoading || tideLoading) {return(
+        <div className="d-flex align-items-center">
+            <strong>Loading {location} forecast...</strong>
+            <div className="spinner-border ms-auto" role="status" aria-hidden="true"/>
+        </div>
+    );}
 
     // If any of the three has an error, show an error message
-    if (waveError || windError || tideError) {
-        return (
-        <ContentCard className="mb-4">
-            <p className="text-danger">
-                {waveError && `Wave data error: ${waveError}`}
-                {windError && `Wind data error: ${windError}`}
-                {tideError && `Tide data error: ${tideError}`}
-            </p>
-        </ContentCard>
-        );
-    }
+    if (waveError || windError || tideError) {return (
+        <p className="text-danger">
+            {waveError && `Wave data error: ${waveError}`}
+            {windError && `Wind data error: ${windError}`}
+            {tideError && `Tide data error: ${tideError}`}
+        </p>
+    );}
 
     return( 
         <React.Fragment>
             <SpotTitle
                 title={location}
+                lat={lat}
+                lng={lng}
             />
 
             <ImageCarousel locationName={location}/>
@@ -182,6 +179,23 @@ function Forecast(){
     const [submitted, setSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const navigate = useNavigate();
+    const { search } = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(search); 
+        const addr = params.get("address"); 
+        const qLat = params.get("lat"); 
+        const qLng = params.get("lng"); 
+
+        if (addr && qLat && qLng) {
+            setLocation(addr);
+            setLat(qLat);
+            setLng(qLng);
+            setSubmitted(true);
+        } 
+    }, [search]);
+
     const handleSearch = async (e) => {
         e.preventDefault(); 
         setErrorMessage(""); 
@@ -197,9 +211,16 @@ function Forecast(){
             if(!data.lat || !data.lng){
                 throw new Error("No coordinates found");
             }
-            setLat(data.lat); 
+            setLat(data.lat);
             setLng(data.lng);
             setSubmitted(true);
+
+            // update URL so it can be shared
+            navigate(
+                `?address=${encodeURIComponent(location)}` +
+                `&lat=${data.lat}&lng=${data.lng}`,
+                { replace: true }
+            );
         }catch(err){
             setErrorMessage(`Sorry, we couldn't find "${location}". Please try another beach or address.`); 
             console.error("Location lookup failed:", err);

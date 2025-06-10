@@ -126,7 +126,7 @@ REACT_APP_FIREBASE_API_KEY=<Browser key (auto created by Firebase) API KEY>
 .env
 ````
 PORT=8080
-FIREBASE_SERVICE_ACCCOUNT_PATH=../<sp2025-inf124-firebase-adminsdk-*.json>
+FIREBASE_SERVICE_ACCOUNT_PATH=../<sp2025-inf124-firebase-adminsdk-*.json>
 GEMINI_API_KEY=<YOUR GEMINI API KEY>
 GEOSERVICES_API_KEY=<GEOSERVICES API KEY>
 ````
