@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "./Custom/PageContainer";
 import ContentCard from "./Custom/ContentCard";
 import SpotTitle from "./Custom/SpotTitle";
@@ -178,6 +179,23 @@ function Forecast(){
     const [submitted, setSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const navigate = useNavigate();
+    const { search } = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(search); 
+        const addr = params.get("address"); 
+        const qLat = params.get("lat"); 
+        const qLng = params.get("lng"); 
+
+        if (addr && qLat && qLng) {
+            setLocation(addr);
+            setLat(qLat);
+            setLng(qLng);
+            setSubmitted(true);
+        } 
+    }, [search]);
+
     const handleSearch = async (e) => {
         e.preventDefault(); 
         setErrorMessage(""); 
@@ -193,9 +211,16 @@ function Forecast(){
             if(!data.lat || !data.lng){
                 throw new Error("No coordinates found");
             }
-            setLat(data.lat); 
+            setLat(data.lat);
             setLng(data.lng);
             setSubmitted(true);
+
+            // update URL so it can be shared
+            navigate(
+                `?address=${encodeURIComponent(location)}` +
+                `&lat=${data.lat}&lng=${data.lng}`,
+                { replace: true }
+            );
         }catch(err){
             setErrorMessage(`Sorry, we couldn't find "${location}". Please try another beach or address.`); 
             console.error("Location lookup failed:", err);
