@@ -3,37 +3,16 @@ import "./Explore.css";
 import ContentCard from "./Custom/ContentCard.jsx";
 import PageContainer from "./Custom/PageContainer.jsx";
 import SpotTitle from "./Custom/SpotTitle.jsx";
-
-
-const spots = [
-  {
-    imgURL: "https://source.unsplash.com/random/150x150?surf",
-    title: "Sunset Cliffs",
-    description:
-      "A scenic coastal location with stunning sunset views and rugged cliffs. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Beginner",
-  },
-  {
-    imgURL: `https://source.unsplash.com/150x150/?surf&sig=${Math.random()}`,
-    title: "Black's Beach",
-    description:
-      "A peaceful hiking trail leads down to a natural reserve sand break. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Intermediate",
-  },
-  {
-    imgURL: "https://source.unsplash.com/150x150/?beach,cliff,coast",
-    title: "Tourmaline Street",
-    description:
-      "An easy access beach break and point break with parking and showers. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec risus quam. Sed id nunc nec lorem malesuada luctus. Aenean bibendum nulla sed finibus egestas.",
-    skillLevel: "Beginner",
-  },
-];
+import { useUserLocation } from "../hooks/useUserLocation.jsx";
 
 function ConditionOverview({ children, icon, label }) {
   return (
     <div className="condition-item text-center">
-      <i className={`condition-icon ${icon}`}></i>
-      <strong className="condition-label card-subtitle mb-1">{label}</strong>
+      <i
+        className={`condition-icon ${icon} mb-2`}
+        style={{ fontSize: "2rem" }}
+      ></i>
+      <strong className="condition-label card-subtitle mb-2">{label}</strong>
       <div className="condition-overview">{children}</div>
     </div>
   );
@@ -80,7 +59,7 @@ function ConditionCard(props) {
           </ul>
         </div>
       ) : (
-        <div className="condition-summary d-flex justify-content-around w-100">
+        <div className="condition-summary d-flex justify-content-around w-100 py-3">
           {/* SWELL */}
           <ConditionOverview icon={"bi bi-tsunami"} label="Swell">
             <p>
@@ -126,26 +105,139 @@ function ConditionCard(props) {
   );
 }
 
+// Update the utility function with better formatted URLs for surf sources
+const generateSurfSources = (spotName, location) => {
+  // Clean the spot name for searches
+  const cleanSpotName = spotName.trim();
+
+  return [
+    {
+      name: `${spotName} Surf Report`,
+      url: `https://www.surfline.com/search/${encodeURIComponent(
+        cleanSpotName
+      )}`,
+    },
+    {
+      name: `Google Search: ${spotName} Surf Conditions`,
+      url: `https://www.google.com/search?q=${encodeURIComponent(
+        cleanSpotName + " surf forecast"
+      )}`,
+    },
+    {
+      name: `NOAA Marine Weather`,
+      url: `https://www.weather.gov/marine`,
+    },
+  ];
+};
+
 const Explore = () => {
-  const [selectedSpot, setSelectedSpot] = useState(null); // State for selected spot
-  const [spotList, setSpotList] = useState(spots); // State for spot list
+  const [selectedSpot, setSelectedSpot] = useState(null);
+  const [spotList, setSpotList] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showLocationTimeout, setShowLocationTimeout] = useState(false);
 
-  // useEffect to update images with random URLs
+  // Always use fresh location data from the hook
+  const {
+    locationName,
+    lat,
+    lng,
+    loading: locationLoading,
+    error: locationError,
+  } = useUserLocation();
+
+  // Set up timeout for location services
   useEffect(() => {
-    const randomBeachImages = [
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/150`,
-    ];
+    const timer = setTimeout(() => {
+      if (locationLoading && !locationName) {
+        setShowLocationTimeout(true);
+      }
+    }, 8000); // Show timeout message after 8 seconds
 
-    const updatedSpotList = spots.map((spot, i) => ({
-      ...spot,
-      imgURL: randomBeachImages[i],
-    }));
+    return () => clearTimeout(timer);
+  }, [locationLoading, locationName]);
 
-    setSpotList(updatedSpotList);
-  }, []);
+  // Get user location from geolocation service and fetch spots
+  useEffect(() => {
+    // If location hook is still loading, keep our loading state
+    if (locationLoading) {
+      setLoading(true);
+      return;
+    }
 
+    // If we have location data, use it
+    if (locationName && !locationError) {
+      setUserLocation(locationName);
+      fetchSurfSpots(locationName);
+      setShowLocationTimeout(false); // Reset timeout flag
+    }
+    // If geolocation failed, show an error
+    else if (locationError || (!locationName && showLocationTimeout)) {
+      setError(
+        "Unable to determine your location. Please enable location services."
+      );
+      setLoading(false);
+    }
+  }, [locationName, locationLoading, locationError, showLocationTimeout]);
+
+  const fetchSurfSpots = (location) => {
+    setLoading(true);
+
+    // Make sure we're using the correct API URL
+    const API_URL =
+      process.env.REACT_APP_API_URL || "http://localhost:8080/api";
+
+    console.log(`Using API URL: ${API_URL}, fetching spots for ${location}`);
+
+    // Use fetch with mode: 'cors' to avoid CORS issues in development
+    fetch(      `${API_URL}/location/surfspots?location=${encodeURIComponent(location)}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => {
+      if (!response.ok) {
+        console.error(`Error response: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    }).then((data) => {
+      console.log("API response:", data);
+      if (
+        data &&
+        data.spots &&
+        Array.isArray(data.spots) &&
+        data.spots.length > 0
+      ){
+        const transformedSpots = data.spots.map((spot, index) => {
+          return {
+            id: `spot-${index}`,
+            title: spot.name,
+            description: spot.description,
+            skillLevel: spot.difficulty || "Intermediate",
+            photoUrls: spot.photoUrls || [],
+            // Add coordinates if available from the API
+            lat: spot.lat || null,
+            lng: spot.lng || null,
+          };
+        });
+        setSpotList(transformedSpots);
+      } else {
+        setError("Unable to locate any spots in your current location.");
+      }
+    }).catch((err) => {
+      console.error("Error fetching spots:", err);
+      setError(`Network error: ${err.message}`);
+    }).finally(() => {
+      setLoading(false);
+    });
+  };
+
+  // The rest of your component logic
   if (selectedSpot) {
     return (
       <div className="explore-page explore-detail-container">
@@ -176,18 +268,44 @@ const Explore = () => {
 
   return (
     <PageContainer title="Explore Spots">
+      <div className="location-subheading">
+        {userLocation ? (
+          <span>Spots near {userLocation}</span>
+        ) : locationLoading && !showLocationTimeout ? (
+          <span>Finding your location...</span>
+        ) : (
+          <span>Location not available</span>
+        )}
+      </div>
       <div className="explore-page explore-list-container">
-        <ul className="spotItems">
-          {spotList.map((spot) => (
-            <li
-              className="content-card"
-              key={spot.title}
-              onClick={() => setSelectedSpot(spot)}
-            >
-              <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <div className="loading-container text-center my-4">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2">Searching for surf spots...</p>
+          </div>
+        ) : error ? (
+          <ContentCard className="error-message">
+            <p className="text-center">{error}</p>
+          </ContentCard>
+        ) : spotList.length > 0 ? (
+          <ul className="spotItems">
+            {spotList.map((spot) => (
+              <li
+                className="content-card"
+                key={spot.id || spot.title}
+                onClick={() => setSelectedSpot(spot)}
+              >
+                <Spot {...spot} onClick={() => setSelectedSpot(spot)} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ContentCard className="error-message">
+            <p className="text-center">No surf spots found in your area.</p>
+          </ContentCard>
+        )}
       </div>
     </PageContainer>
   );
@@ -195,11 +313,17 @@ const Explore = () => {
 
 export default Explore;
 
-const Spot = ({ imgURL, title, description, skillLevel, onClick }) => (
+const Spot = ({ photoUrls, title, description, skillLevel, onClick }) => (
   <div className="spot-card" onClick={onClick}>
     <div className="spot-card-inner">
       <div className="imageWrapper">
-        <img src={imgURL} alt={title} className="spotImage" />
+        {photoUrls && photoUrls.length > 0 ? (
+          <img src={photoUrls[0]} alt={title} className="spotImage" />
+        ) : (
+          <div className="spotImage d-flex align-items-center justify-content-center bg-light">
+            <span className="text-center p-2">{title}</span>
+          </div>
+        )}
       </div>
       <div className="spot-card-content">
         <h2 className="title">{title}</h2>
@@ -214,6 +338,12 @@ const Spot = ({ imgURL, title, description, skillLevel, onClick }) => (
 );
 
 const SpotDetail = ({ spot }) => {
+  const [spotCoordinates, setSpotCoordinates] = useState({
+    lat: spot.lat || null,
+    lng: spot.lng || null,
+  });
+  const [loadingCoords, setLoadingCoords] = useState(false);
+
   // Get today's date in a readable format
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -224,6 +354,44 @@ const SpotDetail = ({ spot }) => {
   // Props for the spot detail
   const idealTide = spot.idealTide || "High tide";
   const crowdFactor = spot.crowdFactor || "Generally uncrowded";
+
+  // Access userLocation from the parent component's state
+  const { locationName } = useUserLocation();
+
+  // Generate relevant surf sources for this specific spot
+  const surfSources = generateSurfSources(spot.title, locationName || "");
+
+  // If we don't have coordinates, try to get them using geocoding
+  useEffect(() => {
+    if (spotCoordinates.lat == null || spotCoordinates.lng == null) {
+      setLoadingCoords(true);
+
+      // Try to geocode the spot name to get coordinates
+      fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/location/coords?address=${encodeURIComponent(spot.title)}`
+      ).then(
+        (res) => res.json()
+      ).then((data) => {
+        if (data.lat && data.lng) {
+          setSpotCoordinates({ lat: data.lat, lng: data.lng });
+        }
+      }).catch((err) => {
+        console.error("Error geocoding spot:", err);
+      }).finally(() => {
+        setLoadingCoords(false);
+      });
+    }
+  }, [spot.title, spotCoordinates.lat, spotCoordinates.lng]);
+
+  // Generate Google Maps URL for directions
+  const googleMapsUrl =
+    spotCoordinates.lat && spotCoordinates.lng
+      ? `https://www.google.com/maps/dir/?api=1&destination=${spotCoordinates.lat},${spotCoordinates.lng}&travelmode=driving`
+      : `https://www.google.com/maps/search/${encodeURIComponent(
+          `${spot.title} surf spot`
+        )}`;
 
   return (
     <PageContainer>
@@ -238,30 +406,56 @@ const SpotDetail = ({ spot }) => {
                 flexWrap: "wrap",
               }}
             >
-              <SpotTitle title={spot.title}/>
-
+              <SpotTitle
+                title={spot.title}
+                lat={spotCoordinates.lat}
+                lng={spotCoordinates.lng}
+              />
+              {loadingCoords && (
+                <small className="text-muted">Getting location...</small>
+              )}
             </div>
             <div style={{ display: "flex", gap: "1rem", margin: "1rem 0" }}>
-              {[...Array(3)].map((_, index) => (
-                <img
-                  key={index}
-                  src={spot.imgURL}
-                  alt={spot.title}
-                  style={{
-                    width: 200,
-                    height: 200,
-                    objectFit: "cover",
-                    padding: ".5rem",
-                  }}
-                />
-              ))}
+              {/* If the spot has photoUrls, use those; otherwise show placeholder */}
+              {spot.photoUrls && spot.photoUrls.length > 0
+                ? // Map through available photoUrls (up to 3)
+                  spot.photoUrls.slice(0, 3).map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`${spot.title} view ${index + 1}`}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        objectFit: "cover",
+                        padding: ".5rem",
+                      }}
+                    />
+                  ))
+                : // Fallback: show placeholders with text
+                  [...Array(3)].map((_, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        backgroundColor: "#f0f0f0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: ".5rem",
+                      }}
+                    >
+                      <span className="text-center">{spot.title}</span>
+                    </div>
+                  ))}
             </div>
             {/* Date between images and details */}
             <div className="spot-date-row">{today}</div>
-            <div style={{ width: "100%" }}>
+            {/* <div style={{ width: "100%" }}>
               <ConditionCard
                 title="Current Conditions"
-                className=""
+                className="d-flex flex-row justify-content-between w-100"
                 overview="Surfers can expect moderate wave activity with favorable wind and tide conditions in the afternoon. However, the water temperature is quite cool, so appropriate wetsuits are recommended."
                 swell_direction="SSW"
                 swell="2-3 ft"
@@ -272,7 +466,8 @@ const SpotDetail = ({ spot }) => {
                 tide="Low"
                 tide_details="Low tide at 3:26 PM: 0.66 feet. High tide at 9:40 PM: 5.16 feet"
               />
-            </div>
+            </div> */}
+
             <div style={{ width: "100%", marginTop: "1rem" }}>
               <ContentCard
                 className="spot-attributes-card"
@@ -319,37 +514,45 @@ const SpotDetail = ({ spot }) => {
               </ContentCard>
             </div>
 
-            {/* Sources Card */}
+            {/* Sources Card  */}
             <div style={{ width: "100%", marginTop: "1.5rem" }}>
               <ContentCard className="sources-card" title="Sources">
                 <ul className="list-unstyled text-center mb-0">
-                  <li className="mb-2">
-                    <a href="./" className="source-link">
-                      Visit {spot.title}
-                    </a>
-                  </li>
-                  <li className="mb-2">
-                    <a href="./" className="source-link">
-                      {spot.title} Community
-                    </a>
-                  </li>
-                  <li>
-                    <a href="./" className="source-link">
-                      Swell Magnet
-                    </a>
-                  </li>
+                  {surfSources.map((source, index) => (
+                    <li key={index} className="mb-2">
+                      <a
+                        href={source.url}
+                        className="source-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {source.name}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </ContentCard>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Updated directions link */}
             <div className="spot-actions d-flex justify-content-between w-100 mt-4 mb-3">
-              <a href="./" className="btn action-button directions-button">
+              <a
+                href={googleMapsUrl}
+                className="btn action-button directions-button"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i className="bi bi-map me-2"></i>
                 Directions
               </a>
               <a
-                href="/forecast-forum"
+                href={
+                  spotCoordinates.lat && spotCoordinates.lng
+                    ? `/forecast?address=${encodeURIComponent(
+                        spot.title
+                      )}&lat=${spotCoordinates.lat}&lng=${spotCoordinates.lng}`
+                    : "/forecast"
+                }
                 className="btn action-button forecast-button"
               >
                 <i className="bi bi-cloud me-2"></i>

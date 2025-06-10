@@ -1,23 +1,18 @@
 import React from "react";
-import './ContentCard.css';
+import "./ContentCard.css";
 
-function ContentCard({children, className, ...props}){
-    return(
-        <div className={`card-container ${className}`}>
+function ContentCard({ children, className, ...props }) {
+  return (
+    <div className={`card-container ${className}`}>
+      {/* ----TITLE---- */}
+      {props.title && <h2 className="section-title mb-2">{props.title}</h2>}
 
-            {/* ----TITLE---- */}
-            {props.title && (
-            <h2 className="section-title mb-2">{props.title}</h2>
-            )}
-
-            {/* ----BODY---- */}
-            <div className={className + " content-card card"}>
-                <div className="card-body justify-content-around">
-                    {children}
-                </div>
-            </div>
-        </div>
-    );
+      {/* ----BODY---- */}
+      <div className={className + " content-card card"}>
+        <div className="card-body justify-content-around">{children}</div>
+      </div>
+    </div>
+  );
 }
 
-export default ContentCard
+export default ContentCard;
