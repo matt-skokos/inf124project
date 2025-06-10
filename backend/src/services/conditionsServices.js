@@ -153,6 +153,7 @@ const NOAATidePredictions = async (lat, lng, timeperiod=1) => {
     const now = new Date(); 
     const endDate = new Date(now); 
     endDate.setDate(now.getDate() + parseInt(timeperiod));
+    now.setDate(now.getDate() - 1);
 
     const formatDate = date => {
         const yyyy = date.getFullYear()
@@ -179,33 +180,37 @@ const NOAATidePredictions = async (lat, lng, timeperiod=1) => {
 
 const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = new Date().getTimezoneOffset()) => {
     const predictions = await NOAATidePredictions(lat, lng,);
-    console.log(`predictions - ${JSON.stringify(predictions)}`)
 
-    userOffset   = parseInt(userOffset, 10);
+    userOffset = parseInt(userOffset, 10);
     console.log(`userTimezone - ${userTimezone}`);
     console.log(`userOffset - ${userOffset}`);
 
     const withEpoch = predictions.map(p => {
         const [datePart, timePart] = p.t.split(' ')
         const year  = parseInt(datePart.slice(0, 4), 10)
-        const month = parseInt(datePart.slice(6, 7), 10) - 1
-        const day   = parseInt(datePart.slice(9, 10), 10)
+        const month = parseInt(datePart.slice(5, 7), 10) - 1
+        const day   = parseInt(datePart.slice(8, 10), 10)
         const [hour, minute] = timePart.split(':').map(n => parseInt(n, 10))
-       
+
         // Date.UTC(...) gives us the *UTC* epoch for that Y/M/D h:m *as if* it were Z,
         // so to shift from the station’s local zone → UTC, we add offset minutes:
         const epoch = Date.UTC(year, month, day, hour, minute) + userOffset * 60_000
 
         return { ...p, epoch }
     })
+    console.log(`withEpoch - ${JSON.stringify(withEpoch)}`);
 
     // only keep those at-or-after “now”
     const now = Date.now()
     const future = withEpoch.filter(p => p.epoch >= now)
+    console.log(`now - ${JSON.stringify(now)}`);
+    console.log(`future - ${JSON.stringify(future)}`);
 
     // Determine next low and high tides 
     const nextLow   = future.find(p => p.type === 'L');
     const nextHigh  = future.find(p => p.type === 'H');
+    console.log(`nextLow - ${JSON.stringify(nextLow)}`);
+    console.log(`nextHigh - ${JSON.stringify(nextHigh)}`);
 
     let tide = 'N/A';
     let tideEpoch   = now
