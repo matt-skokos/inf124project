@@ -198,13 +198,10 @@ const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = n
 
         return { ...p, epoch }
     })
-    console.log(`withEpoch - ${JSON.stringify(withEpoch)}`);
 
     // only keep those at-or-after “now”
     const now = Date.now()
     const future = withEpoch.filter(p => p.epoch >= now)
-    console.log(`now - ${JSON.stringify(now)}`);
-    console.log(`future - ${JSON.stringify(future)}`);
 
     // Determine next low and high tides 
     const nextLow   = future.find(p => p.type === 'L');
