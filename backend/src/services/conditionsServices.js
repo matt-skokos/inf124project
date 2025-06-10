@@ -182,8 +182,7 @@ const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = n
     const predictions = await NOAATidePredictions(lat, lng,);
 
     userOffset = parseInt(userOffset, 10);
-    console.log(`userTimezone - ${userTimezone}`);
-    console.log(`userOffset - ${userOffset}`);
+    console.log(`userTimezone - ${userTimezone} userOffset - ${userOffset}`);
 
     const withEpoch = predictions.map(p => {
         const [datePart, timePart] = p.t.split(' ')
@@ -206,8 +205,6 @@ const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = n
     // Determine next low and high tides 
     const nextLow   = future.find(p => p.type === 'L');
     const nextHigh  = future.find(p => p.type === 'H');
-    console.log(`nextLow - ${JSON.stringify(nextLow)}`);
-    console.log(`nextHigh - ${JSON.stringify(nextHigh)}`);
 
     let tide = 'N/A';
     let tideEpoch   = now

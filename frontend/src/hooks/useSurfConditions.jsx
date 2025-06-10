@@ -15,8 +15,6 @@ export function useSurfConditions(lat, lng, measurement="", location=""){
         
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone       // e.g. “America/Los_Angeles”
         const offset   = new Date().getTimezoneOffset() // minutes *behind* UTC (PDT → 420)
-        console.log(`timezone - ${timezone}`);
-        console.log(`offset - ${offset}`);
 
         const fetchConditions = async () => {
             setLoading(true); 
