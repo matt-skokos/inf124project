@@ -72,6 +72,11 @@ const genLocalSurfSpots = async (location) => {
       // Try to parse the JSON
       const result = JSON.parse(cleanedResponse);
 
+      // Validate the structure
+      if (!result || !Array.isArray(result.spots)) {
+        throw new Error("Invalid response structure from AI");
+      }
+
       // For each spot, fetch photo URLs
       console.log("Fetching photos for each surf spot...");
       for (const spot of result.spots) {
@@ -82,7 +87,6 @@ const genLocalSurfSpots = async (location) => {
 
           const photoUrls = await getPlacePhotoUrls(searchQuery, 400, 400);
           console.log(`Found ${photoUrls.length} photos for ${spot.name}`);
-          console.log("Photo URLs:", photoUrls.slice(0, 3)); // Log up to 3 URLs
 
           // Store up to 3 photo URLs with the spot
           spot.photoUrls = photoUrls.slice(0, 3).map((photo) => photo.url);

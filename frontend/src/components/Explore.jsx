@@ -136,37 +136,50 @@ const Explore = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showLocationTimeout, setShowLocationTimeout] = useState(false);
 
-  // Use our location hook as a backup
+  // Always use fresh location data from the hook
   const {
     locationName,
     lat,
     lng,
     loading: locationLoading,
+    error: locationError,
   } = useUserLocation();
 
-  // Get user location from localStorage on component mount and fetch spots
+  // Set up timeout for location services
   useEffect(() => {
-    const storedLocation = localStorage.getItem("userLocation");
+    const timer = setTimeout(() => {
+      if (locationLoading && !locationName) {
+        setShowLocationTimeout(true);
+      }
+    }, 8000); // Show timeout message after 8 seconds
 
-    // If we have a stored location, use it
-    if (storedLocation) {
-      setUserLocation(storedLocation);
-      fetchSurfSpots(storedLocation);
+    return () => clearTimeout(timer);
+  }, [locationLoading, locationName]);
+
+  // Get user location from geolocation service and fetch spots
+  useEffect(() => {
+    // If location hook is still loading, keep our loading state
+    if (locationLoading) {
+      setLoading(true);
+      return;
     }
-    // Otherwise, wait for the location hook to return data
-    else if (locationName && !locationLoading) {
-      // Save the location to localStorage for future use
-      localStorage.setItem("userLocation", locationName);
+
+    // If we have location data, use it
+    if (locationName && !locationError) {
       setUserLocation(locationName);
       fetchSurfSpots(locationName);
+      setShowLocationTimeout(false); // Reset timeout flag
     }
-    // If both are not available, show an error
-    else if (!locationLoading && !locationName) {
-      setError("Geolocation not enabled");
+    // If geolocation failed, show an error
+    else if (locationError || (!locationName && showLocationTimeout)) {
+      setError(
+        "Unable to determine your location. Please enable location services."
+      );
       setLoading(false);
     }
-  }, [locationName, locationLoading]);
+  }, [locationName, locationLoading, locationError, showLocationTimeout]);
 
   const fetchSurfSpots = (location) => {
     setLoading(true);
@@ -263,8 +276,10 @@ const Explore = () => {
       <div className="location-subheading">
         {userLocation ? (
           <span>Spots near {userLocation}</span>
+        ) : locationLoading && !showLocationTimeout ? (
+          <span>Finding your location...</span>
         ) : (
-          <span>Geolocation not enabled</span>
+          <span>Location not available</span>
         )}
       </div>
       <div className="explore-page explore-list-container">
@@ -339,11 +354,11 @@ const SpotDetail = ({ spot }) => {
   const idealTide = spot.idealTide || "High tide";
   const crowdFactor = spot.crowdFactor || "Generally uncrowded";
 
+  // Access userLocation from the parent component's state
+  const { locationName } = useUserLocation();
+
   // Generate relevant surf sources for this specific spot
-  const surfSources = generateSurfSources(
-    spot.title,
-    localStorage.getItem("userLocation") || ""
-  );
+  const surfSources = generateSurfSources(spot.title, locationName || "");
 
   // Generate Google Maps URL for directions
   const googleMapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(
