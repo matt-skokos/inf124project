@@ -153,6 +153,7 @@ const NOAATidePredictions = async (lat, lng, timeperiod=1) => {
     const now = new Date(); 
     const endDate = new Date(now); 
     endDate.setDate(now.getDate() + parseInt(timeperiod));
+    now.setDate(now.getDate() - 1);
 
     const formatDate = date => {
         const yyyy = date.getFullYear()
@@ -174,39 +175,85 @@ const NOAATidePredictions = async (lat, lng, timeperiod=1) => {
         throw new Error(`NOAA tide data fetch error (${tideRes.status}): ${tideData?.message}\n${tideURL}`); 
     }
     
-    const predictions = tideData.predictions || []; 
-    return  predictions.filter(p => new Date(p.t) >= now);
+    return tideData.predictions || [];
 }
 
-const NOAATideConditions = async (lat, lng) => {
-    const predictions = await NOAATidePredictions(lat, lng);
-    
+const NOAATideConditions = async (lat, lng, userTimezone = 'UTC', userOffset = new Date().getTimezoneOffset()) => {
+    const predictions = await NOAATidePredictions(lat, lng,);
+
+    userOffset = parseInt(userOffset, 10);
+    console.log(`userTimezone - ${userTimezone}`);
+    console.log(`userOffset - ${userOffset}`);
+
+    const withEpoch = predictions.map(p => {
+        const [datePart, timePart] = p.t.split(' ')
+        const year  = parseInt(datePart.slice(0, 4), 10)
+        const month = parseInt(datePart.slice(5, 7), 10) - 1
+        const day   = parseInt(datePart.slice(8, 10), 10)
+        const [hour, minute] = timePart.split(':').map(n => parseInt(n, 10))
+
+        // Date.UTC(...) gives us the *UTC* epoch for that Y/M/D h:m *as if* it were Z,
+        // so to shift from the station’s local zone → UTC, we add offset minutes:
+        const epoch = Date.UTC(year, month, day, hour, minute) + userOffset * 60_000
+
+        return { ...p, epoch }
+    })
+
+    // only keep those at-or-after “now”
+    const now = Date.now()
+    const future = withEpoch.filter(p => p.epoch >= now)
+
     // Determine next low and high tides 
-    const nextLow = predictions.find(p => p.type === 'L');
-    const nextHigh = predictions.find(p => p.type === 'H');
+    const nextLow   = future.find(p => p.type === 'L');
+    const nextHigh  = future.find(p => p.type === 'H');
+    console.log(`nextLow - ${JSON.stringify(nextLow)}`);
+    console.log(`nextHigh - ${JSON.stringify(nextHigh)}`);
 
     let tide = 'N/A';
-    let tideTime = new Date();
-    let tideValue = "N/A";
+    let tideEpoch   = now
     let tideDetails = 'Tide data is unavailable for the selected coordinates and date.'; 
+
+    let chosen, other;
     if(nextLow && nextHigh){
-        const lowTime = new Date(nextLow.t); 
-        const highTime = new Date(nextHigh.t); 
-        if (lowTime < highTime){
-            tide = 'Low';
-            tideTime = lowTime;
-            tideValue = nextLow.v;
-            tideDetails = `Low tide at ${nextLow.t}: ${nextLow.v}ft. High tide at ${nextHigh.t}: ${nextHigh.v}ft.`; 
+        if (nextLow.t < nextHigh.t){
+            chosen = nextLow;
+            other = nextHigh;
+            tide = `Low`
         }else{ 
-            tide = 'High';
-            tideTime = highTime;
-            tideValue = nextHigh.v;
-            tideDetails = `High tide at ${nextHigh.t}: ${nextHigh.v}ft. Low tide at ${nextLow.t}: ${nextLow.v}ft.`; 
+            chosen = nextHigh;
+            other = nextLow;
+            tide = 'High'
         }
     }
-    tideTime = tideTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-    console.log(`${tide} tide at ${tideTime}: ${tideDetails}`)
 
+    tideEpoch = chosen.epoch
+
+    // build details string in user’s timezone
+    const showTime = e => new Date(e)
+      .toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZone: userTimezone
+    })
+
+    if (chosen && other) {
+      tideDetails = `${tide} tide at ${showTime(chosen.epoch)}: ${chosen.v}ft. `
+        + `${tide === 'Low' ? 'High' : 'Low'} tide at ${showTime(other.epoch)}: ${other.v}ft.`
+    } else {
+      tideDetails = `${tide} tide at ${showTime(chosen.epoch)}: ${chosen.v}ft.`
+    }
+
+    // final formatted string for the card
+    const tideTime = new Date(tideEpoch)
+        .toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: userTimezone
+    });
+
+    console.log(`${tideDetails}`)
     return { tide, tideTime, tideDetails };
 }
 

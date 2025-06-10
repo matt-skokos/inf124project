@@ -69,13 +69,14 @@ exports.getTidePredictions = async (req, res) => {
 }
 
 exports.getTideConditions = async (req, res) => {
-    const { lat, lng } = req.query; 
+    const { lat, lng, timezone, offset } = req.query; 
     if(!lat || !lng){
         return res.status(400).json({ error: "Missing required query parameters: lat, lng" });
     }
+
     
     try{
-        const {tide, tideTime, tideDetails} = await NOAATideConditions(lat,lng);
+        const {tide, tideTime, tideDetails} = await NOAATideConditions(lat,lng, timezone, offset);
         return res.json({ tide, tideTime, tideDetails });
     }catch(err){
         console.log("Conditions service error: " , err); 
@@ -115,7 +116,7 @@ exports.getPredictionOverview = async (req, res) => {
 }
 
 exports.getConditionsOverview = async (req, res) => {
-    const { loc: location, lat, lng } = req.query; 
+    const { loc: location, lat, lng, timezone, offset } = req.query; 
     if(!lat || !lng){
         return res.status(400).json({ error: "Missing required query parameters: lat, lng" });
     }
@@ -126,7 +127,7 @@ exports.getConditionsOverview = async (req, res) => {
     try{
         let { waveHeight, waveDirection }               = await NDBCBuoyConditions(lat, lng);
         const { conditionDetails, windDirection, wind } = await NWSWeatherConditions(lat, lng);
-        const { tide, tideTime, tideDetails}            = await NOAATideConditions(lat,lng); 
+        const { tide, tideTime, tideDetails}            = await NOAATideConditions(lat,lng, timezone, offset); 
 
         waveHeight = metersToFeet(waveHeight).toFixed(1);
         waveDirection = degreesToDirection(waveDirection);
