@@ -1,7 +1,33 @@
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import "./SocialModal.css";
-import ReactDOM from 'react-dom';
 
 const SocialModal = ({isOpen, onClose}) => {
+
+  const [copied, setCopied] = useState(false);
+
+  // the URL we’ll share/copy
+  const shareUrl = window.location.href;
+
+  const handleFacebookShare = () => {
+    const fbUrl =
+      `https://www.facebook.com/sharer/sharer.php` +
+      `?u=${encodeURIComponent(shareUrl)}`;
+    window.open(fbUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+        onClose();
+      }, 500);
+    } catch (err) {
+      console.error("Copy failed", err);
+    }
+  };
 
   const modal = (
         <div className="social-modal-overlay" onClick={onClose}>
@@ -9,7 +35,7 @@ const SocialModal = ({isOpen, onClose}) => {
             
             {/* modal header */}
             <header className="social-modal-header">
-              <h3>Share This Spot</h3>
+              <h3>Share Surf Report</h3>
               <button className="social-modal-close-btn" onClick={onClose}>
                 <i className="bi bi-x-lg"></i>
               </button>
@@ -17,29 +43,23 @@ const SocialModal = ({isOpen, onClose}) => {
             
             {/* modal body */}
             <div className="social-modal-body">
-              <p>Share this surf spot with your friends</p>
 
               <div className="social-buttons">
-                <button className="social-btn facebook">
+                <button 
+                  className="social-btn facebook"
+                  onClick={handleFacebookShare}
+                >
                   <i className="bi bi-facebook"></i>
                   <span>Facebook</span>
                 </button>
 
-                <button className="social-btn instagram">
-                  <i className="bi bi-instagram"></i>
-                  <span>Instagram</span>
-                </button>
-
-                <button className="social-btn twitter">
-                  <i className="bi bi-twitter-x"></i>
-                  <span>Twitter</span>
-                </button>
-
-                <button className="social-btn copy-link">
+                <button 
+                  className="social-btn copy-link"
+                  onClick={handleCopyLink}
+                >
                   <i className="bi bi-link-45deg"></i>
-                  <span>Copy Link</span>
+                  <span>{copied ? "Copied!" : "Copy Link"}</span>
                 </button>
-
               </div>
             </div>
           </div>
