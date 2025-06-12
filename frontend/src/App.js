@@ -1,5 +1,5 @@
 // src/App.js
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -12,8 +12,14 @@ import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Explore from "./components/Explore";
 import PrivateRoute from "./components/Custom/PrivateRoute";
+import { notificationService } from './utils/notificationService';
 
 function App() {
+  useEffect(() => {
+    // Initialize notification service when app loads
+    notificationService.init();
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="app-container">
