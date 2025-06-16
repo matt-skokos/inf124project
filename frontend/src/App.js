@@ -1,6 +1,7 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./components/Custom/AuthContext";
 
 import Navbar from "./components/Navbar";
 import Footer from './components/Custom/Footer';
@@ -16,30 +17,32 @@ import PrivateRoute from "./components/Custom/PrivateRoute";
 function App() {
   return (
     <BrowserRouter>
-      <div className="app-container">
-        <Navbar/>
+      <AuthProvider>
+        <div className="app-container">
+          <Navbar/>
 
-        <div className="main-content">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registration" element={<Registration />} />
+          <div className="main-content">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
 
-            {/* Private Routes */}
-            {/* If no ID_TOKEN → Redirect to "/" */}
-            <Route element={<PrivateRoute/>}>
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/forecast" element={<Forecast/>} />
-              <Route path="/favorites" element={<Favorites />} />
-            </Route>
+              {/* Private Routes */}
+              {/* If no ID_TOKEN → Redirect to "/" */}
+              <Route element={<PrivateRoute/>}>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/forecast" element={<Forecast/>} />
+                <Route path="/favorites" element={<Favorites />} />
+              </Route>
 
-          </Routes>
+            </Routes>
+          </div>
+
+          <Footer/>
         </div>
-
-        <Footer/>
-      </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
