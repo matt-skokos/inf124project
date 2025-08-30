@@ -1,10 +1,12 @@
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ConditionOverview } from './Home';
 import { useSurfConditions } from '../hooks/useSurfConditions';
 import PageContainer from './Custom/PageContainer';
 import ContentCard from './Custom/ContentCard';
 import NotificationButton from './Custom/NotificationButton';
+import Button from './Custom/Button';
 import API from '../api';
 import './Favorites.css';
 
@@ -52,6 +54,12 @@ function FavoriteCard({ name, lat, lng }) {
           <h3 className="favorite-name mb-0">{name}</h3>
           <NotificationButton
             schedule={schedule}
+            spotName={name}
+            surfConditions={{
+              wave: waveCond,
+              wind: windCond,
+              tide: tideCond
+            }}
             onSaveNotification={sched =>
               console.log('Saved schedule for', name, sched)
             }
@@ -93,7 +101,7 @@ function FavoriteCard({ name, lat, lng }) {
 }
 
 export default function Favorites() {
-
+  const navigate = useNavigate();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
@@ -101,12 +109,38 @@ export default function Favorites() {
   useEffect(() => {
     async function fetchFavorites (){
       setLoading(true);
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('ID_TOKEN');
+      if (!token) {
+        setError("You must be logged in to view favorites. Please log in first.");
+        setLoading(false);
+        return;
+      }
+
       try{
         const res = await API.get("/favorites");
         setFavorites(res.data.favorites);
       }catch(err){
-        console.error("Unable to fetch favorites from firestore db."); 
-        setError("Unable to fetch favorites from firestore db.");
+        console.error("Unable to fetch favorites from firestore db:", err); 
+        let errorMessage = "Unable to fetch favorites from firestore db.";
+
+        if (err.response) {
+          // Server responded with error status
+          if (err.response.status === 401) {
+            errorMessage = "Authentication failed. Please log out and log back in.";
+          } else {
+            errorMessage = `Server error: ${err.response.status} - ${err.response.data?.error || err.response.statusText}`;
+          }
+        } else if (err.request) {
+          // Network error - request was made but no response received
+          errorMessage = "Network error: Unable to connect to server. Please check if the backend is running.";
+        } else {
+          // Something else went wrong
+          errorMessage = `Error: ${err.message}`;
+        }
+
+        setError(errorMessage);
       }finally{
         setLoading(false)
       }
@@ -124,21 +158,60 @@ export default function Favorites() {
       )}
 
       {(!loading && error) && (
-        <p className="text-danger">
-            Error loading favorites
-        </p>
+        <ContentCard>
+          <p className="text-danger mb-3">
+              {error}
+          </p>
+          {error.includes("must be logged in") && (
+            <Button onClick={() => navigate('/login')}>
+              Go to Login
+            </Button>
+          )}
+          {error.includes("Authentication failed") && (
+            <div className="d-flex gap-2">
+              <Button 
+                onClick={() => {
+                  localStorage.removeItem('ID_TOKEN');
+                  localStorage.removeItem('UID');
+                  navigate('/login');
+                }}
+              >
+                Clear Auth & Login
+              </Button>
+              <Button 
+                onClick={() => window.location.reload()}
+                variant="secondary"
+              >
+                Try Again
+              </Button>
+            </div>
+          )}
+        </ContentCard>
       )}
       
       {(!loading && !error && favorites) && (
-        favorites.map(spot => (
-          // <p> {spot.name} {spot.location._latitude} {spot.location._longitude}</p>
-          <FavoriteCard
-            key={spot.id}
-            name={spot.name}
-            lat={spot.location._latitude}
-            lng={spot.location._longitude}
-          />
-        ))
+        favorites.length === 0 ? (
+          <ContentCard>
+            <p className="text-center mb-3">
+              You haven't added any favorites yet.
+            </p>
+            <div className="text-center">
+              <Button onClick={() => navigate('/explore')}>
+                Explore Surf Spots
+              </Button>
+            </div>
+          </ContentCard>
+        ) : (
+          favorites.map(spot => (
+            // <p> {spot.name} {spot.location._latitude} {spot.location._longitude}</p>
+            <FavoriteCard
+              key={spot.id}
+              name={spot.name}
+              lat={spot.location._latitude}
+              lng={spot.location._longitude}
+            />
+          ))
+        )
       )}
     </PageContainer>
   );
